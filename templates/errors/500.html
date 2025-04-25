@@ -1,0 +1,26 @@
+{% extends "includes/base.html" %}
+{% block title %} Page not found {% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-8">
+            <section class="w-full p-24 flex items-center h-full  dark:bg-gray-50 dark:text-gray-800">
+                <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
+                    <div class="max-w-md text-center">
+                        <h2 class="mb-8 font-extrabold text-9xl dark:text-gray-400">
+                            <span class="sr-only">Error</span>500
+                        </h2>
+                        <p class="text-2xl font-semibold md:text-3xl">Sorry, We are unable to process your request right now.</p>
+                        <p class="mt-4 mb-8 dark:text-gray-600">But dont worry, our team is working on issue, We come back shortly.
+                        </p>
+                        <a rel="noopener noreferrer" href="{% url 'home.index' %}"
+                            class="px-8 py-3 font-semibold rounded dark:bg-violet-600 dark:text-gray-50">Back to
+                            homepage</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+{% endblock %}

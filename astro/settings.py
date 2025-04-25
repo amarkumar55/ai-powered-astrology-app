@@ -17,7 +17,7 @@ PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -173,7 +173,7 @@ LOGGING = {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': 'security.log',
+            'filename': BASE_DIR / 'logs/django_errors.log',
         },
         'console': {
             'level': 'DEBUG',
@@ -183,7 +183,7 @@ LOGGING = {
     'loggers': {
         'django.security': {
             'handlers': ['file'],
-            'level': 'WARNING',
+            'level': 'ERROR',
             'propagate': True,
         },
         'two_factor': {

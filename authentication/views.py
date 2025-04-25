@@ -250,15 +250,14 @@ class VerifyLoginOTPView(FormView):
 
 
 
-@method_decorator(ratelimit(key='user_or_ip', rate='3/m', method='GET', block=True), name='dispatch')
+@method_decorator(login_required, name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='GET', block=True), name='dispatch')
 class CustomLogoutView(LogoutView):
-    next_page = 'auth.login'  # redirect after logout
-    
-    @login_required
+    next_page = 'auth.login'  # Redirect after logout
+
     def dispatch(self, request, *args, **kwargs):
-        # Call custom activity tracking before logout
+        # Custom logout logic
         store_activity(request, {}, "account_logout", request.user)
-        
         messages.success(request, "Logged out successfully.")
         return super().dispatch(request, *args, **kwargs)
 
