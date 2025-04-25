@@ -1,0 +1,50 @@
+{% extends "includes/base.html" %}
+{% block title %} Dashboard | Account Setting & Security {% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            <div class="md:flex w-full">
+                {% include 'dashboard/sidebar.html' %}
+                <div
+                    class="w-full space-y-4 px-6 shadow-md shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 text-medium rounded-lg">
+                    <div class="shadow-md rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Secure Your Account</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            You can enhance your account's security by updating your password regularly.
+                            For additional protection, enable <strong>Two-Factor Authentication (2FA)</strong>.
+                            This ensures only you can access your account—even if someone else knows your password.
+                        </p>
+                        <div class="flex gap-3">
+                            <a href="{% url 'password_change' %}"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
+                                Change Password
+                            </a>
+                            <a href="{% url 'dashboard.enable.2fa' %}"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
+                                Enable 2FA
+                            </a>
+                        </div>
+                    </div>
+                
+                    <div class="shadow-md rounded-lg p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Change Account Email</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Keep your account secure by regularly updating your email and password.
+                            For enhanced protection, enable <strong>Two-Factor Authentication (2FA)</strong>.
+                            This adds an extra layer of security, ensuring that only you can access your account—even if someone else knows
+                            your password.
+                        </p>
+                        <div class="flex gap-3">
+                            <a href="{% url 'dashboard.change_email' %}"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
+                                Change Email Address
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% csrf_token %}
+<div class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-2">
+    {% include 'fields/name.html' with label='First Name' name='first_name' %}
+    {% include 'fields/name.html' with label='Last Name' name='last_name' %}
+</div>
+
+<div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
+    <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth<sup
+            class="text-red-500">*</sup></label>
+
+    <div class="grid grid-cols-3 gap-2">
+        {% include "fields/birth_select.html" with label='Day' name='days' item=days type='day' %}
+        {% include "fields/birth_select.html" with label='Month' name='months' item=months type='month' %}
+        {% include "fields/birth_select.html" with label='Year' name='years' item=months type='year' %}
+    </div>
+</div>
+
+
+<label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birth Time<sup
+        class="text-red-500">*</sup></label>
+<div class="grid grid-cols-2 lg:grid-cols-4  gap-2">
+    {% include "fields/birth_select.html" with label='Hours' name='hours' item=hours type='day' %}
+    {% include "fields/birth_select.html" with label='Minutes' name='minutes' item=minutes type='day' %}
+    {% include "fields/birth_select.html" with label='Seconds' name='seconds' item=minutes type='day' %}
+    {% include "fields/birth_select.html" with label='Time Format' name='time_format' item=time_format type='day' %}
+</div>
+
+{% include "fields/latlog.html" with name='latitude' %}
+{% include "fields/latlog.html" with name='longitude' %}
+
+<div class="grid grid-cols-1">
+    {% include "fields/place.html" with label='Birth Place' name='place_of_birth' %}
+    <div id="suggestions" class="suggestions p-2"></div>
+</div>
+
+{% if show_captcha %}
+{% include 'fields/captcha_custom.html' %}
+{% endif %}
+
+{% include 'fields/term_field.html' %}
+{% include 'fields/submit_button' with value='Submit' %}

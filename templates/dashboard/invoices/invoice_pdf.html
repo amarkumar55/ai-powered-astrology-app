@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>AstroLive | Invoice {{ invoice.invoice_number }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            color: #333;
+        }
+
+        .invoice-box {
+            background: white;
+            max-width: 800px;
+            margin: auto;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h1,
+        h2 {
+            margin: 0 0 10px;
+            color: #444;
+        }
+
+        .header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .details {
+            margin-bottom: 30px;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .billing_detail,
+        .product_info {
+            margin-bottom: 30px;
+        }
+
+        .product_info h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        .summary td {
+            font-weight: bold;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .text-muted {
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-box">
+        <div class="header">
+            <h1>AstroLive.com</h1>
+            <p class="text-muted">Invoice #: {{ invoice.invoice_number }}</p>
+        </div>
+
+        <div class="details">
+            <p><strong>Date:</strong> {{ invoice.created_at }}</p>
+            <p><strong>Payment Reference:</strong> {{ invoice.payment_reference }}</p>
+            <p><strong>Status:</strong> {{ invoice.status }}</p>
+            <p><strong>Payment Method:</strong> {{ invoice.payment_method }}</p>
+        </div>
+
+        <div class="billing_detail">
+            <h2>Billing Information</h2>
+            <p><strong>Name:</strong> {{invoice.billing_name}}</p>
+            <p><strong>Email:</strong>{{invoice.billing_email}}</p>
+            <p><strong>Address:</strong>{{invoice.billing_address}}</p>
+        </div>
+
+        <div class="product_info">
+            <h2>Product Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Price (₹)</th>
+                        <th>Sub Total (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Subscription Plan</td>
+                        <td>{{invoice.qty}}</td>
+                        <td>₹{{invoice.sub_total}}</td>
+                        <td>₹{{invoice.sub_total}}</td>
+                    </tr>
+                    <tr class="summary">
+                        <td colspan="3" class="right">Tax (18%)</td>
+                        <td>₹{{invoice.tax}}</td>
+                    </tr>
+                    <tr class="summary">
+                        <td colspan="3" class="right">Discount</td>
+                        <td>₹{{invoice.discount}}</td>
+                    </tr>
+                    <tr class="summary">
+                        <td colspan="3" class="right">Total Paid</td>
+                        <td>₹{{invoice.total_amount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

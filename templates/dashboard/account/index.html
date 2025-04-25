@@ -1,0 +1,74 @@
+{% extends "includes/base.html" %}
+{% block title %} Dashboard | Manage Account {% endblock %}
+{% block content %}
+<main class="h-screen">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            <div class="md:flex w-full">
+                {% include 'dashboard/sidebar.html' %}
+                <div class="w-full space-y-4 px-6 shadow-md shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 text-medium rounded-lg">
+                    <div class="w-full max-w-3xl rounded-lg shadow-blue-100 hover:shadow-blue-500 p-2">
+                        <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white border-b border-gray-200">Account Management</h3>
+                        <p class="mb-5 text-sm font-medium text-gray-400 dark:text-white">
+                            You can choose to temporarily deactivate your account, which will suspend access without deleting your data. Your
+                            account can be reactivated at any time by logging back in.
+                            Alternatively, you may permanently delete your account, which will result in the irreversible removal of all
+                            associated data from our servers in accordance with our data retention policy.
+                        </p>
+                        <form id="account_form" method="POST" action="{% url 'dashboard.get_account_view' %}">
+                            {% csrf_token %}
+                            <ul class="space-y-4">      
+                                <!-- Temporarily Deactivate -->
+                            <li>
+                                <input type="radio" id="temp_delete" data-parsley-errors-container="#delete_type_error"  data-parsley-required-message="Please select valid option"  required name="delete_type" value="temp" class="hidden peer" />
+                                <label for="temp_delete"
+                                    class="flex items-center justify-between w-full p-5 border border-gray-300 rounded-lg cursor-pointer bg-white peer-checked:border-blue-600 peer-checked:text-blue-600 hover:bg-gray-100 transition dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:peer-checked:text-blue-400 dark:peer-checked:border-blue-400">
+                                    <div>
+                                        <div class="text-lg font-semibold">Temporarily Deactivate Your Account</div>
+                                        <div class="text-sm mt-1">
+                                            Your account will be hidden and disabled temporarily. You can restore it by simply logging back in.
+                                        </div>
+                                        {% if form.errors.delete_type %} {{ form.errors.delete_type }} {% endif %}
+                                    </div>
+                                    <!-- The Circle that Should Change on Selection -->
+                                    <div
+                                        class="circle w-5 h-5 rounded-full border-2 border-gray-400 bg-gray-300 transition-all duration-300 ease-in-out">
+                                    </div>
+                                </label>
+                            </li>
+                            
+                            <!-- Permanently Delete -->
+                            <li>
+                                <input type="radio" id="perm_delete" required name="delete_type" value="permanent" class="hidden peer" />
+                                <label for="perm_delete"
+                                    class="flex items-center justify-between w-full p-5 bg-white border border-gray-300 rounded-lg cursor-pointer peer-checked:border-red-600 peer-checked:text-red-600 hover:bg-gray-100 transition dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:peer-checked:text-red-400 dark:peer-checked:border-red-400">
+                                    <div>
+                                        <div class="text-lg font-semibold">Permanently Delete Your Account</div>
+                                        <div class="text-sm mt-1">
+                                            This will delete all your data and cannot be undone. Proceed only if you're sure.
+                                        </div>
+                                        {% if form.errors.delete_type %} {{ form.errors.delete_type }} {% endif %}
+                                    </div>
+                                    <!-- The Circle that Should Change on Selection -->
+                                    <div
+                                        class="circle w-5 h-5 rounded-full border-2 border-gray-400 bg-gray-300 transition-all duration-300 ease-in-out">
+                                    </div>
+                                </label>
+                            </li>
+                                
+                            <li>
+                                {% include 'fields/password_field.html' with label='Current Password' name='password'  %}
+                            </li>
+
+                            <li>
+                                {% include 'fields/submit_button.html' with value='Delete Account' %}
+                            </li>
+                          </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

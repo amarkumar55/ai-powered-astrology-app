@@ -1,0 +1,21 @@
+{% load custom_filters %}
+<div class="relative w-full mb-5">
+    <label class="block uppercase text-slate-600 text-xs font-bold mb-2" for="{{name}}">
+        Email <sup class="text-red-500">*</sup>
+    </label>
+    <input type="text" 
+        id="{{name}}" 
+        name="{{name}}" 
+        value="{{value}}" 
+        {% if disabled  %} readonly {% endif %} 
+        placeholder="email" 
+        required data-parsley-customemail
+        data-parsley-trigger="keyup" 
+        data-parsley-required-message="Email is required."
+        data-parsley-customemail-message="Please enter a valid email."
+        class="border-0 px-3 py-3  placeholder-slate-300 text-slate-600 {% if disabled %} bg-gray-50 {% else %}  bg-white {% endif %} rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+    
+    {% if form.errors.email %}
+       <p class="text-sm text-red-600 mt-1">{{ form.errors.email.0 }}</p>
+    {% endif %}
+</div>

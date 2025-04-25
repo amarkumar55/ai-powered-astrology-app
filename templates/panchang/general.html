@@ -1,0 +1,70 @@
+{% extends "includes/base.html" %}
+{% block title %}Personalized Panchang Predition{% endblock %}
+{% block content %}
+
+<div class="mx-auto max-w-7xl px-2 py-10 sm:px-6 lg:px-8">
+
+
+<div class="mx-auto max-w-7xl px-6 py-8">
+    <div class="text-center mb-6">
+        <h2 class="text-4xl font-bold text-gray-800 dark:text-white">✨Today Panchang Prediction ✨</h2>
+    </div>
+
+    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
+            <div
+                class="bg-blue-50 dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+                <h3>Panchang For {{ panchang.date }}</h3>
+                <dl class="mt-4 w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Tithi</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.tithi }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Nakshatra</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.nakshatra }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Yoga</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.yoga }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Karana</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.karana }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vara</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.vara }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Sunrise</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.sunrise }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">sunset</dt>
+                            <dd class="text-lg font-semibold">{{ panchang.sunset }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Rahu kaal</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.rahu_kaal }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Gulika kaal</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.gulika_kaal }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Yamaganda</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.yamaganda }}</dd>
+                    </div>
+                    <div class="flex flex-col pb-3">
+                        <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Abhijit Muhurat</dt>
+                        <dd class="text-lg font-semibold">{{ panchang.abhijit_muhurat }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+

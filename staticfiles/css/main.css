@@ -1,0 +1,7 @@
+.parsley-errors-list{
+   font-size: small;
+   color:red;
+   margin-top: 10px;
+   font-weight: 600;
+   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}

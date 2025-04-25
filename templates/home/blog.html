@@ -1,0 +1,104 @@
+{% extends "includes/base.html" %}
+{% block title %}Our Latest Blogs{% endblock %}
+{% block content %}
+
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            <section class="bg-gray-50 dark:bg-gray-900 py-16">
+                <div class="container mx-auto px-6 lg:px-20">
+                    <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white">📝 Our Astrology Blog</h2>
+                    <p class="text-lg text-center text-gray-600 dark:text-gray-300 mt-4">
+                        Stay updated with the latest astrological insights, planetary shifts, and cosmic guidance.
+                    </p>
+            
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+                        <!-- Blog Post 1 -->
+                        <div class="bg-white border border-gray-200 shadow-md shadow-blue-100 hover:shadow-lg hover:shadow-blue-500  rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                            <img src="/static/images/ai-powered-astrology-reports.png" alt="Astrology Blog" class="w-full object-none h-auto">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-700 dark:text-white">Understanding Planetary Transits</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Discover how planetary transits affect different aspects of your life and how to navigate them.
+                                </p>
+                             
+                            </div>
+                            <div class="p-6">
+                                <a href="{% url 'panchang.index' %}"
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
+                                    Read more
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white border border-gray-200 shadow-md shadow-blue-100 hover:shadow-lg hover:shadow-blue-500  rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                            <img src="/static/images/ai-powered-astrology-reports.png" alt="Astrology Blog" class="w-full object-none h-auto">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-700 dark:text-white">Understanding Planetary Transits</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Discover how planetary transits affect different aspects of your life and how to navigate them.
+                                </p>
+                        
+                            </div>
+                            <div class="p-6">
+                                <a href="{% url 'panchang.index' %}"
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
+                                    Read more
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white border border-gray-200 shadow-md shadow-blue-100 hover:shadow-lg hover:shadow-blue-500  rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+                            <img src="/static/images/ai-powered-astrology-reports.png" alt="Astrology Blog" class="w-full object-none h-auto">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-700 dark:text-white">Understanding Planetary Transits</h3>
+                                <p class="text-gray-600 dark:text-gray-300 mt-2">
+                                    Discover how planetary transits affect different aspects of your life and how to navigate them.
+                                </p>
+                        
+                            </div>
+                            <div class="p-6">
+                                <a href="{% url 'panchang.index' %}"
+                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
+                                    Read more
+                                    <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 14 10">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="text-center mt-10">
+                        <a href="{% url 'panchang.index' %}"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
+                            View All
+                            <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

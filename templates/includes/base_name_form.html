@@ -1,0 +1,8 @@
+<div class="relative w-full mb-3 flex flex-row gap-4">
+    {% include 'fields/name.html' with label='First Name' name='first_name' %}
+    {% include 'fields/name.html' with label='Last Name' name='last_name' %}
+</div> 
+
+{% if show_captcha %}
+{% include 'fields/captcha_custom.html' %}
+{% endif %}

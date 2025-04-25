@@ -1,0 +1,14 @@
+{% extends "includes/base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            {% include 'home/options_panel.html' %}
+        </div>
+    </div>    
+</main>
+{% endblock %}
+{% block script %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% load compress %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon_io/favicon-32x32.png">
+    <title>{% block title %}{% endblock %} - {{ APP_NAME }} </title>
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100">
+    {% include 'includes/header.html' %}
+    <div class="w-full h-16 px-4">
+        {% include 'includes/alert.html' %}
+    </div>
+
+    <main class="flex-grow">
+        <div id="content">{% block content %}{% endblock %}</div>
+    </main>
+    {% include 'includes/footer.html' %}
+    <script src="{% static 'js/jquery.min.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/parsley.min.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/validation.js' %}"></script>
+    <script src="{% static 'js/main.js' %}" nonce="{{ nonce }}"></script>
+</body>
+</html>

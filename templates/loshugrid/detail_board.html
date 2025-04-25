@@ -1,0 +1,139 @@
+{% load custom_filters %}
+<div class="mx-auto max-w-7xl px-10">
+    <div class="relative flex py-4 flex-col gap-4 h-auto mb-5">
+        <div class="container mx-auto px-6 py-6 lg:px-20 text-center">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Hii {{ data.name }}, Your Lo Shu Grid Predition Here ❤️</h2>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-4 items-center justify-center"> 
+            <div class="grid grid-cols-3 gap-4 bg-white p-6 rounded-lg shadow-lg">
+                {% for num_key, num_value in data.numbers.items %}
+                    <div class="relative w-20 h-20 flex items-center justify-center text-2xl font-bold 
+                        text-white bg-gray-800 rounded-lg shadow-md border-2 border-gray-700  
+                        hover:bg-gray-500 hover:scale-105 transition-all">
+                        {% if num_value.count == 0 %}
+                         <span class="text-4xl">{{ num_key }}</span>
+                         <div class="absolute inset-0 flex items-center text-4xl justify-center text-slate-500">
+                            x
+                         </div>
+                        {% else %}
+                            {% for _ in ""|rjust:num_value.count %}
+                               <span>{{ num_key}}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+       <div
+        class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
+        <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">✨Your Loshu Grid Numbers✨</h2>
+        <p class="text-md text-center text-gray-600 dark:text-gray-300">
+            Discover the hidden meanings behind your numbers and how they influence your personality and destiny.
+            Explore your strengths, challenges, and recommended remedies to balance your life.
+        </p>
+    
+        <div class="grid grid-cols-1 space-y-2 gap-6 w-full max-w-3xl">
+            {% for num_key, num_value in data.numbers.items %}
+            {% if num_value.count > 0 %}
+            <div
+                class="flex flex-row gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+            
+                <div class="shrink-0">
+                    <div
+                        class="relative w-20 h-20 rounded-lg flex items-center justify-center text-2xl font-bold text-white bg-gray-800  shadow-md border-2 border-blue-700 hover:bg-blue-600 hover:scale-105 transition-all">
+                            {{ num_key}}
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center space-y-2">
+                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-1">This Number Show The Significance of {{ num_value.detail.title }} in Your Life</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <strong>Frequency:</strong> Number {{ num_key}} appeared {{num_value.count}} times in your date of birth
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <strong>Description:</strong>
+                        {% if num_value.count > 3 %}
+                        {{ num_value.detail.4 }}
+                        {% else %}
+                        {% with value=num_value.detail|get_item:num_value.count %}
+                        {{ value }}
+                        {% endwith %}
+                        {% endif %}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                        <strong>Remedies:</strong> {{ num_value.detail.remedis }}
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+       </div>
+
+        <div
+            class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
+            <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">✨Arrows of Strength In Your Gird✨</h2>
+            <p class="text-md text-center text-gray-600 dark:text-gray-300">
+                Discover the hidden meanings behind your numbers and how they influence your personality and destiny.
+                Explore your strengths, challenges, and recommended remedies to balance your life.
+            </p>
+        
+            <div class="grid grid-cols-1 space-y-2 gap-6 w-full max-w-3xl">
+                {% for arrow in data.arrows_of_strength %}
+                    {% for key, value in arrow.items %}
+                    <div
+                        class="flex flex-row gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+            
+                        <div class="shrink-0">
+                            <div
+                                class="relative w-20 h-20 rounded-lg flex items-center justify-center text-2xl font-bold text-white bg-gray-800  shadow-md border-2 border-blue-700 hover:bg-blue-600 hover:scale-105 transition-all">
+                                {{ key|replace:"_,-" }}
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-2">  
+                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                                <strong>Significance:</strong> {{ value }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+             
+                {% endfor %}
+            </div>
+        </div>
+        <div
+            class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
+            <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">&#128549;Number Missing In Your Loshu Grid</h2>
+            <p class="text-md text-center text-gray-600 dark:text-gray-300">
+                Discover the hidden meanings behind your numbers and how they influence your personality and destiny.
+                Explore your strengths, challenges, and recommended remedies to balance your life.
+            </p>
+        
+            <div class="grid grid-cols-1 space-y-2 gap-6 w-full max-w-3xl">
+                {% for num_key, num_value in data.numbers.items %}
+                {% if num_value.count == 0 %}
+                <div
+                    class="flex flex-row gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+        
+                    <div class="shrink-0">
+                        <div
+                            class="relative w-20 h-20 rounded-lg flex items-center justify-center text-2xl font-bold text-white bg-gray-800  shadow-md border-2 border-blue-700 hover:bg-blue-600 hover:scale-105 transition-all">
+                            {{ num_key}}
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center space-y-2">
+                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">This Number Show The Significance of
+                            {{ num_value.detail.title }} in Your Life</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                            <strong>Remedies:</strong> {{ num_value.detail.remedis }}
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="relative w-full mb-4">
+{% spaceless %}
+    <label class="block uppercase text-slate-600 text-xs font-bold mb-2" for="captcha">
+        Captcha <sup class="text-red-500">*</sup>
+    </label>
+    <img src="{{ captcha_image_url }}" alt="captcha" class="captcha" id="captcha-image" />
+    <input type="hidden" name="captcha_0" id="id_captcha_0" value="{{ new_captcha }}">
+    <div class="flex flex-row items-center space-x-4 mt-1">
+    
+        <input type="text"
+            required 
+            name="captcha_1" 
+            id="id_captcha_1"  
+            data-parsley-required="true"
+            data-parsley-required-message="Please enter the CAPTCHA"
+            data-parsley-minlength="4"
+            data-parsley-minlength-message="CAPTCHA must be at least 4 characters"
+            class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+            placeholder="Enter text shown above" />
+        
+        <button type="button"  
+            id="refresh_capcha"
+            class="click cursor-pointer bg-black text-white active:bg-slate-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150">Refresh</button>
+    </div>
+
+    {% if form.captcha.errors %}
+       <p class="text-sm text-red-600 mt-1">{{ form.captcha.errors.0 }}</p>
+    {% endif %}
+{% endspaceless %}
+</div>
+

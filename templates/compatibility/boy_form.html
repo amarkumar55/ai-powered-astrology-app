@@ -1,0 +1,34 @@
+{% include 'fields/full_name.html' with label='Full Name' name='boy_full_name' %}
+
+<div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
+    <label for="boy_birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth<sup
+            class="text-red-500">*</sup></label>
+
+    <div class="grid grid-cols-3 gap-2">
+
+        {% include "fields/birth_select.html" with label='Day' name='boy_days' item=days type='day' %}
+        {% include "fields/birth_select.html" with label='Month' name='boy_months' item=months type='month' %}
+        {% include "fields/birth_select.html" with label='Year' name='boy_years' item=months type='year' %}
+    
+    </div>
+</div>
+
+
+<label for="boy_birth_time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birth Time<sup
+        class="text-red-500">*</sup></label>
+<div class="grid grid-cols-2 lg:grid-cols-4  gap-2">
+    
+    {% include "fields/birth_select.html" with label='Hours' name='boy_hours' item=hours type='day' %}
+    {% include "fields/birth_select.html" with label='Minutes' name='boy_minutes' item=minutes type='day' %}
+    {% include "fields/birth_select.html" with label='Seconds' name='boy_seconds' item=minutes type='day' %}
+    {% include "fields/birth_select.html" with label='Time Format' name='boy_time_type' item=time_format type='day' %}
+</div>
+
+{% include "fields/latlog.html" with name='boy_latitude' %}
+{% include "fields/latlog.html" with name='boy_longitude' %}
+
+<div class="grid grid-cols-1">
+    {% include "fields/place.html" with label='Boy Birth Place' name='boy_place' %}
+    <div id="boy_suggestions" class="suggestions p-2"></div>
+</div>
+

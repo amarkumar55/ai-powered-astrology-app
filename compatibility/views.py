@@ -1,0 +1,104 @@
+from django.views import View
+from django.shortcuts import render
+from django.contrib import messages
+from .forms import CompatibilityForm
+from utlity.helper import store_activity
+from utlity.panchag import calculate_nakshatra
+from django_ratelimit.decorators import ratelimit
+from django.utils.decorators import method_decorator
+from utlity.compatibility import ashtakoot_compatibility
+from utlity.dasha_antradasha import calculate_moon_longitude
+from authentication.utlity import send_error_log, reset_failed_attempts, increment_failed_attempts,handle_captcha_logic
+
+# Create your views here.
+@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+class CompatibilityView(View):
+    template_name = "compatibility/index.html"
+
+    def get(self, request):
+        show_captcha, context = handle_captcha_logic(request, {})
+        form = CompatibilityForm(show_captcha=show_captcha)
+        
+        context.update({
+            "form": form,
+            "is_report_generate": False,
+            "show_captcha" : show_captcha
+        })
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        show_captcha, context = handle_captcha_logic(request, {})
+        form = CompatibilityForm(request.POST, show_captcha=show_captcha)
+        if form.is_valid():
+            try:
+                boy_name = form.cleaned_data.get('boy_full_name', '')
+                girl_name = form.cleaned_data.get('girl_full_name', '')
+
+                # Extract birth data
+                bdays = form.cleaned_data.get("boy_days")
+                bmonths = form.cleaned_data.get("boy_months")
+                byears = form.cleaned_data.get("boy_years")
+                bhours = form.cleaned_data.get("boy_hours")
+                bminutes = form.cleaned_data.get("boy_minutes")  
+                bseconds = form.cleaned_data.get("boy_seconds")
+                b_time_type = form.cleaned_data.get("boy_time_type")
+                b_lat = form.cleaned_data.get("boy_latitude")
+                b_log = form.cleaned_data.get("boy_longitude")
+
+                gdays = form.cleaned_data.get("girl_days")
+                gmonths = form.cleaned_data.get("girl_months")
+                gyears = form.cleaned_data.get("girl_years")
+                ghours = form.cleaned_data.get("girl_hours")
+                gminutes = form.cleaned_data.get("girl_minutes")  
+                gseconds = form.cleaned_data.get("girl_seconds")
+                g_time_type = form.cleaned_data.get("girl_time_type")
+                g_lat = form.cleaned_data.get("girl_latitude")
+                g_log = form.cleaned_data.get("girl_longitude")
+
+                # Convert 12-hour to 24-hour time
+                if b_time_type.lower() == "pm" and bhours != 12:
+                    bhours += 12
+                elif b_time_type.lower() == "am" and bhours == 12:
+                    bhours = 0
+
+                if g_time_type.lower() == "pm" and ghours != 12:
+                    ghours += 12
+                elif g_time_type.lower() == "am" and ghours == 12:
+                    ghours = 0
+
+                # Get Moon and Nakshatra
+                boy_moon = calculate_moon_longitude(b_lat, b_log, byears, bmonths, bdays, bhours, bminutes, bseconds)
+                boy_nakshatra = calculate_nakshatra(boy_moon)
+
+                girl_moon = calculate_moon_longitude(g_lat, g_log, gyears, gmonths, gdays, ghours, gminutes, gseconds)
+                girl_nakshatra = calculate_nakshatra(girl_moon)
+
+                match = ashtakoot_compatibility(boy_nakshatra, girl_nakshatra)
+                reset_failed_attempts(request)
+                
+                store_activity(self.request, form.cleaned_data.copy() , "generated compatibility predition", request.user)
+                
+                messages.success(request, "Your Compatibility prediction is generated.")
+                
+                return render(request, self.template_name, {
+                    "form": form,
+                    "is_report_generate": True,
+                    "match": match,
+                    "boy_name": boy_name,
+                    "girl_name": girl_name,
+                })
+
+            except Exception as e:
+                increment_failed_attempts(request)
+                _, context = handle_captcha_logic(request, {})
+                send_error_log(e)
+                messages.error(request, "Something went wrong while processing your request.")
+
+        else:
+            increment_failed_attempts(request)
+            _, context = handle_captcha_logic(request, {})
+            messages.error(request, "Unable to process your request currently. Please check your details.")
+
+        context.update({'form': form, "is_report_generate": False})
+        return render(request, self.template_name, context)

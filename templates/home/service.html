@@ -1,0 +1,84 @@
+{% extends "includes/base.html" %}
+{% block title %}Our Services{% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+        <section class="bg-gray-50 dark:bg-gray-900 py-16">
+            <div class="container mx-auto px-6 lg:px-20">
+                <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white">🔮 Our Astrology Services</h2>
+                <p class="text-lg text-center text-gray-600 dark:text-gray-300 mt-4">
+                    Discover personalized astrology insights, planetary transits, and cosmic guidance tailored for you.
+                </p>
+        
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
+                    <!-- Kundli Generation -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-center">
+                        <img src="/static/images/personalized-kundli-analysis.png" alt="Kundli" class="mx-auto w-20 h-20">
+                        <h3 class="text-2xl font-semibold text-gray-700 dark:text-white mt-4">Personalized Kundli</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Generate an in-depth birth chart based on your planetary positions and uncover your life’s
+                            blueprint.
+                        </p>
+                    </div>
+        
+                    <!-- Horoscope Predictions -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-center">
+                        <img src="/static/images/horoscope-predictions-analysis.png" alt="Horoscope" class="mx-auto w-20 h-20">
+                        <h3 class="text-2xl font-semibold text-gray-700 dark:text-white mt-4">Horoscope Predictions</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Get accurate daily, weekly, and yearly horoscope readings tailored to your zodiac sign.
+                        </p>
+                    </div>
+        
+                    <!-- Planetary Transits -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-center">
+                        <img src="/static/images/planetary-transits-analysis.png" alt="Transit" class="mx-auto w-20 h-20">
+                        <h3 class="text-2xl font-semibold text-gray-700 dark:text-white mt-4">Planetary Transits</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Track planetary shifts and understand how they influence your personal and professional life.
+                        </p>
+                    </div>
+        
+                    <!-- Career & Financial Guidance -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-center">
+                        <img src="/static/images/career-and-financial-guidance-analysis.png" alt="Career" class="mx-auto w-20 h-20">
+                        <h3 class="text-2xl font-semibold text-gray-700 dark:text-white mt-4">Career & Financial Guidance</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Know the best career path and financial opportunities based on your planetary alignments.
+                        </p>
+                    </div>
+        
+                    <!-- Love & Relationship Analysis -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-center">
+                        <img src="/static/images/love-and-relationship-analysis.png" alt="Love" class="mx-auto w-20 h-20">
+                        <h3 class="text-2xl font-semibold text-gray-700 dark:text-white mt-4">Love & Relationship Analysis</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Understand your compatibility with your partner and enhance your relationships.
+                        </p>
+                    </div>
+        
+                    <!-- AI-Powered Astrology Reports -->
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-center">
+                        <img src="/static/images/ai-powered-astrology-reports.png" alt="AI Astrology" class="mx-auto w-20 h-20">
+                        <h3 class="text-2xl font-semibold text-gray-700 dark:text-white mt-4">AI-Powered Astrology Reports</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mt-2">
+                            Get AI-generated astrology reports based on accurate celestial calculations.
+                        </p>
+                    </div>
+                </div>
+        
+                <div class="text-center mt-10">
+                    <a href="/contact"
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
+                        Contact Us for a Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

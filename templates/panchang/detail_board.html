@@ -1,0 +1,29 @@
+{% load custom_filters %}
+<div class="mx-auto max-w-7xl px-6 py-8">
+    <div class="text-center mb-6">
+        <h2 class="text-4xl font-bold text-gray-800 dark:text-white">✨ Your Personalized Panchang Prediction ✨</h2>
+        <p class="text-gray-600 dark:text-gray-400 mt-2">Hii {{ data.name }}, here’s your birth panchang prediction ❤️</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        <div class="mb-6">
+            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300"><strong>Birth Date:</strong> {{ data.birth_date }}</p>
+            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300"><strong>Birth Place:</strong> {{ data.birth_place }}</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for key, value in data.panchang.items %}
+            <div class="bg-blue-50 dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ key | capfirst }}:</h3>
+                <p class="text-gray-600 dark:text-gray-300 mt-1">
+                    {% if value is list %}
+                        {{ value.0 }} - {{ value.1 }}
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

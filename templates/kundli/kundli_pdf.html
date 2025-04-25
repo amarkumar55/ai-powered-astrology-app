@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundli Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #4B0082;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Kundli Report</h1>
+
+    <section>
+        <h2>1. Birth Details</h2>
+        <p><strong>Name:</strong> {{ name }}</p>
+        <p><strong>Date of Birth:</strong> {{ birth_date }}</p>
+        <p><strong>Time of Birth:</strong> {{ birth_time }}</p>
+        <p><strong>Place of Birth:</strong> {{ birth_place }}</p>
+    </section>
+
+    <section>
+        <h2>2. Birth Chart</h2>
+        <img src="{{ birth_chart_image_url }}" alt="Birth Chart" width="400">
+    </section>
+
+    <section>
+        <h2>3. Planetary Positions & Strengths</h2>
+        {{ planetary_table_html }}
+    </section>
+
+    <section>
+        <h2>4. Shadbala Summary</h2>
+        {{ shadbala_summary_html }}
+    </section>
+
+    <section>
+        <h2>5. Ashtakoot Compatibility</h2>
+        {{ ashtakoot_score_html }}
+    </section>
+
+    <section>
+        <h2>6. Dasha & Antar Dasha</h2>
+        {{ dasha_timeline_html }}
+    </section>
+
+    <section>
+        <h2>7. Dosha Analysis</h2>
+        <ul>
+            <li>Mangal Dosha: {{ mangal_dosha_result }}</li>
+            <li>Kaal Sarp Dosha: {{ kaal_sarp_result }}</li>
+            <li>Pitra Dosha: {{ pitra_dosha_result }}</li>
+            <li>Sadhe Sati: {{ sadhe_sati_result }}</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>8. Yogas</h2>
+        {{ yoga_list_html }}
+    </section>
+
+    <section>
+        <h2>9. Predictions & Remedies</h2>
+        <p>{{ predictions_text }}</p>
+        <p><strong>Suggested Remedies:</strong></p>
+        <ul>
+            {{ remedies_list_html }}
+        </ul>
+    </section>
+</body>
+
+</html>

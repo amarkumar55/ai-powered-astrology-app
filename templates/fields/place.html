@@ -1,0 +1,28 @@
+{% load custom_filters %}
+<div class="relative w-full mb-5">
+    <label class="block text-slate-600 text-xs font-bold mb-2" for="{{name}}">
+        <span class="block text-sm font-medium text-gray-700 mb-1">
+            {{ label|capfirst }}<span class="text-red-500">*</span>
+        </span>
+
+        <input 
+            type="place" 
+            required 
+            name="{{ name }}" 
+            value="{{value }}"
+            data-parsley-trigger="keyup"
+            data-parsley-place
+            data-parsley-required="true" 
+            title="Only letters and spaces are allowed" 
+            id="{{name}}"
+            placeholder="Enter Place"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+        
+        {% with form.errors|get_item:name as field_errors %}
+        {% if field_errors %}
+        <p class="text-sm text-red-600 mt-1">{{ field_errors.0 }}</p>
+        {% endif %}
+        {% endwith %}
+
+    </label>
+</div>

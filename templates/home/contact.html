@@ -1,0 +1,95 @@
+{% extends "includes/base.html" %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            <section class="bg-gray-50 dark:bg-gray-900 py-16">
+                <div class="container mx-auto px-6 lg:px-20">
+                    <h2 class="text-4xl font-bold text-center text-gray-800 dark:text-white">📬 Get in Touch</h2>
+                    <p class="text-lg text-center text-gray-600 dark:text-gray-300 mt-4">
+                        Have questions or need assistance? Feel free to reach out to us!
+                    </p>
+            
+                    <div class="mt-10 grid md:grid-cols-2 gap-10">
+                        <!-- Contact Form -->
+                        <div class="bg-slate-200 text-slate-100 dark:bg-gray-800 shadow-lg rounded-lg p-6 md:p-10">
+                            <h2 class="text-2xl font-semibold text-gray-700 dark:text-white">📩 Send Us a Message</h2>
+                            <form id="contact_form" action="{% url 'home.contactus' %}" method="POST" class="mt-6">
+                                {% csrf_token %}
+                               
+                                {% include "fields/full_name.html" with label='Full Name' name='full_name' %}
+                              
+                                {% include "fields/email_field.html" with label='Email' name='email' %}
+
+                            
+                                <div class="relative w-full mb-4">
+                                    <label class="block uppercase text-slate-600 text-xs font-bold mb-2" for="password">Message 
+                                    <sup class="text-red-500">*</sup>
+                                   
+                                    </label>
+                                    <textarea name="message" rows="4" required id="message" 
+                                        data-parsley-message 
+                                        data-parsley-trigger="keyup"
+                                        data-parsley-required-message="Message is required."
+                                        placeholder="Type Your Query Here....."
+                                        class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"></textarea>
+                                    
+                                    {% if form.errors.message %}
+                                        <p class="text-sm text-red-600 mt-1">
+                                            {% for error in form.message.errors %}
+                                            {{error}}
+                                            {% endfor %}
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="relative w-full mb-4">
+                                     {% include 'fields/captcha_custom.html' %}
+                                </div>
+
+                                {% include 'fields/submit_button' with value='Send Message' %}
+
+                            </form>
+                        </div>
+            
+                        <!-- Contact Information -->
+                        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 md:p-10">
+                            <h3 class="text-2xl font-semibold text-gray-700 dark:text-white">📞 Contact Information</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mt-4">Feel free to reach us through the following channels:
+                            </p>
+                            <ul class="mt-4 space-y-3">
+                                <li class="flex items-center">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-lg">📍</span>
+                                    <p class="ml-2 text-gray-600 dark:text-gray-300">Antri, Madhya Pradesh, India</p>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-lg">📧</span>
+                                    <p class="ml-2 text-gray-600 dark:text-gray-300">
+                                        <a href="mailto:support@astrolive.com"
+                                            class="text-indigo-600 dark:text-indigo-400 font-semibold">support@astrolive.com</a>
+                                    </p>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-indigo-600 dark:text-indigo-400 text-lg">📞</span>
+                                    <p class="ml-2 text-gray-600 dark:text-gray-300">+91 9685079691</p>
+                                </li>
+                            </ul>
+            
+                            <!-- Social Media -->
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-white mt-6">🌍 Follow Us</h3>
+                            <div class="flex space-x-4 mt-3">
+                                <a href="#" class="text-indigo-600 dark:text-indigo-400 text-2xl hover:text-indigo-700">📘</a>
+                                <a href="#" class="text-indigo-600 dark:text-indigo-400 text-2xl hover:text-indigo-700">🐦</a>
+                                <a href="#" class="text-indigo-600 dark:text-indigo-400 text-2xl hover:text-indigo-700">📸</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

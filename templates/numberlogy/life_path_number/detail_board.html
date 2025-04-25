@@ -1,0 +1,31 @@
+{% load custom_filters %}
+<div class="mx-auto max-w-7xl px-10">
+    <div class="relative flex py-4 flex-col gap-4 h-auto mb-5">
+        <div class="container mx-auto px-6 py-6 lg:px-20 text-center">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Hii {{ data.name }}, Your Life Path Number Predition
+                Here ❤️</h2>
+        </div>
+
+        <div
+            class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
+            <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">✨Your Life Path Number is {{ data.life_path_number }}✨</h2>
+            <p class="text-md text-center text-gray-600 dark:text-gray-300">
+                Discover the hidden meanings behind your life path number and how they influence your personality and destiny.
+                Explore your strengths, challenges, to balance your life.
+            </p>
+
+            <div class="grid grid-cols-1 space-y-2 gap-6 w-full max-w-3xl">
+                {% for num_key, num_value in data.life_path_number_description.items %}
+                    <div
+                        class="flex flex-row gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+                        <div class="flex flex-col justify-center space-y-2">
+                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                                <strong>{{num_key|capfirst}}:</strong> {{ num_value|capfirst }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

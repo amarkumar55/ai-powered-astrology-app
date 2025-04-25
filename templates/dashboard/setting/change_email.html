@@ -1,0 +1,68 @@
+{% extends "includes/base.html" %}
+{% block title %} Dashboard | Account | Change Email {% endblock %}
+{% block content %}
+<main class="h-screen">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            <div class="md:flex w-full">
+                {% include 'dashboard/sidebar.html' %}
+                <div
+                    class="w-full space-y-4 px-6 shadow-md shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 text-medium rounded-lg">
+                    <div class="shadow-md rounded-lg p-6">
+                        <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white border-b border-gray-200">Change Your Account Email</h3>
+                        <form id="sendOtpForm">
+                            {%  csrf_token %}
+                            <ul class="space-y-6">            
+                              
+                                <li class="w-7/9">
+                                   {% include "fields/email_field.html" with label='Current Email' name='old_email' value=request.user.email %}
+                                </li>
+
+                                <li class="w-7/9">
+                                    {% include "fields/email_field.html" with label='New Email' name='new_email'  %}                              
+                                </li>
+
+                                <li class="w-7/9">
+                                    {% include 'fields/password_field.html' with label='Current Password' name='password' %}
+                                </li>
+
+                                <li class="w-7/9">
+                                    <div class="flex justify-between items-center">
+                                        <button type="button"  id="sendOtpBtn" class="cursor-pointer inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>  
+
+                        <form id="verifyForm" class="hidden">
+                            {% csrf_token %}
+                            <ul class="space-y-6">
+                                <input type="hidden" id="old_email_1" />
+                                <input type="hidden" id="new_email_1" />
+                                <li class="w-7/9">
+                                    {% include 'fields/otp_field.html' with label='Enter OTP (old email)' name='old_email_otp' %}
+                                </li>
+
+                                <li class="w-7/9">
+                                    {% include 'fields/otp_field.html' with label='Enter OTP (new email)' name='new_email_otp' %}
+                                </li>
+
+                                <li class="w-7/9">
+                                    <div class="flex justify-between items-center">
+                                        <button type="button" id="verifyOtpBtn"
+                                            class="cursor-pointer inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% load custom_filters %}
+<div class="max-w-4xl mx-auto px-6 py-10">
+    <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">💑 Marriage Compatibility Prediction</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mt-2">❤️ {{ boy_name }} & {{ girl_name }} ❤️</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Compatibility Card -->
+        {% for item in compatibility_scores %}
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 text-center">
+            <h3 class="text-lg font-semibold text-gray-700 dark:text-white mb-2">{{ item.label }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Max Score: <span class="font-medium">{{ item.max }}</span></p>
+            <p class="text-xl font-bold text-blue-600 dark:text-blue-400 mt-2">{{ item.score }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Total & Result Section -->
+    <div class="mt-10 text-center space-y-4">
+        <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-xl shadow">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Total Score</h3>
+            <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ total_score }} / 36</p>
+        </div>
+
+        <div
+            class="{% if match.total_score >= 20 %}bg-green-100 dark:bg-green-800{% else %}bg-red-100 dark:bg-red-800{% endif %} p-6 rounded-xl shadow mt-6">
+            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Marriage Prediction Result</h3>
+            <p class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-200">
+                {% if total_score >= 20 %}
+                🎉 Congratulations! Your match is perfect.
+                {% else %}
+                ⚠️ We do not recommend marriage with each other.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>

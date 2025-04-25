@@ -1,0 +1,9 @@
+{% include "includes/base_name_form.html" %}
+
+{% include 'fields/birth_date.html' %}
+
+{% if show_captcha %}
+{% include 'fields/captcha_custom.html' %}
+{% endif %}
+
+{% include 'fields/submit_button.html' with value='Submit' %}

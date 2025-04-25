@@ -1,0 +1,20 @@
+<div class="relative w-full mb-4">
+    <label class="inline-flex items-center cursor-pointer">
+        <input type="checkbox" 
+            required name="is_accepted_terms"
+            id="is_accepted_terms"
+            data-parsley-required-message="You must accept the terms and conditions."
+            class="form-checkbox border-0 rounded text-slate-700 ml-1 w-5 h-5 ease-linear transition-all duration-150" />
+       
+            <span class="ml-2 text-sm font-semibold text-slate-600">
+               I agree with the
+                <a href="{% url 'home.policy' %}" class="cursor-pointer underline text-sm text-slate-400">
+                    term's and conditions
+                </a>
+            <sup>
+            {% if form.errors.is_accepted_terms %}
+                <p class="text-sm text-red-600 mt-1"> {{ form.errors.is_accepted_terms.0 }} </p> 
+            {% endif %}
+        </span>
+    </label>
+</div>
