@@ -1,4 +1,4 @@
-<div class="relative w-full mb-4">
+<div class="relative w-full mb-3">
 {% spaceless %}
     <label class="block uppercase text-slate-600 text-xs font-bold mb-2" for="captcha">
         Captcha <sup class="text-red-500">*</sup>
@@ -18,9 +18,12 @@
             class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
             placeholder="Enter text shown above" />
         
-        <button type="button"  
-            id="refresh_capcha"
-            class="click cursor-pointer bg-black text-white active:bg-slate-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150">Refresh</button>
+        <svg xmlns="http://www.w3.org/2000/svg" id="refresh_capcha" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                class="size-2 w-12 h-12">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+        </svg>
+
     </div>
 
     {% if form.captcha.errors %}

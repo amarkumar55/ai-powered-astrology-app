@@ -5,3 +5,13 @@
    font-weight: 600;
    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+
+
+#user-menu-list {
+   display: none;
+   position: absolute;
+   background: white;
+   border: 1px solid #ccc;
+   border-radius: 6px;
+   z-index: 100;
+}

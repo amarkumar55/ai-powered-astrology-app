@@ -6,29 +6,29 @@
        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
             <div class="md:flex w-full">
                 {% include 'dashboard/sidebar.html' %}
-                <div class="space-y-4 px-6 bg-gray-50  text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
+                <div class="space-y-4 px-6 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
                     {% if subscription and subscription.plan %}
                         <div class="w-full space-y-4">
                             <div
-                                class="space-y-4  rounded-3xl shadow-lg shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 bg-gray-900 p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10">
+                                class="space-y-4  rounded-2xl shadow-lg shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 bg-white p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10">
                             
                                 <div class="flex flex-row justify-between">
                                     <div>
-                                        <h3 id="tier-enterprise" class="text-3xl font-semibold text-indigo-400">Your Active Subscription ({{subscription.plan.name }})</h3>
+                                        <h3 id="tier-enterprise" class="text-3xl font-semibold text-gray-900">Your Active Subscription ({{subscription.plan.name }})</h3>
                                     </div>
                                     <div>
-                                        <span class="text-3xl font-semibold tracking-tight text-white">₹{{ subscription.plan.price }}</span>
+                                        <span class="text-3xl font-semibold tracking-tight text-gray-600">₹{{ subscription.plan.price }}</span>
                                     </div>
                                 </div>
                             
-                                <p class="text-sm text-gray-400 mt-2">
+                                <p class="text-sm text-gray-600 mt-2">
                                     Valid from {{ subscription.start_date|date:"d M Y" }} to {{ subscription.end_date|date:"d M Y" }}
                                 </p>
-                                <p class="mt-6 text-base/7 text-gray-300">{{subscription.plan.description}}</p>
-                                <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-300 sm:mt-10">
+                                <p class="mt-6 text-base/7 text-gray-600">{{subscription.plan.description}}</p>
+                                <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-600 sm:mt-10">
                                     {% for feature in subscription.plan.features.all %}
                                     <li class="flex gap-x-3">
-                                        <svg class="h-6 w-5 flex-none text-indigo-400" viewBox="0 0 20 20" fill="currentColor"
+                                        <svg class="h-6 w-5 flex-none text-gray-900" viewBox="0 0 20 20" fill="currentColor"
                                             aria-hidden="true" data-slot="icon">
                                             <path fill-rule="evenodd"
                                                 d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
@@ -46,14 +46,15 @@
                                     <form action="{% url 'auth.logout' %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit"
-                                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
-                                            <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M7.824 5.937a1 1 0 0 0 .726-.312 2.042 2.042 0 0 1 2.835-.065 1 1 0 0 0 1.388-1.441 3.994 3.994 0 0 0-5.674.13 1 1 0 0 0 .725 1.688Z" />
-                                                <path
-                                                    d="M17 7A7 7 0 1 0 3 7a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1V7a5 5 0 1 1 10 0v7.083A2.92 2.92 0 0 1 12.083 17H12a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1a1.993 1.993 0 0 0 1.722-1h.361a4.92 4.92 0 0 0 4.824-4H17a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3Z" />
-                                            </svg>Logout
+                                            class="inline-flex gap-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                                <polyline points="16 17 21 12 16 7" />
+                                                <line x1="21" y1="12" x2="9" y2="12" />
+                                            </svg>
+                                            Logout
+                                          
                                         </button>
                                     </form>
                             </div>

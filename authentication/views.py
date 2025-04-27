@@ -26,7 +26,7 @@ User = get_user_model()
 COOLDOWN_SECONDS = 60  
 
 
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', block=True), name='dispatch')
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'authentication/password_reset_confirm.html'
     success_url = reverse_lazy('auth.login')
@@ -59,7 +59,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     
     
 # REGISTER NEW USER INTO SYSTEM
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', block=True), name='dispatch')
 class RegisterView(FormView):
     template_name = 'authentication/register.html'
     form_class = RegisterForm

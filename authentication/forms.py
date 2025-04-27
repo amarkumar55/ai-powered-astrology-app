@@ -123,7 +123,7 @@ class RegisterForm(forms.ModelForm):
 
 
 class VerifyLoginOtp(forms.Form):
-    otp = forms.IntegerField(required=True)
+    otp = forms.CharField(required=True)
 
     def __init__(self, *args, request=None, **kwargs):
         self.show_captcha = kwargs.pop('show_captcha', False)
@@ -152,7 +152,7 @@ class VerifyLoginOtp(forms.Form):
 
 class VerifyOtpForm(forms.Form):
     email = forms.EmailField(min_length=5, max_length=100, required=True)
-    otp = forms.IntegerField(required=True)
+    otp = forms.CharField(required=True)
 
     def __init__(self, request=None, *args, **kwargs):
         self.show_captcha = kwargs.pop('show_captcha', False)

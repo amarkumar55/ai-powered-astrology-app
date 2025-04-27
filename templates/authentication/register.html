@@ -32,7 +32,7 @@
                         <form id="register_form"  method="POST" action="{% url 'auth.register' %}" class="mt-6" data-parsley-validate>
                             {% csrf_token %}
                             
-                            <div class="relative w-full mb-3 flex flex-row gap-4">                                 
+                            <div class="relative w-full flex flex-row gap-4">                                 
                                 {% include 'fields/name.html' with label='First Name' name='first_name' %}
                                 {% include 'fields/name.html' with label='Last Name' name='last_name' %}
                             </div>
@@ -41,7 +41,7 @@
                             {% include 'fields/birth_date.html' %}
                             {% include 'fields/gender.html' %}
                          
-                            <div class="relative w-full mb-4 flex flex-row gap-4">
+                            <div class="relative w-full flex flex-row gap-4">
                                
                                 {% include 'fields/password_field.html' with label="Password" name="password" %}
                                 {% include 'fields/password_field.html' with label="Confirm Password" name="confirm_password" %}
