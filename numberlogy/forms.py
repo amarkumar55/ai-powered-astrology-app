@@ -13,7 +13,8 @@ class NameNumberForm(forms.Form):
 
     def __init__(self, request=None, *args, **kwargs):
         self.show_captcha = kwargs.pop('show_captcha', False)
-        super().__init__(request=request, *args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.request = request  
 
         if self.show_captcha:
             self.fields['captcha'] = CaptchaField(widget=CustomCaptchaTextInput)

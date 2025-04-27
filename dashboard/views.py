@@ -28,13 +28,13 @@ OTP_COOLDOWN_SECONDS = 60
 MAX_ATTEMPTS = 5
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required
 def index(request):
     subscription = UserSubscription.objects.filter(user=request.user).select_related('plan').prefetch_related('plan__features').first()  
     return render(request, "dashboard/index.html", {"subscription": subscription})
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required()
 def invoices(request):
     invoices = Invoice.objects.filter(user=request.user)
@@ -44,7 +44,7 @@ def invoices(request):
     return render(request, "dashboard/invoices/index.html", {"page_obj": page_obj})
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required()
 def get_payment_history(request):
 
@@ -60,7 +60,7 @@ def get_payment_history(request):
     return render(request, "dashboard/payment/index.html", {"page_obj": page_obj})
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required()
 def get_refund_history(request):
     transactions = UserTransaction.objects.filter(
@@ -75,14 +75,14 @@ def get_refund_history(request):
     return render(request, "dashboard/payment/refund.html", {"page_obj": page_obj})
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required()
 def get_your_activity(request):
     activities = UserActivity.objects.filter(user=request.user).order_by('-action_date_time')[:10]
     return render(request, "dashboard/activity/index.html", {"activities":activities})
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required()
 def get_setting(request):
     setting = request.user
@@ -90,7 +90,7 @@ def get_setting(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class ProfileUpdateView(View):
     template_name = "dashboard/profile/index.html"
     form_class = ProfileForm
@@ -126,13 +126,13 @@ class ProfileUpdateView(View):
                     hours += 12
                 elif cd["time_format"] == 'AM' and hours == 12:
                     hours = 0
-
+   
                 # Update fields
                 user.first_name = cd["first_name"]
                 user.last_name = cd["last_name"]
                 user.username = cd["username"]
                 user.gender = cd["gender"]
-                user.birth_day = date(cd["year"], cd["month"], cd["day"])
+                user.birth_date = date(cd["year"], cd["month"], cd["day"])
                 user.birth_time = time(hours, cd["minutes"], cd["seconds"])
                 user.timezone = cd["timezone"]
                 user.birth_place = cd["place"]
@@ -144,7 +144,7 @@ class ProfileUpdateView(View):
                     user.profile_picture = handle_profile_upload(cd["profile"], cd["username"])
 
                 user.save()
-                store_activity(request, cd.copy(), "profile update", user)
+                store_activity(request, {} , "profile update", user)
                 messages.success(request, "Your profile was updated successfully!")
                 return redirect("dashboard.get_profile")
 
@@ -157,7 +157,7 @@ class ProfileUpdateView(View):
     
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class AccountDeleteView(View):
     template_name = "dashboard/account/index.html"
     success_template = "dashboard/account/profile_disable.html"
@@ -205,7 +205,7 @@ class AccountDeleteView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class DisableTwoFactorView(View):
     template_name = 'dashboard/setting/enable_2fa.html'
 
@@ -230,41 +230,53 @@ class DisableTwoFactorView(View):
     
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='200/m', method='POST', block=True), name='dispatch')
 class EnableTwoFactorView(View):
     template_name = 'dashboard/setting/enable_2fa.html'
 
     def get(self, request):
-        enable_2fa_form = Enable2FAForm()
+        form = Enable2FAForm()
         return render(request, self.template_name, {
-            "form": enable_2fa_form,
+            "form": form,
         })
 
     def post(self, request):
-        enable_2fa_form = Enable2FAForm(request.POST)
+
+        form = Enable2FAForm(request.POST)
         
-        if enable_2fa_form.is_valid():
+        if form.is_valid():
             try:
+                # Send OTP via email
                 email = request.user.email
-                send_otp_message("Your OTP for 2FA", email)
-                messages.info(request, 'OTP sent to your email. Please enter it below.')
-                verify_otp_form = VerifyOTPForm()
+                send_otp_message(email, "Your OTP for 2FA")
+                
+                # Notify user about OTP
+                messages.success(request, 'OTP sent to your email. Please enter it below.')
+                
+                # Prepare the OTP verification form
+                form = VerifyOTPForm()
+                
+                # Render with post-email form
                 return render(request, self.template_name, {
                     'post_email_enter': True,
-                    'verify_otp_form': verify_otp_form,
-                  
+                    'form': form,
                 })
+
             except Exception as e:
+                # Log error and notify user
                 send_error_log(e)
                 messages.error(request, 'Unable to send OTP right now. Please try later.')
+        
         else:
+         
             messages.error(request, 'Invalid data. Please try again.')
 
-        return render(request, self.template_name, {"form": enable_2fa_form})
+        # In case of form errors, return the original form with errors
+        return render(request, self.template_name, {"form": form})
     
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class VerifyTwoFactorOTPView(View):
  
     template_name = 'dashboard/setting/enable_2fa.html'
@@ -273,16 +285,18 @@ class VerifyTwoFactorOTPView(View):
         form = VerifyOTPForm(request.POST)
 
         if form.is_valid():
+           
             otp_entered = request.POST.get('email_otp', '').strip()
+        
 
             try:
-                device = EmailOTP.objects.get(email=request.user.email)
+                device = EmailOTP.objects.get(email='amar@astrolive.com')
             except EmailOTP.DoesNotExist:
-                messages.error(request, 'No OTP generated. Please request one first.')
+                messages.error(request, 'otp not matched.')
                 return render(request, self.template_name, {'post_email_enter': True})
 
             if request.user.two_factor_enabled:
-                messages.info(request, '2FA is already enabled for your account.')
+                messages.error(request, '2FA is already enabled for your account.')
                 return redirect('dashboard.index')
 
             if device.is_expired():
@@ -296,12 +310,13 @@ class VerifyTwoFactorOTPView(View):
             else:
                 messages.error(request, 'Invalid OTP. Please try again.')
         else:
+            print("form invalid")
             messages.error(request, 'Unable to process your request. Please try again.')
 
         return render(request, self.template_name, {'post_email_enter': True})
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
 @login_required
 def change_email_view(request):
     form = VerifyEmailChangeForm()
@@ -309,7 +324,7 @@ def change_email_view(request):
 
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class SendOTPForEmailChangeView(View):
     def post(self, request):
         form = VerifyEmailChangeForm(request.POST)
@@ -335,8 +350,8 @@ class SendOTPForEmailChangeView(View):
             if cache.get(cooldown_key):
                 return JsonResponse({'status': 'cooldown', 'message': 'Please wait before requesting another OTP'}, status=429)
 
-            send_otp_message("Your OTP for Email Verification", old_email)
-            send_otp_message("Your OTP for Email Verification", new_email)
+            send_otp_message(old_email,"Your OTP for Email Verification")
+            send_otp_message(new_email,"Your OTP for Email Verification")
 
             cache.set(cooldown_key, True, OTP_COOLDOWN_SECONDS)
         except Exception as e:
@@ -346,7 +361,7 @@ class SendOTPForEmailChangeView(View):
         return JsonResponse({'status': 'success', 'message': 'OTP sent successfully'})
 
 @method_decorator(login_required, name='dispatch')
-@method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class VerifyOTPForEmailChangeView(View):
     def post(self, request):
         form = VerifyEmailChangeOTP(request.POST)

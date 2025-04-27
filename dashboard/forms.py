@@ -245,11 +245,12 @@ class DisableTwoFactorForm(forms.Form):
     
 
 class Enable2FAForm(forms.Form):
-    email = forms.EmailField(min_length=5,  max_length=100, required=True)
+    email = forms.EmailField(min_length=5, max_length=100, required=True)
 
     def clean_email(self):
-        email = self.cleaned_data.get("email")
-
+        email = self.cleaned_data.get("email").strip()  # Remove any extra spaces
+        
+        # Regex to validate email address format
         email_regex = re.compile(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
         if not email_regex.fullmatch(email):
             raise forms.ValidationError("Please enter a valid email address.")
@@ -265,25 +266,24 @@ class Enable2FAForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        # Clean all string fields
+        # Clean all string fields except email
         for field, value in cleaned_data.items():
-            if isinstance(value, str):
+            if isinstance(value, str) and field != 'email':
                 cleaned_data[field] = bleach.clean(value, tags=[], strip=True)
 
         return cleaned_data
-
 
 class VerifyOTPForm(forms.Form):
     email_otp = forms.CharField(min_length=6, max_length=6, required=True)
 
     def clean_email_otp(self):
-        otp = self.cleaned_data.get("email_otp")
+        email_otp = self.cleaned_data.get("email_otp")
 
         # Ensure OTP is only digits
-        if not re.fullmatch(r"^\d{6}$", otp):
+        if not re.fullmatch(r"^\d{6}$", email_otp):
             raise forms.ValidationError("OTP must contain exactly 6 digits.")
 
-        return otp
+        return email_otp
     
     def clean(self):
         cleaned_data = super().clean()

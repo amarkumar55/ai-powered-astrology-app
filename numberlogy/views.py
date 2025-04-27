@@ -361,7 +361,7 @@ class PersonalityNumberView(View):
 
 @method_decorator(ratelimit(key='user_or_ip', rate='5/m', block=True), name='dispatch')
 class AngelNumberView(View):
-    template_name = "nnumberlogy/angel_number/index.html"
+    template_name = "numberlogy/angel_number/index.html"
 
     def get(self, request): 
         return render(request, self.template_name, {})

@@ -3,7 +3,7 @@
     <label class="block uppercase text-slate-600 text-xs font-bold mb-2" for="{{name}}">
         Email <sup class="text-red-500">*</sup>
     </label>
-    <input type="text" 
+    <input type="email" 
         id="{{name}}" 
         name="{{name}}" 
         value="{{value}}" 
@@ -15,7 +15,11 @@
         data-parsley-customemail-message="Please enter a valid email."
         class="border-0 px-3 py-3  placeholder-slate-300 text-slate-600 {% if disabled %} bg-gray-50 {% else %}  bg-white {% endif %} rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
     
-    {% if form.errors.email %}
-       <p class="text-sm text-red-600 mt-1">{{ form.errors.email.0 }}</p>
+    {% if form.errors %}
+        {% with form.errors|get_item:name as field_errors %}
+        {% if field_errors %}
+        <p class="backend-error-message text-sm text-red-600 mt-1">{{ field_errors.0 }}</p>
+        {% endif %}
+        {% endwith %}
     {% endif %}
 </div>

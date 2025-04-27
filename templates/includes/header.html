@@ -3,7 +3,7 @@
         <div class="flex h-16 items-center justify-between">
             <!-- App Name -->
             <div class="flex-shrink-0 text-white px-3 font-bold text-lg">
-                {{ APP_NAME }}
+               <a href="{% url 'home.index' %}">{{ APP_NAME }}</a>
             </div>
 
             <!-- Desktop Menu -->
@@ -37,25 +37,25 @@
                             class="absolute hidden top-full mt-2 right-0 z-10 w-48 origin-top-right rounded-md bg-white py-1 ring-1 shadow-lg ring-black/5 focus:outline-none"
                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                 
-                            <a href="{% url 'dashboard.index' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.index' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Dashboard</a>
-                            <a href="{% url 'dashboard.get_profile' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.get_profile' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Your Profile</a>
-                            <a href="{% url 'dashboard.invoices' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.invoices' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Invoices</a>
-                            <a href="{% url 'dashboard.activity' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">Your
+                            <a href="{% url 'dashboard.activity' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700" role="menuitem">Your
                                 Activity</a>
-                            <a href="{% url 'dashboard.get_payment_history' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.get_payment_history' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Payment History</a>
-                            <a href="{% url 'dashboard.get_refund_history' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.get_refund_history' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Refund History</a>
-                            <a href="{% url 'dashboard.get_account_view' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.get_account_view' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Account</a>
-                            <a href="{% url 'dashboard.get_setting' %}" class="block px-4 py-2 text-sm text-gray-700"
+                            <a href="{% url 'dashboard.get_setting' %}" class="cursor-pointer block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem">Settings</a>
                             <form action="{% url 'auth.logout' %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700">Logout</button>
+                                <button type="submit" class="cursor-pointer block w-full text-left px-4 py-2 text-sm text-gray-700">Logout</button>
                             </form>
                         </div>
                     </div>

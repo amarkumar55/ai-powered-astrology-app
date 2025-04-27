@@ -1,7 +1,6 @@
-import re
-from django.urls import reverse
+from django.urls import  reverse
 from django.shortcuts import redirect
-
+import re
 
 class BlockUnverifiedUserMiddleware:
     def __init__(self, get_response):
@@ -11,19 +10,24 @@ class BlockUnverifiedUserMiddleware:
         user = request.user
         path = request.path
 
+        # If user is authenticated but NOT verified
         if user.is_authenticated and not user.is_email_verified:
-            # List of explicitly allowed paths for unverified users
-            allowed_paths = [
-                reverse('resend_verification'),
-                reverse('auth.logout'),
-                # Add other essentials here
-            ]
 
-            # Allow verification link paths like /verify/uid/token/
-            is_verification_path = re.match(r'^/verify/[\w-]+/[\w-]+/?$', path)
+            # Reverse the named URLs
+            resend_verification_url = reverse('resend_verification')
+            logout_url = reverse('auth.logout')
+            
 
-            # Default: BLOCK everything unless explicitly allowed
-            if path not in allowed_paths and not is_verification_path and not path.startswith('/admin'):
+
+            # Also allow verification URLs (like /verify/uid/token/)
+            is_verification_path = re.match(r'^/authentication/verify/[\w-]+/[\w-]+/?$', path)
+
+            # If NOT in allowed paths AND not admin AND not verification link
+            if (not path.startswith(resend_verification_url) and
+                not path.startswith(logout_url) and
+                not is_verification_path and
+                not path.startswith('/admin')):
+
                 return redirect('resend_verification')
 
         return self.get_response(request)

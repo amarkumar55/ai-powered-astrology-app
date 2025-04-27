@@ -5,8 +5,7 @@
 </div>
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
-    <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth<sup
-            class="text-red-500">*</sup></label>
+    <label for="birth_date" class="block text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
 
     <div class="grid grid-cols-3 gap-2">
         {% include "fields/birth_select.html" with label='Day' name='days' item=days type='day' %}
@@ -16,17 +15,18 @@
 </div>
 
 
-<label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birth Time<sup
-        class="text-red-500">*</sup></label>
-<div class="grid grid-cols-2 lg:grid-cols-4  gap-2">
+<div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
+    <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Birth Time</label>
+    <div class="grid grid-cols-4 gap-2">
     {% include "fields/birth_select.html" with label='Hours' name='hours' item=hours type='day' %}
     {% include "fields/birth_select.html" with label='Minutes' name='minutes' item=minutes type='day' %}
     {% include "fields/birth_select.html" with label='Seconds' name='seconds' item=minutes type='day' %}
     {% include "fields/birth_select.html" with label='Time Format' name='time_format' item=time_format type='day' %}
+   </div>
 </div>
 
-{% include "fields/latlog.html" with name='latitude' %}
-{% include "fields/latlog.html" with name='longitude' %}
+{% include "fields/latlon.html" with name='latitude' %}
+{% include "fields/latlon.html" with name='longitude' %}
 
 <div class="grid grid-cols-1">
     {% include "fields/place.html" with label='Birth Place' name='place_of_birth' %}
@@ -38,4 +38,4 @@
 {% endif %}
 
 {% include 'fields/term_field.html' %}
-{% include 'fields/submit_button' with value='Submit' %}
+{% include 'fields/submit_button.html' with value='Submit' %}

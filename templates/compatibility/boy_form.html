@@ -24,8 +24,8 @@
     {% include "fields/birth_select.html" with label='Time Format' name='boy_time_type' item=time_format type='day' %}
 </div>
 
-{% include "fields/latlog.html" with name='boy_latitude' %}
-{% include "fields/latlog.html" with name='boy_longitude' %}
+{% include "fields/latlon.html" with name='boy_latitude' %}
+{% include "fields/latlon.html" with name='boy_longitude' %}
 
 <div class="grid grid-cols-1">
     {% include "fields/place.html" with label='Boy Birth Place' name='boy_place' %}

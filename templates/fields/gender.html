@@ -7,6 +7,7 @@
         name="gender"
         id="gender" 
         data-parsley-required-message="Please select your gender." 
+        data-parsley-trigger="keyup" 
         required
         class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
         <option value="Male" {% if value == 'Male' %} selected {% endif %}>Male</option>
@@ -14,6 +15,6 @@
         <option value="Other" {% if value == 'Other' %} selected {% endif %}>Other</option>
     </select>
     {% if form.errors.gender %}
-       <p class="text-sm text-red-600 mt-1">{{ form.errors.gender.0 }}</p>
+       <p class="backend-error-message text-sm text-red-600 mt-1">{{ form.errors.gender.0 }}</p>
     {% endif %}
 </div>

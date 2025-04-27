@@ -15,6 +15,8 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 User = get_user_model()
 
@@ -37,11 +39,18 @@ def generate_otp(length=6):
 
 
 def send_otp_message(email, message):
+       
+    try:
+        validate_email(email)  # Check if the email is valid
+    except ValidationError:
+        raise ValueError("Invalid email address provided.")  # Raise 
+    
     otp = generate_otp()
     EmailOTP.objects.update_or_create(
         email=email,
         defaults={'otp': otp, 'otp_created_at': timezone.now()}
     )
+  
     send_mail(
         message,
         f'Your OTP is: {otp}',

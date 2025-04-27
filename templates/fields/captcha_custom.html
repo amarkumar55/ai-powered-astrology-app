@@ -12,6 +12,7 @@
             name="captcha_1" 
             id="id_captcha_1"  
             data-parsley-required="true"
+            data-parsley-trigger="keyup" 
             data-parsley-required-message="Please enter the CAPTCHA"
             data-parsley-minlength="4"
             data-parsley-minlength-message="CAPTCHA must be at least 4 characters"
@@ -27,7 +28,7 @@
     </div>
 
     {% if form.captcha.errors %}
-       <p class="text-sm text-red-600 mt-1">{{ form.captcha.errors.0 }}</p>
+       <p class="backend-error-message text-sm text-red-600 mt-1">{{ form.captcha.errors.0 }}</p>
     {% endif %}
 {% endspaceless %}
 </div>

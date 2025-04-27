@@ -145,7 +145,7 @@ class VerifyLoginOtp(forms.Form):
         if not otp:
             self.add_error("otp", "OTP is required.")
         else:
-            if not re.match(r'^\d{6}$', str(otp)):
+            if not re.match(r'^\d{6}$', otp):
                 self.add_error("otp", "OTP must be a 6-digit number.")
 
         return cleaned_data
@@ -222,7 +222,8 @@ class CustomLoginForm(AuthenticationForm):
 class ResendVerificationForm(forms.Form):
     def __init__(self, request=None, *args, **kwargs):
         self.show_captcha = kwargs.pop('show_captcha', False)
-        super().__init__(request=request, *args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.request = request
 
         if self.show_captcha:
             self.fields['captcha'] = CaptchaField(widget=CustomCaptchaTextInput)

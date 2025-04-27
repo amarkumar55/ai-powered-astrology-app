@@ -84,6 +84,7 @@ class RegisterView(FormView):
             user.date_joined = current_date
             user.last_login = current_date
             user.is_active = True
+            user.set_password(form.cleaned_data.get('password'))
             user.save()
             
             if user.id:
@@ -99,12 +100,13 @@ class RegisterView(FormView):
             return self.form_invalid(form)  # fall back to the form with errors
 
     def form_invalid(self, form):
+        
         messages.error(self.request, "There was an error with your registration.")
         return super().form_invalid(form)
 
 
 
-@method_decorator(ratelimit(key='user_or_ip', rate='3/m', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', block=True), name='dispatch')
 class CustomLoginView(LoginView):
     template_name = 'authentication/login.html'
     form_class = CustomLoginForm
@@ -147,6 +149,12 @@ class CustomLoginView(LoginView):
         else:
             remember_me = self.request.POST.get('remember')
             login(self.request, user)
+          
+            if user.is_authenticated and not user.is_email_verified:
+                self.request.session['unverified_email'] = user.email
+            else:
+                self.request.session.pop('unverified_email', None)
+        
             reset_failed_attempts(self.request)
             if remember_me:
                 self.request.session.set_expiry(60 * 60 * 24 * 30)
@@ -164,7 +172,7 @@ class CustomLoginView(LoginView):
 
 
 
-@method_decorator(ratelimit(key='user_or_ip', rate='3/m', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', block=True), name='dispatch')
 class VerifyLoginOTPView(FormView):
     template_name = 'authentication/verify_login_otp.html'
     form_class = VerifyLoginOtp
@@ -263,7 +271,7 @@ class CustomLogoutView(LogoutView):
 
 
 
-@method_decorator(ratelimit(key='user_or_ip', rate='3/m', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', block=True), name='dispatch')
 class ProcessAccountVerificationView(View):
     
     def get(self, request, uidb64, token, *args, **kwargs):
@@ -284,7 +292,7 @@ class ProcessAccountVerificationView(View):
         
     
 
-@method_decorator(ratelimit(key='user_or_ip', rate='3/m', block=True), name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', block=True), name='dispatch')
 class ResendVerificationView(View):
     template_name = 'authentication/verify_notice.html'
 

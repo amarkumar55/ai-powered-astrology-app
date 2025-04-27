@@ -1,24 +1,29 @@
+$(window).on('load', function() {
 
-/* Alert hide or show script*/
-function hideAlert() {
-    var alert2 =  document.getElementById('alert-2');
-    var alert3 = document.getElementById('alert-3');
-            
-    if(alert2){
-        alert2.style.display = 'none';
+    /* Alert hide or show script */
+    function hideAlert() {
+        var alert2 = document.getElementById('alert-2');
+        var alert3 = document.getElementById('alert-3');
+                
+        if (alert2) {
+            alert2.style.display = 'none';
+        }
+
+        if (alert3) {
+            alert3.style.display = 'none';
+        }
+        
+        document.querySelectorAll('.backend-error-message').forEach(function(el) {
+            el.style.display = 'none';
+        });
     }
 
-    if(alert3) {
-        alert3.style.display = 'none';
-    }
-}
-
-setTimeout(function () {
-    hideAlert();
-}, 5000);
-
+    setTimeout(hideAlert, 4000);
+});
 
 $(document).ready(function () {
+
+
     let debounceTimeout;
 
     $('#place').on('input', function () {
@@ -157,6 +162,7 @@ $(document).ready(function () {
             // Prevent the default form submission behavior
             event.preventDefault();
 
+            
             // Collect form values
             const old_email = document.getElementById("old_email").value;
             const new_email = document.getElementById("new_email").value;
@@ -456,30 +462,37 @@ $(document).ready(function () {
         disable_2fa_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 disable_2fa_form.off('submit');  // Prevent recursion
+                disable_2fa_form[0].submit();   
             }
         });
         disable_2fa_form.on('submit', function(e) {
             e.preventDefault(); // Always prevent default
         });
     }
-    
+
+        
     const enable_2fa_form = $('#enable_2fa_form');
-    if (enable_2fa_form.length > 0) { 
+    if (enable_2fa_form.length > 0) {
         enable_2fa_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
-                enable_2fa_form.off('submit');  // Prevent recursion
+                // Submit the form after validation passes
+                enable_2fa_form.off('submit').submit();  // This ensures the form is submitted
+                enable_2fa_form[0].submit();   
             }
         });
+        
         enable_2fa_form.on('submit', function(e) {
-            e.preventDefault(); // Always prevent default
+            e.preventDefault(); // Always prevent default, but we’ll manually trigger the submission after validation
         });
     }
+
 
     const verify_otp_form_2fa = $('#verify_otp_form_2fa');
     if (verify_otp_form_2fa.length > 0) { 
         verify_otp_form_2fa.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 verify_otp_form_2fa.off('submit');  // Prevent recursion
+                verify_otp_form_2fa[0].submit();   
             }
         });
         verify_otp_form_2fa.on('submit', function(e) {
@@ -492,6 +505,7 @@ $(document).ready(function () {
         kundli_matching_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 kundli_matching_form.off('submit');  // Prevent recursion
+                kundli_matching_form[0].submit();   
             }
         });
         kundli_matching_form.on('submit', function(e) {
@@ -504,6 +518,7 @@ $(document).ready(function () {
         dasha_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 dasha_form.off('submit');  // Prevent recursion
+                dasha_form[0].submit();  
             }
         });
         dasha_form.on('submit', function(e) {
@@ -517,6 +532,7 @@ $(document).ready(function () {
         contact_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 contact_form.off('submit');  // Prevent recursion
+                contact_form[0].submit();  
             }
         });
         contact_form.on('submit', function(e) {
@@ -530,6 +546,7 @@ $(document).ready(function () {
         kundli_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 kundli_form.off('submit');  // Prevent recursion
+                kundli_form[0].submit();  
             }
         });
         kundli_form.on('submit', function(e) {
@@ -543,6 +560,7 @@ $(document).ready(function () {
         loshugrid_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 loshugrid_form.off('submit');  // Prevent recursion
+                loshugrid_form[0].submit();  
             }
         });
         loshugrid_form.on('submit', function(e) {
@@ -556,6 +574,7 @@ $(document).ready(function () {
         name_number_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 name_number_form.off('submit');  // Prevent recursion
+                name_number_form[0].submit(); 
             }
         });
         name_number_form.on('submit', function(e) {
@@ -568,6 +587,7 @@ $(document).ready(function () {
         panchang_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 panchang_form.off('submit');  // Prevent recursion
+                panchang_form[0].submit(); 
             }
         });
         panchang_form.on('submit', function(e) {
@@ -580,6 +600,7 @@ $(document).ready(function () {
         checkout_form.parsley().on('form:validate', function (formInstance) {
             if (formInstance.isValid()) {
                 checkout_form.off('submit');  // Prevent recursion
+                checkout_form[0].submit(); 
             }
         });
         checkout_form.on('submit', function(e) {
@@ -618,6 +639,8 @@ $(document).ready(function () {
 $('#user-menu-button').on('click', function (e) {
     e.stopPropagation();
 });
+
+
 
 $(document).on('click', function (e) {
     if (!$(e.target).closest('#user-menu-button, #user-menu-list').length) {

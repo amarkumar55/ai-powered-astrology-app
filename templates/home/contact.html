@@ -37,7 +37,7 @@
                                         class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"></textarea>
                                     
                                     {% if form.errors.message %}
-                                        <p class="text-sm text-red-600 mt-1">
+                                        <p class="backend-error-message text-sm text-red-600 mt-1">
                                             {% for error in form.message.errors %}
                                             {{error}}
                                             {% endfor %}

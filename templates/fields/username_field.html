@@ -15,6 +15,6 @@
         class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
 
     {% if form.errors.username %}
-        <p class="text-sm text-red-600 mt-1">{{ form.errors.username.0 }}</p>
+        <p class="backend-error-message text-sm text-red-600 mt-1">{{ form.errors.username.0 }}</p>
     {% endif %}
 </div>
