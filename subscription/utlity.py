@@ -49,3 +49,13 @@ def create_data(plan_slug):
     countries = get_all_countries()
  
     return {plan, countries}
+
+
+def kundli_price(price):
+    gst, total = calculate_total_and_tax(price)   
+    countries = get_all_countries()
+    return {
+        "total": total,
+        "gst": gst,
+        "countries": countries
+    }

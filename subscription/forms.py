@@ -18,9 +18,10 @@ class CheckoutForm(forms.Form):
     phone_code = forms.CharField(max_length=3, min_length=1, required=True)
     phone_number = forms.CharField(max_length=12, required=True)
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         self.show_captcha = kwargs.pop('show_captcha', False)
-        super().__init__(request=request, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if self.show_captcha:
             self.fields['captcha'] = CaptchaField(widget=CustomCaptchaTextInput)

@@ -13,13 +13,14 @@ class LoShuGridForm(forms.Form):
     last_name = forms.CharField(min_length=2, strip=True, max_length=30 , required=True)
     birth_date= forms.DateField(required=True)
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         self.show_captcha = kwargs.pop('show_captcha', False)
         super().__init__(*args, **kwargs)
-        self.request = request  
 
         if self.show_captcha:
             self.fields['captcha'] = CaptchaField(widget=CustomCaptchaTextInput)
+            
             
     def clean_first_name(self):
         name = self.cleaned_data.get("first_name")

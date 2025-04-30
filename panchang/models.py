@@ -18,7 +18,7 @@ class UserPanchang(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date_of_birth = models.DateField()
     time_of_birth = models.TimeField()
-    place_of_birth = models.CharField(max_length=100)
+    place = models.CharField(max_length=100)
     latitude = models.FloatField()
     longitude = models.FloatField()
     tithi = models.CharField(max_length=50, null=False, blank=False)

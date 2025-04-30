@@ -23,7 +23,7 @@ class KundliForm(forms.Form):
     hours = forms.IntegerField(min_value=0, max_value=23, required=True)
     minutes = forms.IntegerField(min_value=0, max_value=59, required=True)
     seconds = forms.IntegerField(min_value=0, max_value=59, required=True)
-    time_type = forms.ChoiceField(choices=TIME_PERIOD_CHOICES, required=True)
+    time_format = forms.ChoiceField(choices=TIME_PERIOD_CHOICES, required=True)
 
     is_accepted_terms = forms.BooleanField(required=True)
     place = forms.CharField(max_length=255, required=True)
@@ -31,10 +31,10 @@ class KundliForm(forms.Form):
     latitude = forms.FloatField(required=False)
     longitude = forms.FloatField(required=False)
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         self.show_captcha = kwargs.pop('show_captcha', False)
         super().__init__(*args, **kwargs)
-        self.request = request  
 
         if self.show_captcha:
             self.fields['captcha'] = CaptchaField(widget=CustomCaptchaTextInput)
@@ -88,7 +88,7 @@ class KundliForm(forms.Form):
 
         try:
             hours = self.convert_to_24_hour(
-                cleaned_data.get("hours"), cleaned_data.get("time_type")
+                cleaned_data.get("hours"), cleaned_data.get("time_format")
             )
             datetime(
                 cleaned_data.get("years"),
@@ -105,3 +105,5 @@ class KundliForm(forms.Form):
             self.add_error("is_accepted_terms", "Please accept the terms and conditions.")
 
         return cleaned_data
+
+

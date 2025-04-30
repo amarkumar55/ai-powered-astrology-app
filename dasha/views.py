@@ -48,7 +48,7 @@ class DashaAntarDashaView(View):
                 minutes = form.cleaned_data.get("minutes")
                 seconds = form.cleaned_data.get("seconds")
                 time_type = form.cleaned_data.get("time_format")
-                place = form.cleaned_data.get("place_of_birth")
+                place = form.cleaned_data.get("place")
                 lat = form.cleaned_data.get("latitude")
                 lon = form.cleaned_data.get("longitude")
 
@@ -67,12 +67,25 @@ class DashaAntarDashaView(View):
                     context.update({"form": form, "is_report_generate": False})
                     return render(request, self.template_name, context)
 
-                birth_details, _ = BirthDetails.objects.get_or_create(
-                    birth_date=birth_date,
-                    birth_time=birth_time,
-                    latitude__startswith=str(round(lat, 6)),
-                    longitude__startswith=str(round(lon, 6))
-                )
+                lat = round(lat, 6)
+                lon = round(lon, 6)
+
+                birth_details = BirthDetails.objects.filter(
+                        birth_date=birth_date,
+                        birth_time=birth_time,
+                        latitude__gte=lat - 0.000001,
+                        latitude__lte=lat + 0.000001,
+                        longitude__gte=lon - 0.000001,
+                        longitude__lte=lon + 0.000001
+                ).first()
+
+                if not birth_details:
+                    birth_details = BirthDetails.objects.create(
+                        birth_date=birth_date,
+                        birth_time=birth_time,
+                        latitude=lat,
+                        longitude=lon
+                    )
 
                 moon_details = MoonPosition.objects.filter(birth_details=birth_details).first()
 
@@ -91,7 +104,7 @@ class DashaAntarDashaView(View):
                     starting_planet = calculate_dasha(moon_details.moon_longitude)
                     dasha_sequence = generate_vimshottari_dasha(birth_date, starting_planet)
                     for dasha in dasha_sequence:
-                        planet_name, start_date = dasha
+                        planet_name, start_date, _ = dasha
                         calculate_antar_dashas(
                             birth_details=birth_details,
                             mahadasha_start_date=str(start_date),
@@ -108,7 +121,11 @@ class DashaAntarDashaView(View):
                 )
 
                 reset_failed_attempts(request)
-                store_activity(self.request, form.cleaned_data.copy() , "generated dasha antar dasha predition", request.user)
+                if request.user.is_authenticated:
+                   store_activity(self.request, form.cleaned_data.copy() , "generated dasha antar dasha predition", request.user)
+                else:
+                    store_activity(self.request, form.cleaned_data.copy() , "generated dasha antar dasha predition", None)
+
                 messages.success(request, "Your Dasha and Antar Dasha prediction is generated.")
 
                 return render(request, self.template_name, {

@@ -57,7 +57,12 @@ class DriverConductorView(View):
         
              
                 reset_failed_attempts(request)
-                store_activity(request, form.cleaned_data.copy(), "driver_conductor_predition_generate", request.user)
+             
+                if request.user.is_authenticated:
+                    store_activity(request, form.cleaned_data.copy(), "driver_conductor_predition_generate", request.user)
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "name_number_predition_generate", None)
+             
                 messages.success(request, "Your Driver and Conductor prediction has been generated successfully.")
 
                 return render(request, self.template_name, {
@@ -89,6 +94,7 @@ class DriverConductorView(View):
 
 @method_decorator(ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True), name='dispatch')
 class NameNumberView(View):
+    
     template_name = "numberlogy/name_number/index.html"
 
     def get(self, request): 
@@ -108,7 +114,7 @@ class NameNumberView(View):
  
         show_captcha, context = handle_captcha_logic(request, {})
         form = NameNumberForm(request.POST, show_captcha=show_captcha)
-
+      
         if form.is_valid():
             try:
              
@@ -126,9 +132,13 @@ class NameNumberView(View):
                     "name_number_compatibility": get_name_number_compatibility(name_number),
                 }
 
-    
+            
                 reset_failed_attempts(request)
-                store_activity(request, form.cleaned_data.copy(), "name_number_predition_generate", request.user)
+                if request.user.is_authenticated:
+                    store_activity(request, form.cleaned_data.copy(), "name_number_predition_generate", request.user)
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "name_number_predition_generate", None)
+                
                 messages.success(request, "Your Name Number prediction has been generated successfully.")
 
                 return render(request, self.template_name, {
@@ -144,6 +154,7 @@ class NameNumberView(View):
                 messages.error(request, "Something went wrong while processing your request.")
 
         else:
+            
             increment_failed_attempts(request)
             messages.error(request, "Unable to process your request currently. Please check your details.")
 
@@ -196,7 +207,12 @@ class LifePathView(View):
                 }
     
                 reset_failed_attempts(request)
-                store_activity(request, form.cleaned_data.copy(), "life_path_predition_generate", request.user)
+              
+                if request.user.is_authenticated:
+                    store_activity(request, form.cleaned_data.copy(), "life_path_predition_generate", request.user)   
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "life_path_predition_generate", None)
+               
                 
                 messages.success(request, "Your Life Path Number prediction has been generated successfully.")
 
@@ -257,6 +273,7 @@ class DestinyPathView(View):
                 # Calculate driver and conductor numbers
                 destiny_number = calculate_destiny_number(first_name + " "+ last_name)
 
+
                 data = {
                     "name": f"{first_name} {last_name}".strip(),
                     "destiny_number": destiny_number,
@@ -264,7 +281,12 @@ class DestinyPathView(View):
                 }
     
                 reset_failed_attempts(request)
-                store_activity(request, form.cleaned_data.copy(), "destiny_number_predition_generate", request.user)
+
+                if request.user.is_authenticated:
+                    store_activity(request, form.cleaned_data.copy(), "destiny_number_predition_generate", request.user)
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "destiny_number_predition_generate", None)
+              
                 messages.success(request, "Your  Number prediction has been generated successfully.")
 
                 return render(request, self.template_name, {
@@ -331,7 +353,11 @@ class PersonalityNumberView(View):
                 }
     
                 reset_failed_attempts(request)
-                store_activity(request, form.cleaned_data.copy(), "personality_number_predition_generate", request.user)
+                if request.user.is_authenticated:
+                    store_activity(request, form.cleaned_data.copy(), "personality_number_predition_generate", request.user)
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "personality_number_predition_generate", None)
+              
                 messages.success(request, "Your personality number prediction has been generated successfully.")
 
                 return render(request, self.template_name, {

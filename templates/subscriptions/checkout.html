@@ -61,21 +61,59 @@
                             <div class="flow-root relative space-y-4 rounded-3xl shadow-lg shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 bg-gray-900 p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10">
                                 <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Billing Information</h3>
 
-                                {% include 'fields/full_name.html' with label='Your name' name='name' %}
-                                {% include 'fields/email_field.html' with label='Your email' name='email' %}
-                            
-                                <div>
-                                    <div class="mb-2 flex items-center gap-2">
-                                        <label for="select-country" class="block text-base/7 text-gray-300">Country<sup class="text-red-500">*</sup>{% if form.errors.country %}<span class="text-red-500">{{form.errors.country }}</span>{% endif %} </label>
-                                    </div>
-                                    <select id="select-country" name="country" data-parsley-required-message="Please select valid country." required
-                                        class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
-                                        <option selected>Select your country</option>
-                                        {% for code, country in countries.items %}
-                                        <option value="{{ code }}">{{ country.name }}</option>
-                                        {% endfor %}
-                                    </select>
+                                <div class="relative w-full mb-3">
+                                    <label class="block text-base/7 text-gray-300" for="full_name">
+                                            Full Name<span class="text-red-500">*</span>
+                                        <input type="text" required name="full_name" minlength="3" maxlength="30" data-parsley-trigger="keyup"
+                                                data-parsley-customfullname data-parsley-required-message="Full Name is required."
+                                                data-parsley-customname-message="Please enter a valid name (only letters and spaces)."
+                                                title="Only letters and spaces are allowed" id="full_name" placeholder="Full Name"
+                                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" />
+                                    
+                                    
+                                        {% if form.errors %}
+                                    
+                                        <p class="backend-error-message text-sm text-red-600 mt-1">{{ form.errors.full_name.0 }}</p>
+                                    
+                                        {% endif %}
+                                    
+                                    </label>
                                 </div>
+                                    
+                                <div class="relative w-full mb-3">
+                                        <label class="block text-base/7 text-gray-300" for="email">
+                                            Email<span class="text-red-500">*</span>
+                                    
+                                            <input type="email" name="email" minlength="3" maxlength="30" data-parsley-trigger="keyup" placeholder="email"
+                                                required data-parsley-customemail data-parsley-trigger="keyup"
+                                                data-parsley-required-message="Email is required."
+                                                data-parsley-customemail-message="Please enter a valid email." id="email" placeholder="Email"
+                                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" />
+                                    
+                                    
+                                            {% if form.errors %}
+                                    
+                                            <p class="backend-error-message text-sm text-red-600 mt-1">{{ form.errors.email.0 }}</p>
+                                    
+                                            {% endif %}
+                                    
+                                        </label>
+                                </div>
+                                    
+                                <div>
+                                        <div class="mb-2 flex items-center gap-2">
+                                            <label for="select-country" class="block text-base/7 text-gray-300">Country<sup class="text-red-500">*</sup>{%
+                                                if form.errors.country %}<span class="text-red-500">{{form.errors.country }}</span>{% endif %} </label>
+                                        </div>
+                                        <select id="select-country" name="country" data-parsley-required-message="Please select valid country." required
+                                            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
+                                            <option selected>Select your country</option>
+                                            {% for code, country in countries.items %}
+                                            <option value="{{ code }}">{{ country.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                </div>
+
                                 <div>
                                     <div class="mb-2 flex items-center gap-2">
                                         <label for="select-state" class="block text-base/7 text-gray-300">State<sup class="text-red-500">*</sup>{% if form.errors.state %}<span class="text-red-500">{{form.errors.state }}</span>{% endif %} </label>

@@ -80,7 +80,12 @@ class LoShuGridView(View):
                 data['numbers'] = numbers
              
                 reset_failed_attempts(request)
-                store_activity(request, form.cleaned_data.copy(), "loshugrid_predition_generate", request.user)
+
+                if request.user.is_authenticated:
+                    store_activity(request, form.cleaned_data.copy(), "loshugrid_predition_generate", request.user)
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "loshugrid_predition_generate", None)
+                
                 messages.success(request, "Your Lo Shu Grid prediction is generated.")
 
                 return render(request, self.template_name, {

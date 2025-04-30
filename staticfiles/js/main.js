@@ -21,6 +21,24 @@ $(window).on('load', function() {
     setTimeout(hideAlert, 4000);
 });
 
+function openModal(type) {
+    if (type == undefined) {
+        document.getElementById('suggestionsModal').classList.remove('hidden');
+    } else {
+        document.getElementById(type+'_suggestionsModal').classList.remove('hidden');
+    }
+   
+}
+
+function closeModal(type) {
+    if (type == undefined) {
+         document.getElementById('suggestionsModal').classList.add('hidden');
+    } else {
+        document.getElementById(type+'_suggestionsModal').classList.add('hidden');
+    }
+}
+
+
 $(document).ready(function () {
 
 
@@ -49,13 +67,15 @@ $(document).ready(function () {
           
             if (searchTerm.length > 2) {
                 try {
+               
                     let response = await fetch(`/kundli-preditions/search-location?place=${encodeURIComponent(searchTerm)}`);
-                    let data = await response.json();
-                    
+               
+                    let data = await response.json();    
+                 
                     if (type == "general") {
                        var suggestionsDiv = document.getElementById("suggestions");
                     } else {
-                        var suggestionsDiv = document.getElementById(type+"_suggestions");
+                       var suggestionsDiv = document.getElementById(type+"_suggestions");
                     }
                  
                     suggestionsDiv.innerHTML = "";
@@ -72,6 +92,11 @@ $(document).ready(function () {
                             div.onclick = () => selectLocation(location, type);
                             suggestionsDiv.appendChild(div);
                         });
+                        if (type == "general") {
+                            openModal();
+                        } else {
+                            openModal(type);
+                        }
                     }
                 } catch (error) {
                     console.error("Error fetching locations:", error);
@@ -87,12 +112,15 @@ $(document).ready(function () {
             document.getElementById("latitude").value = location.latitude;
             document.getElementById("longitude").value = location.longitude;
             document.getElementById("suggestions").innerHTML = "";
+            closeModal();
         } else {
             document.getElementById(type+"_place").value = location.place;
             document.getElementById(type+"_latitude").value = location.latitude;
             document.getElementById(type+"_longitude").value = location.longitude;
-            document.getElementById(type+"_suggestions").innerHTML = "";
+            document.getElementById(type + "_suggestions").innerHTML = "";
+            closeModal(type);
         }
+        
     }
     
     $('#select-country').on('change', function () {

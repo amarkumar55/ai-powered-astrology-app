@@ -38,10 +38,10 @@ class CompatibilityForm(forms.Form):
 
     is_accepted_terms = forms.BooleanField(required=True)
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         self.show_captcha = kwargs.pop('show_captcha', False)
         super().__init__(*args, **kwargs)
-        self.request = request  
 
         if self.show_captcha:
             self.fields['captcha'] = CaptchaField(widget=CustomCaptchaTextInput)
@@ -60,13 +60,13 @@ class CompatibilityForm(forms.Form):
 
     def clean_boy_place(self):
         place = self.cleaned_data.get("boy_place", "")
-        if not re.fullmatch(r"^[A-Za-z0-9\s]+$", place):
+        if not re.fullmatch(r"[A-Za-z0-9\s,.-]+", place):
             raise forms.ValidationError("Place can contain only alphabets, numbers, and spaces.")
         return bleach.clean(place, tags=[], strip=True)
 
     def clean_girl_place(self):
         place = self.cleaned_data.get("girl_place", "")
-        if not re.fullmatch(r"^[A-Za-z0-9\s]+$", place):
+        if not re.fullmatch(r"[A-Za-z0-9\s,.-]+", place):
             raise forms.ValidationError("Place can contain only alphabets, numbers, and spaces.")
         return bleach.clean(place, tags=[], strip=True)
 
@@ -113,7 +113,7 @@ class CompatibilityForm(forms.Form):
         # Clean remaining string fields
         for field, value in cleaned_data.items():
             if isinstance(value, str) and field not in [
-                'boy_full_name', 'girl_full_name', 'boy_birth_place', 'girl_birth_place'
+                'boy_full_name', 'girl_full_name', 'boy_place', 'girl_place'
             ]:
                 cleaned_data[field] = bleach.clean(value, tags=[], strip=True)
 

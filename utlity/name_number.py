@@ -591,6 +591,7 @@ def get_name_number_mean(num):
 
 
 def get_destiny_number_significance(num):
+
     return destiny_number_significance[str(num)]
 
 
@@ -650,8 +651,9 @@ def reduce_to_single_digit_personality(name):
         total_sum  += destiny_char_number[letter]
     
     while total_sum > 9 and  total_sum not in [11, 22, 33]:
-          total_sum = sum(int(digit) for digit in str(total_sum))
-
+        total_sum = sum(int(digit) for digit in str(total_sum))
+     
+    return total_sum
 
 def calculate_destiny_number(name):
     name = name.replace(" ", "")    

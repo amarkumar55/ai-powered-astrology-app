@@ -24,16 +24,17 @@ class PanchangForm(forms.ModelForm):
     minutes = forms.IntegerField(min_value=0, max_value=59, required=True)
     seconds = forms.IntegerField(min_value=0, max_value=59, required=True)
     time_format = forms.ChoiceField(choices=TIME_PERIOD_CHOICES,required=True)
-    place_of_birth = forms.CharField(required=True)
+    place = forms.CharField(required=True)
     latitude = forms.FloatField(required=True)
     longitude = forms.FloatField(required=True)
     is_accepted_terms = forms.BooleanField(required=True)
     
     class Meta:
         model = UserPanchang
-        fields = ["first_name", "last_name", "place_of_birth"]
+        fields = ["first_name", "last_name", "place"]
 
-    def __init__(self, request=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         self.show_captcha = kwargs.pop('show_captcha', False)
         super().__init__(*args, **kwargs)
 
@@ -52,8 +53,8 @@ class PanchangForm(forms.ModelForm):
             raise forms.ValidationError("Last name can only contain letters.")
         return bleach.clean(name, tags=[], strip=True)
 
-    def clean_place_of_birth(self):
-        place_of_birth = self.cleaned_data.get("place_of_birth")
+    def clean_place(self):
+        place_of_birth = self.cleaned_data.get("place")
         if not re.fullmatch(r"[A-Za-z0-9\s,.-]+", place_of_birth):
             raise forms.ValidationError("Place must contain only alphabets, digits, spaces, commas, periods, and hyphens.")
         return bleach.clean(place_of_birth, tags=[], strip=True)

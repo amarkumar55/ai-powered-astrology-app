@@ -1,4 +1,4 @@
-{% include 'fields/full_name.html' with label='Full Name' name='girl_full_name' %}
+{% include 'fields/full_name.html' with label='Girl Full Name' name='girl_full_name' %}
 
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
@@ -8,7 +8,7 @@
     <div class="grid grid-cols-3 gap-2">
         {% include "fields/birth_select.html" with label='Day' name='girl_days' item=days type='day' %}
         {% include "fields/birth_select.html" with label='Month' name='girl_months' item=months type='month' %}
-        {% include "fields/birth_select.html" with label='Year' name='girl_years' item=months type='year' %}
+        {% include "fields/birth_select.html" with label='Year' name='girl_years' item=years type='year' %}
     </div>
 </div>
 
@@ -29,5 +29,18 @@
 
 <div class="grid grid-cols-1">
     {% include "fields/place.html" with label='Girl Birth Place' name='girl_place' %}
-    <div id="girl_suggestions" class="suggestions p-2"></div>
+</div>
+<div id="girl_suggestionsModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-xl relative max-h-[80vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Select Birth Place</h2>
+            <button onclick="closeModal('girl')" class="text-gray-600 text-2xl leading-none">&times;</button>
+        </div>
+
+        <div id="girl_suggestions" class="space-y-2">
+
+        </div>
+    </div>
 </div>

@@ -17,17 +17,27 @@ from authentication.utlity import send_error_log, reset_failed_attempts, increme
 
 @ratelimit(key='user_or_ip', rate='5/m', block=True)
 def states_view(request, country_id):
-    data = get_states_by_country(country_id)
-    if not data:
-        return HttpResponseNotFound("Country code not found.")
-    return JsonResponse(data, safe=False)
+    try:
+        data = get_states_by_country(country_id)
+        if not data:
+            return HttpResponseNotFound("Country code not found.")
+        return JsonResponse(data, safe=False)
+    except Exception as e:
+        send_error_log(e)
+    return JsonResponse([], safe=False)
+    
 
 @ratelimit(key='user_or_ip', rate='5/m', block=True)
 def cities_view(request, state_id):
-    data = get_cities_by_state(state_id)
-    if not data:
-        return HttpResponseNotFound("State code not found.")
-    return JsonResponse(data, safe=False)
+    try:
+        data = get_cities_by_state(state_id)
+        if not data:
+            return HttpResponseNotFound("State code not found.")
+        return JsonResponse(data, safe=False)
+    except Exception as e:
+        send_error_log(e)
+    return JsonResponse([], safe=False)
+    
 
 
     

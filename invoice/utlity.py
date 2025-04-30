@@ -12,7 +12,6 @@ def calculate_total_and_tax(price):
         total = price + gst
         return gst, total
     except (InvalidOperation, TypeError) as e:
-        print(f"Decimal calculation failed: {e}")
         return Decimal('0'), Decimal('0')
 
 def create_invoice(plan, user, billing_name, billing_email, billing_address):

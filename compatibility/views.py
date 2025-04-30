@@ -76,15 +76,32 @@ class CompatibilityView(View):
 
                 match = ashtakoot_compatibility(boy_nakshatra, girl_nakshatra)
                 reset_failed_attempts(request)
+
+                match_data = [
+                    {"label": "Varna", "score": match.get('varna_score', 0), "max": 1},
+                    {"label": "Vashya", "score": match.get('vasha_score', 0), "max": 2},
+                    {"label": "Tara", "score": match.get('tara_score', 0), "max": 3},
+                    {"label": "Yoni", "score": match.get('yoni_score', 0), "max": 4},
+                    {"label": "Graha Maitri", "score": match.get('graha_maitry_score', 0), "max": 5},
+                    {"label": "Gana", "score": match.get('gana_score', 0), "max": 6},
+                    {"label": "Bhakoot", "score": match.get('bhakoot_score', 0), "max": 7},
+                    {"label": "Nadi", "score": match.get('nadi_score', 0), "max": 8}, 
+                ]
+
+     
+                if request.user.is_authenticated:
+                    store_activity(self.request, form.cleaned_data.copy() , "generated compatibility predition", request.user)
+                else:
+                    store_activity(request, form.cleaned_data.copy(), "generated compatibility predition", None)
                 
-                store_activity(self.request, form.cleaned_data.copy() , "generated compatibility predition", request.user)
-                
+              
                 messages.success(request, "Your Compatibility prediction is generated.")
                 
                 return render(request, self.template_name, {
                     "form": form,
                     "is_report_generate": True,
-                    "match": match,
+                    "compatibility_scores": match_data,
+                    "total_score": match['total_score'],
                     "boy_name": boy_name,
                     "girl_name": girl_name,
                 })

@@ -6,14 +6,12 @@
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
     <label for="birth_date" class="block text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
-
     <div class="grid grid-cols-3 gap-2">
         {% include "fields/birth_select.html" with label='Day' name='days' item=days type='day' %}
         {% include "fields/birth_select.html" with label='Month' name='months' item=months type='month' %}
-        {% include "fields/birth_select.html" with label='Year' name='years' item=months type='year' %}
+        {% include "fields/birth_select.html" with label='Year' name='years' item=years type='year' %}
     </div>
 </div>
-
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
     <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Birth Time</label>
@@ -29,8 +27,22 @@
 {% include "fields/latlon.html" with name='longitude' %}
 
 <div class="grid grid-cols-1">
-    {% include "fields/place.html" with label='Birth Place' name='place_of_birth' %}
-    <div id="suggestions" class="suggestions p-2"></div>
+    {% include "fields/place.html" with label='Birth Place' name='place' %}
+</div>
+
+<div id="suggestionsModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 backdrop-blur-sm">
+    <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-xl relative max-h-[80vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Select Birth Place</h2>
+            <button onclick="closeModal()" class="text-gray-600 text-2xl leading-none">&times;</button>
+        </div>
+
+        <div id="suggestions" class="space-y-2">
+         
+        </div>
+    </div>
 </div>
 
 {% if show_captcha %}

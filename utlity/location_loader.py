@@ -8,8 +8,8 @@ def get_all_countries():
 def get_states_by_country(country_code):
     return states_lookup.get(country_code, [])
 
-def get_cities_by_state(country,state_code):
-    return cities_by_state.get(f"{country}_{state_code}", [])
+def get_cities_by_state(state_code):
+    return cities_by_state.get(state_code, [])
 
 def get_all_timezone():
     return [

@@ -15,13 +15,14 @@
         </div>
 
         <div class="flex flex-row items-center gap-0 justify-center p-4">
-            <div class="w-full p-10 mb-5">
+            <div class="w-full mx-auto lg:w-6/12 p-10 mb-5">
                 <div class="relative flex flex-col min-w-0 break-words w-full mb-8 shadow-lg bg-slate-200 rounded-lg">
-                    <div class="p-8">
-                        <h2 class="text-4xl font-bold text-gray-800 dark:text-white">Enter Your Details</h2>
-                    </div>
-                    <div class="flex-auto p-4  mb-4 lg:px-10 py-12">
-                        <form id="loshugrid_form" method="POST" action="{% url 'numerology.driver_conductor.index' %}" class="mt-6">
+                    <div class="mt-6 px-4 lg:px-10 py-10 pt-0">
+                        <div class="text-slate-400 text-center mb-3 font-bold">
+                            <small>Enter Your Details</small>
+                        </div>
+                        <form id="loshugrid_form" method="POST" action="{% url 'numerology.driver_conductor.index' %}" class="mt-6"
+                            data-parsley-validate>
                             {% csrf_token %}
                             {% include "includes/base_detail_form.html" %}
                         </form>

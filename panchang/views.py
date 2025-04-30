@@ -60,13 +60,13 @@ class UserPersonalizedPanchang(View):
                 hours = form.cleaned_data.get("hours")
                 minutes = form.cleaned_data.get("minutes")  # Fixed field reference
                 seconds = form.cleaned_data.get("seconds")  # Fixed field reference
-                time_type = form.cleaned_data.get("period")
+                time_type = form.cleaned_data.get("time_format")
                 birth_date = datetime.date(years, months, days)
-                place = form.cleaned_data.get("place_of_birth")
+                place = form.cleaned_data.get("place")
                 latitude = form.cleaned_data.get("latitude")
                 longitude = form.cleaned_data.get("longitude")
 
-        
+    
                 if time_type.lower() == "pm" and hours != 12:
                     hours += 12
                 elif time_type.lower() == "am" and hours == 12:
@@ -99,6 +99,8 @@ class UserPersonalizedPanchang(View):
                 messages.error(request, "Something went wrong while processing your request.")
 
         else:
+            for error in form.errors:
+                print(error)
             increment_failed_attempts(request)
             messages.error(request, "Unable to process your request currently. Please check your details.")
 
