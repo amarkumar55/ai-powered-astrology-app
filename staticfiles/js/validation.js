@@ -153,3 +153,15 @@ window.Parsley.addValidator('phone', {
     en: 'Please enter a valid phone number (10 to 12 digits).'
   }
 });
+
+
+window.Parsley.addValidator('pincode', {
+  requirementType: 'string',
+  validateString: function (value) {
+    const pinPattern = /^\d{6}$/; // Only allows exactly 6 digits
+    return pinPattern.test(value);
+  },
+  messages: {
+    en: 'Please enter a valid 6-digit PinCode.'
+  }
+});

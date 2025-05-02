@@ -705,8 +705,8 @@ def rotate_point(x, y, cx, cy, angle_deg):
     qy = cy + dx * math.sin(angle_rad) + dy * math.cos(angle_rad)
     return qx, qy
 
-def generate_kundli_svg_and_return_url(house_data, static_dir="static/kundli_svgs", base_url="/static/kundli_svgs/"):
-   
+def generate_kundli_svg_and_return_url(house_data, static_dir="media/kundli_svgs", base_url="/media/kundli_svgs/"):
+    print(house_data)
     os.makedirs(static_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"kundli_chart_{timestamp}.svg"
@@ -779,8 +779,9 @@ def generate_kundli_svg_and_return_url(house_data, static_dir="static/kundli_svg
     }
 
     for house, (x, y) in house_positions.items():
-        sign = house_data[str(house)]["sign"]
-        planets = house_data[str(house)]["planets"]
+
+        sign = house_data[house]["sign"]
+        planets = house_data[house]["planets"]
      
         style = house_text_styles[house]
 

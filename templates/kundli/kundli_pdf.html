@@ -1,104 +1,813 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kundli Report</title>
+    <title>AstroLive | Kundli Pdf Report</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+      
+      body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            color: #333;
+        }
+
+        .invoice-box {
+            background: white;
+            max-width: 800px;
+            margin: auto;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         h1,
-        h2,
-        h3 {
-            color: #4B0082;
+        h2 {
+            margin: 0 0 10px;
+            color: #444;
+        }
+
+        .header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .details {
+            margin-bottom: 30px;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .billing_detail,
+        .product_info {
+            margin-bottom: 30px;
+        }
+
+        .product_info h2 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            font-size: 15px;
         }
 
-        th,
-        td {
+        table th,
+        table td {
+            padding: 12px 15px;
             border: 1px solid #ddd;
-            padding: 10px;
             text-align: left;
         }
 
-        th {
+        table th {
             background-color: #f2f2f2;
         }
 
-        section {
-            margin-bottom: 40px;
+        .summary td {
+            font-weight: bold;
         }
+
+        .right {
+            text-align: right;
+        }
+
+        .text-muted {
+            color: #888;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .left-column {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .right-column {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .right-column img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sub-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .table td {
+            color: #555;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tr:nth-child(odd) {
+            background-color: #fff;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .impact-box {
+            background: white;
+            max-width: 800px;
+            margin: auto;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .impact-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #444;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .impact-description {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+        }
+
+        .impact-item {
+            margin-bottom: 10px;
+        }
+
+        .impact-key {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .impact-value {
+            font-size: 15px;
+            color: #555;
+        }
+        .doshas-box {
+            background-color: white;
+            padding: 30px;
+            margin: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+        }
+
+        .doshas-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #444;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dosha-section {
+            margin-bottom: 30px;
+        }
+
+        .dosha-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .manglik {
+            color: #e74c3c;
+        }
+
+        .kaal-sarp {
+            color: #8e44ad;
+        }
+
+        .pitra {
+            color: #2980b9;
+        }
+
+        .dosha-description {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .dosha-status {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .warning {
+            background-color: #fce4ec;
+            color: #d32f2f;
+            border: 1px solid #f44336;
+        }
+
+        .success {
+            background-color: #e8f5e9;
+            color: #388e3c;
+            border: 1px solid #4caf50;
+        }
+
+        .dosha-list {
+            padding-left: 20px;
+            margin-top: 10px;
+            color: #f39c12;
+        }
+
+        .dosha-list li {
+            font-size: 14px;
+        }
+
+        .kundli-overview {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 1rem;
+        }
+
+        .sub-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub-title.red { color: #e74c3c; }
+        .sub-title.yellow { color: #f39c12; }
+        .sub-title.blue { color: #3498db; }
+
+        .description {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .list {
+            margin-top: 1rem;
+            padding-left: 20px;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .mahapurush-yogas, .gaja-kesari-yoga, .budha-aditya-yoga {
+            margin-top: 2rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        .alert-red {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-yellow {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+
+        .alert-green {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .kundli-overview, .maha-dasha-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-top: 1rem;
+        }
+
+        .section-description {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .table th, .table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f4f4f4;
+            color: #555;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #fff;
+        }
+
+        .container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .container p {
+            color: #777;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Add additional styling for specific sections */
+        .section-title {
+            color: #333;
+        }
+
+        .section-title, .title {
+            margin-top: 0;
+        }
+
+    
     </style>
 </head>
 
 <body>
-    <h1>Kundli Report</h1>
+    <div class="invoice-box">
+        <div class="container">
+            <div class="left-column">
+                <h2>Kundli Details</h2>
+                <table>
+                    <tr>
+                        <th>Full Name</th>
+                        <td>{{name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth</th>
+                        <td>{{birth_date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Birth Time</th>
+                        <td>{{birth_time}}</td>
+                    </tr>
+                    <tr>
+                        <th>Birth Place</th>
+                        <td>{{birth_place}}</td>
+                    </tr>
+                    <tr>
+                        <th>Rashi</th>
+                        <td>{{kundli.birth_sign}}</td>
+                    </tr>
+                    <tr>
+                        <th>Lagan Rashi</th>
+                        <td>{{kundli.ascendant}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nakshatra</th>
+                        <td>{{ nakshatra }}</td>
+                    </tr>
+                    <tr>
+                        <th>Ganra</th>
+                        <td>{{ ganra }}</td>
+                    </tr>
+                    <tr>
+                        <th>Yoni</th>
+                        <td>{{yoni}} </td>
+                    </tr>
+                    <tr>
+                        <th>Varna</th>
+                        <td>{{varna}}</td>
+                    </tr>
+                    <tr>
+                        <th>Nadi</th>
+                        <td>{{nadi}}</td>
+                    </tr>
+                </table>
+            </div>
 
-    <section>
-        <h2>1. Birth Details</h2>
-        <p><strong>Name:</strong> {{ name }}</p>
-        <p><strong>Date of Birth:</strong> {{ birth_date }}</p>
-        <p><strong>Time of Birth:</strong> {{ birth_time }}</p>
-        <p><strong>Place of Birth:</strong> {{ birth_place }}</p>
-    </section>
+            <div class="right-column">
+                <h2>North Indian Lagna Chart</h2>
+             
+                <img src="{{kundli.chart_url}}" alt="Lagna Chart" />
+            </div>
+        </div>
+        <div class="details">
+            <h2 class="sub-title">Planet Positions</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Planet</th>
+                        <th>Degree</th>
+                        <th>Sign</th>
+                        <th>House</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for planet in kundli_data.planets %}
+                    <tr>
+                        <td>{{ planet.name }}</td>
+                        <td>{{ planet.degree }}°</td>
+                        <td>{{ planet.sign }}</td>
+                        <td>{{ planet.house }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+            <h2 class="sub-title">House Details</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>House</th>
+                        <th>Sign</th>
+                        <th>Start Degree</th>
+                        <th>Planets</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for house in kundli_data.houses %}
+                    <tr>
+                        <td>{{ house.number }}</td>
+                        <td>{{ house.sign }}</td>
+                        <td>{{ house.start_degree }}°</td>
+                        <td>
+                            {% if house.planets %}
+                            {{ house.planets|join:", " }}
+                            {% else %}
+                            —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="impact-box">
+            <div>
+                <h2 class="impact-title">Planets Impact on Your Life Overview</h2>
+            </div>
+            <div class="impact-description">
+                {% for key, value in planet_descriptions.items %}
+                <div class="impact-item">
+                    <dt class="impact-key">{{ key }}</dt>
+                    <dd class="impact-value"><strong>Description:</strong> {{ value }}</dd>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
 
-    <section>
-        <h2>2. Birth Chart</h2>
-        <img src="{{ birth_chart_image_url }}" alt="Birth Chart" width="400">
-    </section>
+        <div class="doshas-box">
+            <div>
+                <h2 class="doshas-title">Kundli Doshas Overview</h2>
+            </div>
+        
+            <!-- Manglik Dosha -->
+            <div class="dosha-section">
+                <h3 class="dosha-title manglik">Manglik Dosha</h3>
+                <p class="dosha-description">
+                    <strong>What is Manglik Dosha?</strong><br>
+                    Manglik Dosha, also known as Mangal or Kuja Dosha, occurs when Mars is placed in specific houses in a
+                    birth
+                    chart. It influences marital compatibility and may lead to issues like delays or discord in marriage.
+                </p>
+                {% if manglik_dosha %}
+                <div class="dosha-status warning">
+                    <strong>Manglik Dosha Detected:</strong><br>
+                    Mars is influencing a sensitive house, which could impact marriage harmony. Remedies and further
+                    astrological evaluation are recommended.
+                </div>
+                {% else %}
+                <div class="dosha-status success">
+                    <strong>No Manglik Dosha:</strong><br>
+                    Mars placement in your chart is favorable for marital harmony and stability.
+                </div>
+                {% endif %}
+            </div>
+        
+            <!-- Kaal Sarp Dosha -->
+            <div class="dosha-section">
+                <h3 class="dosha-title kaal-sarp">Kaal Sarp Dosha</h3>
+                <p class="dosha-description">
+                    <strong>What is Kaal Sarp Dosha?</strong><br>
+                    Kaal Sarp Dosha forms when all planets are placed between Rahu and Ketu. It is linked to karmic
+                    challenges
+                    and can affect multiple life areas like career, health, and peace of mind.
+                </p>
+                {% if kaal_sarp_dosha %}
+                <div class="dosha-status warning">
+                    <strong>Kaal Sarp Dosha Detected:</strong><br>
+                    Rahu and Ketu are enclosing all planets in your chart, indicating spiritual or karmic obstacles.
+                    Remedies
+                    can help mitigate its effects.
+                </div>
+                {% else %}
+                <div class="dosha-status success">
+                    <strong>No Kaal Sarp Dosha:</strong><br>
+                    Planetary positions are balanced and do not fall under Rahu-Ketu influence.
+                </div>
+                {% endif %}
+            </div>
+        
+            <!-- Pitra Dosha -->
+            <div class="dosha-section">
+                <h3 class="dosha-title pitra">Pitra Dosha</h3>
+                <p class="dosha-description">
+                    <strong>What is Pitra Dosha?</strong><br>
+                    Pitra Dosha is the karmic imbalance due to unsatisfied ancestral souls. It can result in various life
+                    struggles unless ancestral duties like Shraddha or Tarpan are fulfilled.
+                </p>
+                {% if pitra_dosha %}
+                <ul class="dosha-list">
+                    {% for item in pitra_dosha %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="dosha-status success">
+                    <strong>No Pitra Dosha found in your Kundli.</strong>
+                </p>
+                {% endif %}
+            </div>
+        </div>
 
-    <section>
-        <h2>3. Planetary Positions & Strengths</h2>
-        {{ planetary_table_html }}
-    </section>
+        <div class="kundli-overview">
+            <div>
+                <h2 class="title">Kundli Yoga Overview</h2>
+            </div>
+        
+            <!-- Maha Purush Yogas -->
+            <div>
+                <h3 class="sub-title red">Maha Purush Yogas</h3>
+                <p class="description">
+                    <strong>What is Maha Purush Yogas?</strong><br>
+                    These powerful yogas are formed when a planet is in its own or exalted sign and placed in a Kendra (1st,
+                    4th, 7th, 10th house). They bring strength, talent, and success. Here's a quick breakdown:
+                </p>
+                <ul class="list">
+                    <li><strong>Ruchaka Yoga</strong> – Mars in own/exalted sign in Kendra: Courage, leadership, strength.</li>
+                    <li><strong>Bhadra Yoga</strong> – Mercury in own/exalted sign in Kendra: Intelligence, charm,
+                        communication.</li>
+                    <li><strong>Hamsa Yoga</strong> – Jupiter in own/exalted sign in Kendra: Wisdom, spirituality, wealth.</li>
+                    <li><strong>Malavya Yoga</strong> – Venus in own/exalted sign in Kendra: Beauty, luxury, relationships.</li>
+                    <li><strong>Shasha Yoga</strong> – Saturn in own/exalted sign in Kendra: Authority, discipline, success.
+                    </li>
+                </ul>
+        
+                <!-- Mahapurush Yogas check -->
+                <div class="mahapurush-yogas">
+                    <!-- If mahapurush_yogas exists -->
+                    <div class="alert alert-red">
+                        Example Yoga Detected
+                    </div>
+        
+                    <!-- If no mahapurush_yogas -->
+                    <div class="alert alert-green">
+                        <strong>No Maha Purush Yoga found:</strong><br>
+                        Your chart currently doesn’t reflect Maha Purush Yoga.
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Gaja Kesari Yoga -->
+            <div>
+                <h3 class="sub-title yellow">Gaja Kesari Yoga</h3>
+                <p class="description">
+                    <strong>What is Gaja Kesari Yoga?</strong><br>
+                    This auspicious yoga occurs when Jupiter is in a Kendra from the Moon. It symbolizes power, intellect,
+                    and success.
+                </p>
+        
+                <!-- Gaja Kesari Yoga check -->
+                <div class="gaja-kesari-yoga">
+                    <!-- If gaja_kesari_yoga exists -->
+                    <div class="alert alert-yellow">
+                        <strong>Gaja Kesari Yoga Detected:</strong><br>
+                        High intelligence, fame, respect, prosperity, leadership, and noble behavior.
+                    </div>
+        
+                    <!-- If no gaja_kesari_yoga -->
+                    <div class="alert alert-green">
+                        <strong>No Gaja Kesari Yoga found:</strong><br>
+                        Your chart currently doesn’t reflect Gaja Kesari Yoga.
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Budha Aditya Yoga -->
+            <div>
+                <h3 class="sub-title blue">Budha Aditya Yoga</h3>
+                <p class="description">
+                    <strong>What is Budha Aditya Yoga?</strong><br>
+                    This yoga forms when the Sun and Mercury are conjunct. It enhances intellect, communication,
+                    leadership, and fame.
+                </p>
+        
+                <!-- Budha Aditya Yoga check -->
+                <div class="budha-aditya-yoga">
+                    <!-- If budha_aditya_yoga exists -->
+                    <div class="alert alert-yellow">
+                        <strong>Budha Aditya Yoga Detected:</strong><br>
+                        Analytical mind, sharp communication, confident personality, fame, and career success in media, law, or
+                        business.
+                    </div>
+        
+                    <!-- If no budha_aditya_yoga -->
+                    <div class="alert alert-green">
+                        <strong>No Budha Aditya Yoga found:</strong><br>
+                        Your chart does not currently show the conjunction of Sun and Mercury in a favorable position.
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <section>
-        <h2>4. Shadbala Summary</h2>
-        {{ shadbala_summary_html }}
-    </section>
-
-    <section>
-        <h2>5. Ashtakoot Compatibility</h2>
-        {{ ashtakoot_score_html }}
-    </section>
-
-    <section>
-        <h2>6. Dasha & Antar Dasha</h2>
-        {{ dasha_timeline_html }}
-    </section>
-
-    <section>
-        <h2>7. Dosha Analysis</h2>
-        <ul>
-            <li>Mangal Dosha: {{ mangal_dosha_result }}</li>
-            <li>Kaal Sarp Dosha: {{ kaal_sarp_result }}</li>
-            <li>Pitra Dosha: {{ pitra_dosha_result }}</li>
-            <li>Sadhe Sati: {{ sadhe_sati_result }}</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>8. Yogas</h2>
-        {{ yoga_list_html }}
-    </section>
-
-    <section>
-        <h2>9. Predictions & Remedies</h2>
-        <p>{{ predictions_text }}</p>
-        <p><strong>Suggested Remedies:</strong></p>
-        <ul>
-            {{ remedies_list_html }}
-        </ul>
-    </section>
+        <div class="kundli-overview">
+            <div>
+                <h2 class="title">Kundli Sade Sati Overview</h2>
+            </div>
+        
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Moon Sign</th>
+                            <td>{{sade_sati_result.moon_sign}}</td>
+                        </tr>
+                        <tr>
+                            <th>Saturn Sign</th>
+                            <td>{{sade_sati_result.saturn_sign}}</td>
+                        </tr>
+                        <tr>
+                            <th>Affected Sign</th>
+                            <td>
+                                {% for item in sade_sati_result.affected_signs %}
+                                {{item}},
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Sade Sati Result</th>
+                            <td>
+                                {% if sade_sati_result.is_in_sade_sati %}
+                                <strong>Sade Sati found in your kundli</strong>
+                                {% else %}
+                                <strong>No Sade Sati found in your kundli</strong><br>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        
+        <div class="maha-dasha-section">
+            <div class="container">
+                <h2 class="section-title">Maha Dasha and Antar Dasha Prediction</h2>
+            </div>
+        
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Maha Dasha</th>
+                        <th>Antar Dasha</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in antar_dasha_details %}
+                    <tr>
+                        <td>{{item.major_dasha}}</td>
+                        <td>{{item.antar_dasha_planet}}</td>
+                        <td>{{item.start_date}}</td>
+                        <td>{{item.end_date}}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No Antar Dasha details found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+            <div class="container">
+                <h2 class="section-title">Current Running Dasha and Antar Dasha</h2>
+                <p class="section-description">You can check the effects here and see whether they are currently active by
+                    comparing them with your Dasha and Antar Dasha periods shown in the table above.</p>
+            </div>
+        
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Maha Dasha</th>
+                        <th>Antar Dasha</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Dasha Affect</th>
+                        <th>Antar Dasha Affect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in current_dasha_affect %}
+                    <tr>
+                        <td>{{item.mahadasha_planet}}</td>
+                        <td>{{item.antar_dasha_planet}}</td>
+                        <td>{{item.start_date}}</td>
+                        <td>{{item.end_date}}</td>
+                        <td>{{item.mahadasha_effect}}</td>
+                        <td>{{item.antardasha_effect}}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No Antar Dasha details found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
-
 </html>

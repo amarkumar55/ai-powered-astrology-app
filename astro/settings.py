@@ -3,6 +3,7 @@ import pdfkit
 import environ
 from pathlib import Path
 from datetime import timedelta
+from logging.handlers import RotatingFileHandler
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,8 +18,11 @@ PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
+ALLOWED_HOSTS = ['astro.local']
+
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -54,6 +58,7 @@ INSTALLED_APPS = [
     'subscription',
     'invoice',
     'blogs',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -120,11 +125,12 @@ SECURE_CONTENT_TYPE_NOSNIFF = True  # Enables X-Content-Type-Options: nosniff
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"  # Restricts referrer info
 X_FRAME_OPTIONS = "DENY"  # Prevents clickjacking
 
-CSP_IMG_SRC = ["'self'", "data:"]  # Allow images from self and data URIs
-CSP_FONT_SRC = ("'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com")
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'",)
+CSP_IMG_SRC = ["'self'", "data:"]
+CSP_FONT_SRC = ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"]
 CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+CSP_FRAME_SRC = ("'self'",)
+CSP_INCLUDE_NONCE_IN = ['script-src']
 
 INSTALLED_APPS += ['axes']
 
@@ -165,19 +171,40 @@ LOGIN_URL = '/authentication/login'
 LOGIN_REDIRECT_URL = '/dashboard/index'
 
 
-# Log Config
+
+
+LOG_DIR = BASE_DIR / 'logs'
+LOG_DIR.mkdir(exist_ok=True)  # Ensure the logs/ directory exists
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[{asctime}] {levelname} {name}: {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/django_errors.log',
+            'filename': LOG_DIR / 'django_errors.log',
+            'formatter': 'verbose',
         },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'payment_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_DIR / 'payment.log',
+            'maxBytes': 5 * 1024 * 1024,  # 5 MB
+            'backupCount': 5,
+            'formatter': 'verbose',
         },
     },
     'loggers': {
@@ -189,7 +216,12 @@ LOGGING = {
         'two_factor': {
             'handlers': ['console'],
             'level': 'INFO',
-        }
+        },
+        'payment': {
+            'handlers': ['payment_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     },
 }
 
@@ -229,17 +261,8 @@ USE_TZ = True
 
 TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.fake.Fake'
 
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
-# Config for serve static and media content
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 COMPRESS_ROOT = BASE_DIR / 'static'
 COMPRESS_ENABLED = True
 STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',   
@@ -249,6 +272,17 @@ STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',
 
 
 
+
+
+MEDIA_URL = '/media/'
+
+STATIC_URL = "/static/" 
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"), 
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Email Config
@@ -264,9 +298,10 @@ EMAIL_HOST_PASSWORD = ''
 DEFAULT_FROM_EMAIL = 'info@astrolive.com'  
 
 
-
-
 CRONJOBS = [
     ('10 0 * * *', 'django.core.management.call_command', ['generate_panchang']),
     ('15 0 * * *', 'django.core.management.call_command', ['generate_horoscopes']),
 ]
+
+RAZOR_KEY_ID='#####'
+RAZOR_KEY_SECRET='####'

@@ -38,6 +38,7 @@ urlpatterns = [
     path('subscription/', include('subscription.urls')),
     path('invoices/',include('invoice.urls')), 
     path('captcha/', include('captcha.urls')),   
+    path('payment/', include('payment.urls')),   
     re_path(r"^.*$", views.custom_404),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

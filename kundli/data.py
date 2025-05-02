@@ -261,9 +261,10 @@ planet_house_descriptions = {
 def get_planet_descriptions(planet_data):
     descriptions = {}
 
-    for planet, details in planet_data.items():
-        sign = details.get("sign")
-        house = details.get("house")
+    for item in planet_data['planets']:
+        planet = item.get("name")
+        sign = item.get("sign")
+        house = item.get("house")
 
         sign_description = planet_sign_descriptions.get(planet, {}).get(sign, "No description available.")
         house_description = planet_house_descriptions.get(planet, {}).get(house, "No house impact description.")
@@ -272,10 +273,3 @@ def get_planet_descriptions(planet_data):
 
     return descriptions
 
-
-# Generate the descriptions
-kundli_descriptions = get_planet_descriptions()
-
-# Print output
-# for planet, description in kundli_descriptions.items():
-#     print(f"{planet}: {description}")

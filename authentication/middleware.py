@@ -31,3 +31,20 @@ class BlockUnverifiedUserMiddleware:
                 return redirect('resend_verification')
 
         return self.get_response(request)
+    
+
+from django.http import HttpResponseBadRequest
+import logging
+
+logger = logging.getLogger(__name__)
+
+class DebugHostMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        host = request.META.get('HTTP_HOST', '')
+        if ',' in host:
+            logger.warning(f"Invalid HTTP_HOST header received: {host}")
+            return HttpResponseBadRequest(f"Bad Host header: {host}")
+        return self.get_response(request)

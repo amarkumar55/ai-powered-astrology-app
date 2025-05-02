@@ -21,3 +21,5 @@ def invoice_download(request, invoice_number):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="invoice_{invoice_number}.pdf"'
     return response
+
+
