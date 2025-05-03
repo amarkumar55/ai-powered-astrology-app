@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from dasha.models import BirthDetails
 # Create your models here.
-
+User = get_user_model()
 class Location(models.Model):
     place =  models.CharField(max_length=50)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
@@ -9,6 +10,7 @@ class Location(models.Model):
 
 
 class KundliReport(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100,  blank=True, null=True,default='')
     place = models.CharField(max_length=200,  blank=True, null=True,default='')
     birth_details = models.ForeignKey(BirthDetails, on_delete=models.CASCADE) 

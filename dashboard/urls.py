@@ -6,6 +6,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path("index", views.index, name="dashboard.index"),
     path("invoices/index", views.invoices, name="dashboard.invoices"),
+    path("kundli/index", views.kundlies, name="dashboard.kundlies"),
     path("activity/index", views.get_your_activity, name="dashboard.activity"),
     path("profile/index", views.ProfileUpdateView.as_view(), name="dashboard.get_profile"),
     path("payment-history/index", views.get_payment_history, name="dashboard.get_payment_history"),

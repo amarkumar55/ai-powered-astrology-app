@@ -17,7 +17,7 @@ from authentication.utlity import send_error_log
 from django_ratelimit.decorators import ratelimit
 
 razorpay_client = razorpay.Client(
-    auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+    auth=(os.environ.get('RAZOR_KEY_ID'), os.environ.get('RAZOR_KEY_SECRET')))
 
 payment_logger = logging.getLogger('payment')
 
@@ -145,47 +145,6 @@ def KundliPaymentHandler(request):
         messages.error(request, "Invalid request.")
         return redirect('kundli.premium_payment')
 
-
-def test_payment(request):
-
-    payment_id = 'pay_QQ7MOgO1HsyhH4'
-    razorpay_order_id = 'rder_QQ7GmvOYPqdOqa'
-    signature = '959580bf55bfea563ca1361b2ba795c3745f9a05b447e9852a6e9690b4e1b76b'
-
-    payment_logger.debug(f"Payment ID: {payment_id}")
-    payment_logger.debug(f"Order ID: {razorpay_order_id}")
-    payment_logger.debug(f"Signature: {signature}")
-
-    params_dict = {
-        'razorpay_order_id': razorpay_order_id,
-        'razorpay_payment_id': payment_id,
-        'razorpay_signature': signature
-    }
-
-    amount = int(os.environ.get('KUNDLI_PREMIMUM_PRICE', '100'))
-    data = kundli_price(amount)
-    total_amount = int(float(data.get('total', amount)) * 100)
-
-    #payment_logger.debug(f"Calculated Total Amount (in paise): {total_amount}")
-    #result = razorpay_client.utility.verify_payment_signature(params_dict)
-    #payment_logger.debug(f"Signature verification result: {result}")
-
-    if True:
-        try:
-            payment_logger.info("Signature verified, attempting payment capture...")
-            razorpay_client.payment.capture(payment_id, total_amount)
-            payment_logger.info(f"Payment successfully captured.")
-            messages.success(request, "Your Payment Processed Successfully.")
-            return redirect('kundli.premium_download')
-        except Exception as capture_error:
-            payment_logger.error("Payment capture failed for %s: %s", payment_id, capture_error, exc_info=True)
-            payment_logger.exception("Payment capture failed.")
-            messages.error(request, "Unable to process payment. If your balance is deducted you can write us with payment details.")
-            return redirect('kundli.premium_payment')
-    else:
-        payment_logger.warning("Signature verification failed.")
-        messages.error(request, "Unable to process payment. If your balance is deducted you can write us.")
-        return redirect('kundli.premium_payment')
 
 @require_POST
 @ratelimit(key='user_or_ip', rate='2/m', method='POST', block=True)

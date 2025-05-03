@@ -15,7 +15,7 @@
                     <a href="{% url 'panchang.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Panchang</a>
                     <a href="{% url 'matching.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Compatibility</a>        
                     <a href="{% url 'numerology.name_number.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Numerlogy</a>  
-                    <a href="{% url 'home.our_plans' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pricing</a>
+                    <!-- <a href="{% url 'home.our_plans' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pricing</a> -->
                    
                 </div>
                 {% if request.user.is_authenticated %}
@@ -25,7 +25,7 @@
                     <!-- WRAP IMAGE + MENU IN RELATIVE DIV -->
                     <div class="relative">
                         {% if request.user.profile_picture %}
-                        <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture.url }}"
+                        <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture }}"
                             id="user-menu-button" alt="">
                         {% else %}
                         <img class="size-8 ml-4 rounded-full cursor-pointer"
@@ -80,7 +80,7 @@
                 <span class="text-sm my-auto text-gray-300">Welcome, {{ request.user.username }}</span>
 
                 {% if request.user.profile_picture %}
-                <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture.url }}" id="user-menu-button"
+                <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture }}" id="user-menu-button"
                     alt="">
                 {% else %}
                 <img class="size-8 ml-4 rounded-full cursor-pointer"
@@ -111,7 +111,7 @@
             <a href="{% url 'panchang.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Panchang</a>
             <a href="{% url 'matching.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Compatibility</a>
             <a href="{% url 'numerology.name_number.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Numerology</a>
-            <a href="{% url 'home.our_plans' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Pricing</a>
+            <!-- <a href="{% url 'home.our_plans' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Pricing</a> -->
             {% if request.user.is_authenticated %}
                
                 <a href="{% url 'dashboard.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Dashboard</a>

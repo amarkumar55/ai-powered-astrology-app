@@ -4,6 +4,7 @@ from invoice.models import Invoice
 from django.contrib import messages
 from django.core.cache import cache
 from django.http import JsonResponse
+from kundli.models import KundliReport
 from utlity.helper import store_activity
 from authentication.models import EmailOTP
 from django.core.paginator import Paginator
@@ -89,6 +90,18 @@ def get_setting(request):
     return render(request, "dashboard/setting/index.html", {"setting":setting})
 
 
+@ratelimit(key='user_or_ip', rate='20/m', block=True)
+@login_required()
+def kundlies(request):
+
+    kundlies = KundliReport.objects.filter()
+    paginator = Paginator(kundlies, 10) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "dashboard/kundli/index.html", {"page_obj": page_obj})
+
+
 @method_decorator(login_required, name='dispatch')
 @method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class ProfileUpdateView(View):
@@ -141,7 +154,7 @@ class ProfileUpdateView(View):
 
                 # Handle profile picture
                 if cd.get("profile"):
-                    user.profile_picture = handle_profile_upload(cd["profile"], cd["username"])
+                    user.profile_picture =  handle_profile_upload(cd["profile"], cd["username"])
 
                 user.save()
                 store_activity(request, {} , "profile update", user)

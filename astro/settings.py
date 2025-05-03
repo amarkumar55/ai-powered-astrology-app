@@ -271,9 +271,7 @@ STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',
                      )
 
 
-
-
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STATIC_URL = "/static/" 
@@ -305,3 +303,4 @@ CRONJOBS = [
 
 RAZOR_KEY_ID='#####'
 RAZOR_KEY_SECRET='####'
+
