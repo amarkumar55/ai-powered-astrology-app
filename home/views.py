@@ -11,13 +11,14 @@ from authentication.utlity import send_error_log
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from utlity.card_data import menu_options
 
 User = get_user_model() 
 
 
-@ratelimit(key='user_or_ip', rate='5/m', block=True)
+@ratelimit(key='user_or_ip', rate='500/m', block=True)
 def index(request):
-    return render(request, "home/index.html",{})
+    return render(request, "home/index.html",{"data": menu_options})
 
 @ratelimit(key='user_or_ip', rate='2/m', block=True)
 def about(request):
@@ -81,6 +82,19 @@ class ContactUsView(View):
 @ratelimit(key='user_or_ip', rate='5/m', block=True)
 def policy(request):
     return render(request, "home/policy.html",{})
+
+
+@ratelimit(key='user_or_ip', rate='5/m', block=True)
+def term_condition(request):
+    return render(request, "home/term_condition.html",{})
+
+@ratelimit(key='user_or_ip', rate='5/m', block=True)
+def support(request):
+    return render(request, "home/policy.html",{})
+
+@ratelimit(key='user_or_ip', rate='5/m', block=True)
+def faqs(request):
+    return render(request, "home/faq.html",{})
 
 @ratelimit(key='user_or_ip', rate='5/m', block=True)
 def our_plans(reqest):

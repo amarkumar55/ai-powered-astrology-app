@@ -1,32 +1,100 @@
-<nav class="bg-gray-800">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<nav class="bgNavbar w-full p-2 shadow-lg shadow-[bg-hcolor] z-50 bg-opacity-90 fixed top-0 left-0 right-0  border-b border-white/10">
+    <div class="px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
             <!-- App Name -->
-            <div class="flex-shrink-0 text-white px-3 font-bold text-lg">
+            <div class="flex-shrink-0 text-white px-3 text-xl font-extrabold tracking-tight">
                <a href="{% url 'home.index' %}">{{ APP_NAME }}</a>
             </div>
 
             <!-- Desktop Menu -->
-            <div class="hidden sm:ml-6 sm:flex sm:items-center sm:justify-between w-full">
-                <div class="flex space-x-2">
-                    <a href="{% url 'kundli.index' %}" class="cursor-pointer rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Kundli Generation</a>
-                    <a href="{% url 'panchang.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Planetary Positions</a>
-                    <a href="{% url 'dasha.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Dasha & Antardasha </a>
-                    <a href="{% url 'panchang.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Panchang</a>
-                    <a href="{% url 'matching.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Compatibility</a>        
-                    <a href="{% url 'numerology.name_number.index' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Numerlogy</a>  
-                    <!-- <a href="{% url 'home.our_plans' %}" class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Pricing</a> -->
-                   
+            <div class="hidden sm:ml-6 sm:flex sm:items-center sm:justify-between w-full pointer-events-auto">
+              
+                <div class="flex space-x-2 my-auto">
+                    <a href="{% url 'kundli.premium_anaysis' %}"
+                        class="cursor-pointer flex items-center nav-item px-2 py-2 text-sm">Premium Kundli Report</a>
+
+                    <a href="{% url 'dasha.index' %}" class="cursor-pointer flex items-center nav-item px-2 py-2 text-sm">Dasha &
+                        Antardasha</a>
+                    <a href="{% url 'panchang.index' %}"
+                        class="cursor-pointer flex items-center nav-item px-2 py-2 text-sm">Panchang</a>
+                    <a href="{% url 'matching.index' %}"
+                        class="cursor-pointer flex items-center nav-item px-2 py-2 text-sm">Compatibility</a>
+                
+          
+                    <div class="relative inline-block text-left">
+                        <!-- Trigger Button -->
+                        <a href="#" id="horoscope_list_button" class="cursor-pointer flex items-center nav-item px-2 py-2 text-sm">
+                            Horoscope
+                            <svg class="-ml-2 px-2 py-2 size-8" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    
+                        <!-- Dropdown -->
+                        <div id="horoscope_list"
+                            class="absolute hidden top-full left-0 mt-2 z-20 w-48 rounded-md py-1 ring-1 shadow-lg ring-black/5 bg-hcolor text-white"
+                            role="menu" aria-orientation="vertical" aria-labelledby="numberlogy_list_button" tabindex="-1">
+                    
+                            <a href="{% url 'horoscope.daily_horoscope' %}" class="block px-4 nav-item py-2 text-sm"
+                                role="menuitem">Daily Horoscope</a>
+                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Weekly
+                                Horoscope</a>
+                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Monthly Horoscope</a>
+                            
+                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Yearly Horoscope</a>
+                  
+                        </div>
+                    </div>
+
+                    <div class="relative inline-block text-left">
+                        <!-- Trigger Button -->
+                        <a href="#" id="numberlogy_list_button" class="cursor-pointer flex items-center nav-item px-2 py-2 text-sm">
+                            Numerology
+                            <svg class="-ml-2 px-2 py-2 size-8" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    
+                        <!-- Dropdown -->
+                        <div id="numberlogy_list"
+                            class="absolute hidden top-full left-0 mt-2 z-20 w-48 rounded-md py-1 ring-1 shadow-lg ring-black/5 bg-hcolor text-white"
+                            role="menu" aria-orientation="vertical" aria-labelledby="numberlogy_list_button" tabindex="-1">
+                    
+                            <a href="{% url 'numerology.driver_conductor.index' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Driver And Conductor</a>
+                            <a href="{% url 'numerology.name_number.index' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Name Number</a>
+                            <a href="{% url 'numerology.life_path_number.index' %}" class="block px-4 py-2 nav-item text-sm" role="menuitem">Life Path Number</a>
+                            <a href="{% url 'numerology.destiny_number.index' %}" class="block px-4 py-2 nav-item text-sm" role="menuitem">Destiny Number</a>
+                            <a href="{% url 'numerology.personality_number.index' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Personality Number</a>
+                            <a href="{% url 'numerology.angel_number.index' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Angel Numbers</a>
+                            <a href="{% url 'loshugrid.index' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Lo Shu Grid</a>
+                           
+                        </div>
+                    </div>
+
                 </div>
+        
                 {% if request.user.is_authenticated %}
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm text-gray-300">Welcome, {{ request.user.username }}</span>
+                    <span class="text-sm font-extrabold tracking-tight">Welcome, {{ request.user.username }}</span>
                 
                     <!-- WRAP IMAGE + MENU IN RELATIVE DIV -->
                     <div class="relative">
                         {% if request.user.profile_picture %}
-                        <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture }}"
-                            id="user-menu-button" alt="">
+                    
+                        <div class="flex items-center" id="user-menu-button" >
+                            <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture }}" 
+                                alt="">
+                            <svg class="cursor-pointer size-8 text-sm font-extrabold tracking-tight" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                <path fill-rule="evenodd"
+                                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                       
                         {% else %}
                         <img class="size-8 ml-4 rounded-full cursor-pointer"
                             src="/staticfiles/images/career-and-financial-guidance-analysis.png" id="user-menu-button" alt="">
@@ -61,13 +129,27 @@
                     </div>
                 </div>
                 {% else %}
-                <div class="flex space-x-2">
-                    <a href="{% url 'auth.login' %}"
-                        class="cursor-pointer rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">
-                        
-                        Login</a>
-                    <a href="{% url 'auth.register' %}"
-                        class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Register</a>
+                <div class="flex space-x-4">
+                   
+                    <a href="{% url 'auth.login' %} " class="flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+                            <path d="M12 11V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6m0 0l5 5m-5-5l-5 5"></path>
+                        </svg>
+                        <span class="cursor-pointer rounded-md py-2  text-white text-xl font-extrabold tracking-tight">Login</span>
+                    </a>
+                  
+
+
+                    <a href="{% url 'auth.register' %}" class="flex items-center px-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M20 8v6m3-3h-6M8 7a4 4 0 118 0 4 4 0 01-8 0z" />
+                        </svg>
+
+                       <span class="cursor-pointer px-2 py-2 text-white text-xl font-extrabold tracking-tight">Register</span>
+                    </a>
+                    
                 </div>
                 {% endif %}
             </div>
@@ -76,19 +158,22 @@
 
             <!-- Mobile menu button -->
             <div class="sm:hidden flex flex-row gap-4">
+             
                 {% if request.user.is_authenticated %}
-                <span class="text-sm my-auto text-gray-300">Welcome, {{ request.user.username }}</span>
+                <span class="text-sm my-auto font-extrabold tracking-tight">Welcome, {{ request.user.username }}</span>
 
                 {% if request.user.profile_picture %}
+                
                 <img class="size-8 ml-4 rounded-full cursor-pointer" src="{{ request.user.profile_picture }}" id="user-menu-button"
                     alt="">
+               
                 {% else %}
                 <img class="size-8 ml-4 rounded-full cursor-pointer"
                     src="/staticfiles/images/career-and-financial-guidance-analysis.png" id="user-menu-button" alt="">
                 {% endif %}
                 {% endif %}
 
-                <button id="menu-toggle" class="cursor-pointer text-gray-300 focus:outline-none">
+                <button id="menu-toggle" class="cursor-pointer text-white font-extrabold tracking-tight focus:outline-none">
                     <svg id="hamburger" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
@@ -101,35 +186,58 @@
             </div>
         </div>
     </div>
-
     <!-- Mobile Menu -->
     <div id="mobile-menu-list" class="hidden lg:hidden px-4 pb-4 space-y-2">
         <div class="space-y-1 pt-2 pb-3">
-            <a href="{% url 'kundli.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Kundli Generation</a>
-            <a href="{% url 'panchang.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Planetary Positions</a>
-            <a href="{% url 'dasha.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Dasha & Antardasha</a>
-            <a href="{% url 'panchang.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Panchang</a>
-            <a href="{% url 'matching.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Compatibility</a>
-            <a href="{% url 'numerology.name_number.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Numerology</a>
-            <!-- <a href="{% url 'home.our_plans' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Pricing</a> -->
+
+            <a href="{% url 'kundli.index' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item">Kundli Generation</a>
+            <a href="{% url 'dasha.index' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item">Dasha & Antardasha</a>
+            <a href="{% url 'panchang.index' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item">Panchang</a>
+            <a href="{% url 'matching.index' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item">Compatibility</a>
+            <a href="{% url 'loshugrid.index' %}" class="cursor-pointer block px-4 py-2 text-sm nav-item">Lo Shu Grid</a>
+            <a href="{% url 'numerology.driver_conductor.index' %}" class="cursor-pointer block px-4 py-2 text-sm nav-item">Driver And Conductor</a>
+            <a href="{% url 'numerology.destiny_number.index' %}" class="cursor-pointer block px-4 py-2 text-sm nav-item">Destiny Number</a>
+            <a href="{% url 'horoscope.daily_horoscope' %}" class="cursor-pointer block px-4 py-2 text-sm nav-item">Daily Horoscope</a>
+            <a href="{% url 'horoscope.weekly_horoscope' %}" class="cursor-pointer block px-4 py-2 text-sm nav-item">Weekly Horoscope</a>
+         
             {% if request.user.is_authenticated %}
                
-                <a href="{% url 'dashboard.index' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Dashboard</a>
-                <a href="{% url 'dashboard.get_profile' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Your Profile</a>
-                <a href="{% url 'dashboard.invoices' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Invoices</a>
-                <a href="{% url 'dashboard.activity' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Your Activity</a>
-                <a href="{% url 'dashboard.get_payment_history' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Payment History</a>
-                <a href="{% url 'dashboard.get_refund_history' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Refund History</a>
-                <a href="{% url 'dashboard.get_account_view' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;"  role="menuitem">Account</a>
-                <a href="{% url 'dashboard.get_setting' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;" role="menuitem">Settings</a>
+                <a href="{% url 'dashboard.index' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Dashboard</a>
+                <a href="{% url 'dashboard.get_profile' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Your Profile</a>
+                <a href="{% url 'dashboard.invoices' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Invoices</a>
+                <a href="{% url 'dashboard.activity' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Your Activity</a>
+                <a href="{% url 'dashboard.get_payment_history' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Payment History</a>
+                <a href="{% url 'dashboard.get_refund_history' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Refund History</a>
+                <a href="{% url 'dashboard.get_account_view' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item"  role="menuitem">Account</a>
+                <a href="{% url 'dashboard.get_setting' %}" class="cursor-pointer block px-3 py-2 text-sm nav-item" role="menuitem">Settings</a>
                 
                 <form action="{% url 'auth.logout' %}" method="post">
                     {% csrf_token %}
-                    <button class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white; w-full text-left" type="submit">Logout</button>
+                    <button type="submit" class="flex items-center ml-2 space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v9m5.657-5.657a8 8 0 11-11.314 0" />
+                        </svg>
+
+                    <span class="cursor-pointer py-2  text-white text-xl font-extrabold tracking-tight">Logout </span>
+                   </button>
                 </form>
             {% else %}
-              <a href="{% url 'auth.login' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Login</a>
-              <a href="{% url 'auth.register' %}" class="cursor-pointer block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white;">Register</a>
+                <a href="{% url 'auth.login' %} " class="flex items-center ml-2 space-x-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+                        <path d="M12 11V5a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-6m0 0l5 5m-5-5l-5 5"></path>
+                    </svg>
+                    <span class="cursor-pointer rounded-md py-2  text-white text-xl font-extrabold tracking-tight">Login</span>
+                </a>
+                <a href="{% url 'auth.register' %}" class="flex items-center ml-2 space-x-1">
+                 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M20 8v6m3-3h-6M8 7a4 4 0 118 0 4 4 0 01-8 0z" />
+                    </svg>
+                
+                    <span class="cursor-pointer px-2 py-2 text-white text-xl font-extrabold tracking-tight">Register</span>
+                </a>
             {% endif %}
         </div>
     </div>

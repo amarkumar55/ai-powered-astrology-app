@@ -1,0 +1,176 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}AI Chatbot Support - Astro Admin Panel{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <!-- Chat Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">AI Chatbot Support</h2>
+            <div class="flex items-center space-x-4">
+                <span class="px-3 py-1 rounded-full text-sm font-medium {% if chatbot_status == 'online' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ chatbot_status|title }}
+                </span>
+                <button onclick="clearChat()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-trash"></i> Clear Chat
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="flex flex-col h-[600px]">
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="flex-1 overflow-y-auto mb-4 space-y-4 p-4">
+                <!-- Welcome Message -->
+                <div class="flex items-start space-x-3">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <p class="text-sm text-gray-800">
+                                Hello! I'm your AI assistant. How can I help you today? I can assist with:
+                            </p>
+                            <ul class="mt-2 text-sm text-gray-600 list-disc list-inside">
+                                <li>Kundli report analysis</li>
+                                <li>Horoscope predictions</li>
+                                <li>Subscription queries</li>
+                                <li>General astrology questions</li>
+                            </ul>
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500">Just now</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="border-t pt-4">
+                <form id="chatForm" class="flex space-x-4">
+                    <div class="flex-1">
+                        <input type="text" id="messageInput" 
+                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                               placeholder="Type your message here..."
+                               autocomplete="off">
+                    </div>
+                    <button type="submit" 
+                            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    let isProcessing = false;
+
+    // Function to add a message to the chat
+    function addMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex items-start space-x-3';
+        
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'flex-shrink-0';
+        
+        const icon = document.createElement('div');
+        icon.className = isUser ? 
+            'w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center' :
+            'w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center';
+        
+        icon.innerHTML = isUser ? 
+            '<i class="fas fa-user text-white"></i>' :
+            '<i class="fas fa-robot text-white"></i>';
+        
+        iconDiv.appendChild(icon);
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'flex-1';
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = isUser ?
+            'bg-indigo-600 text-white rounded-lg p-3' :
+            'bg-gray-100 rounded-lg p-3';
+        
+        messageContent.innerHTML = `<p class="text-sm">${content}</p>`;
+        
+        const timestamp = document.createElement('p');
+        timestamp.className = 'mt-1 text-xs text-gray-500';
+        timestamp.textContent = 'Just now';
+        
+        contentDiv.appendChild(messageContent);
+        contentDiv.appendChild(timestamp);
+        
+        messageDiv.appendChild(iconDiv);
+        messageDiv.appendChild(contentDiv);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to handle chat form submission
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (isProcessing) return;
+        
+        const message = messageInput.value.trim();
+        if (!message) return;
+        
+        isProcessing = true;
+        messageInput.value = '';
+        
+        // Add user message
+        addMessage(message, true);
+        
+        try {
+            // Send message to backend
+            const response = await fetch('/admin/chatbot/send-message/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+                body: JSON.stringify({ message }),
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Add AI response
+                addMessage(data.response);
+            } else {
+                addMessage('Sorry, I encountered an error. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            addMessage('Sorry, I encountered an error. Please try again.');
+        } finally {
+            isProcessing = false;
+        }
+    });
+
+    // Function to clear chat
+    function clearChat() {
+        if (confirm('Are you sure you want to clear the chat history?')) {
+            chatMessages.innerHTML = '';
+            // Add welcome message back
+            addMessage(`Hello! I'm your AI assistant. How can I help you today? I can assist with:
+                <ul class="mt-2 text-sm text-gray-600 list-disc list-inside">
+                    <li>Kundli report analysis</li>
+                    <li>Horoscope predictions</li>
+                    <li>Subscription queries</li>
+                    <li>General astrology questions</li>
+                </ul>`);
+        }
+    }
+</script>
+{% endblock %} 

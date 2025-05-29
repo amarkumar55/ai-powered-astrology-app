@@ -1,0 +1,124 @@
+{% extends "includes/base.html" %}
+{% block title %}Terms and Conditions{% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+            <section class="py-16">
+                <div class="container mx-auto px-6 lg:px-20">
+                    <h2 class="text-4xl font-bold text-center text-white">📜 Terms & Conditions</h2>
+                    <p class="text-lg text-center text-gray-300 mt-4">
+                        Please read these Terms & Conditions carefully before using our website.
+                    </p>
+
+                    <div class="mt-10 shadow-lg rounded-lg p-6 md:p-10">
+                        <h3 class="text-2xl font-semibold text-gray-400">1. Acceptance of Terms</h3>
+                        <p class="text-gray-500 mt-2">
+                            By accessing and using AstroLive, you agree to abide by these Terms & Conditions. If you do
+                            not agree, please do not use our services.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">2. Use of Services</h3>
+                        <p class="text-gray-500 mt-2">
+                            Our astrology-based services are for informational and entertainment purposes only. They
+                            should not replace professional advice in areas such as health, finance, or legal matters.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">3. User Responsibilities</h3>
+                        <ul class="text-gray-500 mt-2 space-y-2">
+                            <li>✔ Users must provide accurate information when using our services.</li>
+                            <li>✔ Any misuse, unauthorized access, or tampering with our services is strictly
+                                prohibited.</li>
+                            <li>✔ Users must be at least 18 years old to use paid astrology services.</li>
+                        </ul>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">4. Payments & Refunds</h3>
+                        <p class="text-gray-500 mt-2">
+                            All payments for astrology reports, consultations, or premium services are non-refundable
+                            unless
+                            explicitly mentioned. If you face issues, contact our support team at <a
+                                href="mailto:support@astrolive.com" class="text-white">support@astrolive.com</a>.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">5. Privacy Policy</h3>
+                        <p class="text-gray-500 mt-2">
+                            Your personal data is handled with strict confidentiality. We do not share or sell your data
+                            to third
+                            parties. Read our <a href="{% url 'privacy_policy' %}" class="text-white">Privacy Policy</a>
+                            for more details.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">6. Intellectual Property</h3>
+                        <p class="text-gray-500 mt-2">
+                            All content, including texts, images, and astrology reports, is the intellectual property of
+                            AstroLive.
+                            Unauthorized reproduction or distribution is strictly prohibited.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">7. Disclaimer</h3>
+                        <p class="text-gray-500 mt-2">
+                            AstroLive does not guarantee 100% accuracy of astrological predictions. Our services are
+                            based on
+                            astrological calculations and interpretations.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">8. Changes to Terms</h3>
+                        <p class="text-gray-500 mt-2">
+                            We reserve the right to update these Terms & Conditions at any time. Continued use of the
+                            site implies
+                            acceptance of any modifications.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">9. Contact Us</h3>
+                        <p class="text-gray-500 mt-2">
+                            If you have any questions about our Terms & Conditions, feel free to reach us at <a
+                                href="mailto:support@astrolive.com" class="text-white">support@astrolive.com</a>.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">10. Limitation of Liability</h3>
+                        <p class="text-gray-500 mt-2">
+                            AstroLive shall not be held liable for any direct, indirect, incidental, consequential, or
+                            punitive damages
+                            arising out of your use of, or inability to use, our services. This includes but is not
+                            limited to
+                            damages for errors, inaccuracies, or omissions in content.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">11. Governing Law</h3>
+                        <p class="text-gray-500 mt-2">
+                            These Terms & Conditions are governed by and construed in accordance with the laws of [Your
+                            Country/State].
+                            Any disputes arising under or in connection with these terms shall be subject to the
+                            exclusive
+                            jurisdiction of the courts of [Your Jurisdiction].
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">12. Termination</h3>
+                        <p class="text-gray-500 mt-2">
+                            We reserve the right to terminate or suspend access to our services immediately, without
+                            prior notice or
+                            liability, for any reason whatsoever, including without limitation if you breach the Terms.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">13. External Links</h3>
+                        <p class="text-gray-500 mt-2">
+                            Our website may contain links to third-party websites or services that are not owned or
+                            controlled by AstroLive.
+                            We are not responsible for the content, policies, or practices of any third-party sites.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-gray-400 mt-6">14. Cookies</h3>
+                        <p class="text-gray-500 mt-2">
+                            Our website uses cookies to enhance user experience. By continuing to browse the site, you
+                            consent to our use
+                            of cookies. Please review our <a href="{% url 'privacy_policy' %}" class="text-white">Privacy
+                                Policy</a> for
+                            more information.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+{% endblock %}

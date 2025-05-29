@@ -128,7 +128,7 @@ X_FRAME_OPTIONS = "DENY"  # Prevents clickjacking
 CSP_IMG_SRC = ["'self'", "data:"]
 CSP_FONT_SRC = ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"]
 CSP_SCRIPT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",'https://fonts.googleapis.com')
 CSP_FRAME_SRC = ("'self'",)
 CSP_INCLUDE_NONCE_IN = ['script-src']
 
@@ -303,4 +303,5 @@ CRONJOBS = [
 
 RAZOR_KEY_ID='#####'
 RAZOR_KEY_SECRET='####'
+
 

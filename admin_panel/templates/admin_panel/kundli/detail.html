@@ -1,0 +1,169 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}{{ report.name }}'s Kundli - Astro Admin Panel{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">Kundli Report Details</h2>
+            <div class="flex space-x-3">
+                <a href="{% url 'admin_panel:admin_kundli_edit' report.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <i class="fas fa-edit mr-2"></i>Edit Report
+                </a>
+                <a href="{% url 'admin_panel:admin_kundli_list' %}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Basic Information -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <div class="flex flex-col items-center mb-6">
+                        <img class="h-32 w-32 rounded-full object-cover mb-4" src="https://ui-avatars.com/api/?name={{ report.name }}&background=0D8ABC&color=fff&size=128" alt="{{ report.name }}">
+                        <h3 class="text-xl font-semibold text-gray-900">{{ report.name }}</h3>
+                        <p class="text-gray-500">{{ report.place }}</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Birth Details</h4>
+                            <p class="mt-1 text-sm text-gray-900">{{ report.birth_details }}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Birth Time</h4>
+                            <p class="mt-1 text-sm text-gray-900">{{ report.birth_time }}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Birth Sign</h4>
+                            <span class="mt-1 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                {{ report.birth_sign }}
+                            </span>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Ascendant</h4>
+                            <span class="mt-1 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                {{ report.ascendant }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Astrological Details -->
+            <div class="lg:col-span-2">
+                <div class="space-y-6">
+                    <!-- Planetary Positions -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Planetary Positions</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {% for planet, position in report.planetary_positions.items %}
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="text-sm font-medium text-gray-500">{{ planet }}</div>
+                                <div class="mt-1 text-sm text-gray-900">{{ position }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Houses -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Houses</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {% for house, details in report.houses.items %}
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="text-sm font-medium text-gray-500">{{ house }}</div>
+                                <div class="mt-1 text-sm text-gray-900">{{ details }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Yogas and Doshas -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Yogas and Doshas</h3>
+                        <div class="space-y-4">
+                            {% if report.yogas %}
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Yogas</h4>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    {% for yoga in report.yogas %}
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                        {{ yoga }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if report.doshas %}
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Doshas</h4>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    {% for dosha in report.doshas %}
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                        {{ dosha }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Predictions -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Predictions</h3>
+                        <div class="space-y-4">
+                            {% if report.general_prediction %}
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">General Prediction</h4>
+                                <p class="mt-1 text-sm text-gray-900">{{ report.general_prediction }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if report.career_prediction %}
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Career</h4>
+                                <p class="mt-1 text-sm text-gray-900">{{ report.career_prediction }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if report.health_prediction %}
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Health</h4>
+                                <p class="mt-1 text-sm text-gray-900">{{ report.health_prediction }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if report.relationship_prediction %}
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">Relationships</h4>
+                                <p class="mt-1 text-sm text-gray-900">{{ report.relationship_prediction }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="mt-6 pt-6 border-t border-gray-200">
+            <div class="flex justify-between items-center text-sm text-gray-500">
+                <div>
+                    <span class="mr-4">Created: {{ report.created_at|date:"F d, Y H:i" }}</span>
+                    <span>Last Updated: {{ report.updated_at|date:"F d, Y H:i" }}</span>
+                </div>
+                <div>
+                    <span>Report ID: {{ report.id }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

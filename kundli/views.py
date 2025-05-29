@@ -21,7 +21,7 @@ from django.contrib.auth.decorators import login_required
 from .utlity import generate_kundli_details, clean_chart_data, get_valid_context_or_redirect
 from authentication.utlity import send_error_log, reset_failed_attempts, increment_failed_attempts,handle_captcha_logic
 
-#Tech9691@@
+
 @method_decorator(login_required, name='dispatch')
 @method_decorator(ratelimit(key='user_or_ip', rate='10/m', method='POST', block=True), name='dispatch')
 class KundliPreditionView(View):

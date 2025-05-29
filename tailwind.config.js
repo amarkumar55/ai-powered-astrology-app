@@ -1,15 +1,19 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './templates/**/*.{html,js}',   // Django templates location
-    './static/js/**/*.{js,jsx}',    // Your JS files
+    './templates/**/*.{html,js}',
+    './static/js/**/*.{js,jsx}',
+  ],
+  safelist: [
+    'bg-[#150d28]',
+    'bg-[#2f142e]',
   ],
   theme: {
-    extend: {},
-  },
-    plugins: [
-        function({ addVariant }) {
-        addVariant('peer-checked', '&:checked ~ .peer-checked\\:block');
+    extend: {
+      colors: {
+        primary: '#150d28',
+        bgcard : rgba(22, 125, 255, .3)
       }
-  ],
+    },
+  },
+  plugins: [],
 }

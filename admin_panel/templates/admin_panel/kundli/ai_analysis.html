@@ -1,0 +1,68 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}AI Analysis - {{ kundli.name }}'s Kundli - Astro Admin Panel{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800">AI Analysis: {{ kundli.name }}'s Kundli</h2>
+                <p class="text-sm text-gray-500">Generated on {{ kundli.updated_at|date:"F d, Y H:i" }}</p>
+            </div>
+            <div class="flex space-x-4">
+                <a href="{% url 'admin_panel:admin_kundli_detail' kundli.id %}" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-arrow-left"></i> Back to Kundli
+                </a>
+                <button onclick="printAnalysis()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-print"></i> Print
+                </button>
+            </div>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-gray-500">Birth Details</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ kundli.birth_date|date:"F d, Y" }}</p>
+                <p class="text-sm text-gray-900">{{ kundli.birth_time|time:"H:i" }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-gray-500">Birth Place</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ kundli.place }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-gray-500">Birth Sign</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ kundli.birth_sign }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-gray-500">Ascendant</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ kundli.ascendant }}</p>
+            </div>
+        </div>
+
+        <!-- AI Analysis -->
+        <div class="prose max-w-none">
+            {{ ai_analysis|linebreaks }}
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="mt-8 p-4 bg-yellow-50 rounded-lg">
+            <h3 class="text-sm font-medium text-yellow-800">Disclaimer</h3>
+            <p class="mt-1 text-sm text-yellow-700">
+                This analysis is generated using artificial intelligence and should be used as a general guide only. 
+                For personalized and detailed astrological guidance, please consult with a professional astrologer.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function printAnalysis() {
+        window.print();
+    }
+</script>
+{% endblock %} 

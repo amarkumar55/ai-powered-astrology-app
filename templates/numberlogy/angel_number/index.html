@@ -1,87 +1,99 @@
 {% extends "includes/base.html" %}
 {% block title %}Understand Angel Numbers{% endblock %}
 {% block content %}
-
-<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-
-    <div class="relative flex flex-col gap-8 h-auto">
-        <!-- Introduction -->
-        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white">🌟 Angel Numbers: Signs from the Universe 🌟
-            </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mt-4">
-                Have you ever glanced at the clock at exactly 11:11 or noticed a license plate with 333? Perhaps you've
-                seen a receipt
-                totaling 444 or a phone number ending in 777. These seemingly coincidental patterns are known as Angel
-                Numbers —
-                messages from the universe or your guardian angels guiding you on your path.
-            </p>
-        </div>
-
-        <!-- What Are Angel Numbers -->
-        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white">💫 What Are Angel Numbers?</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mt-4">
-                Angel Numbers are repeating sequences of numbers that appear in your everyday life. Whether it's a
-                random street sign,
-                your total at a coffee shop, or the time on your phone, these numbers often carry spiritual meanings and
-                messages. They
-                act as gentle nudges from the universe, reminding you that you are guided, supported, and aligned with
-                your life’s
-                purpose.
-            </p>
-        </div>
-
-        <!-- Why Are Angel Numbers Important -->
-        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white">🧘 Why Are Angel Numbers Important?</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mt-4">
-                Many people believe that Angel Numbers are a way for higher powers to communicate guidance,
-                encouragement, and support.
-                When you repeatedly notice a certain number pattern, it could be a sign to pay attention to your
-                thoughts and
-                intentions. These numbers might be:
-            <ul class="mt-4 space-y-2 list-disc list-inside text-gray-700 dark:text-gray-400">
-                <li>Encouraging you to stay positive.</li>
-                <li>Reminding you to focus on your goals.</li>
-                <li>Reassuring you that you are on the right path.</li>
-            </ul>
-            </p>
-        </div>
-
-        <!-- How to Interpret Angel Numbers -->
-        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white">🌱 How to Interpret Angel Numbers</h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mt-4">
-                Understanding Angel Numbers involves tuning into your intuition and reflecting on what’s going on in
-                your life when you
-                see them. While each number carries its own unique meaning, it's essential to consider:
-            <ul class="mt-4 space-y-2 list-disc list-inside text-gray-700 dark:text-gray-400">
-                <li>Your current thoughts and feelings when noticing the number.</li>
-                <li>The context of your life — challenges, decisions, or changes.</li>
-                <li>Your inner voice and how the number resonates with you.</li>
-            </ul>
-            </p>
-        </div>
-
-        <!-- Angel Numbers and Their Meanings -->
-        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white">🌟 Angel Numbers and Their Meanings</h2>
-            <div class="grid gap-6 space-y-2 space-x-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
-                {% for num_key, num_value in angel_numbers.items %}
-                <div
-                    class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-                    <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300">{{ num_key }} - {{ num_value.title}}</h2>
-                    <p class="text-gray-700 dark:text-gray-300 mt-2"><strong>Meaning:</strong> {{ num_value.meaning }}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-center p-4">
+            <section class="py-16">
+                <div class="container mx-auto px-6 space-y-8 lg:px-20">
+                    <h2 class="text-4xl font-bold text-center text-white mb-6">🔢 Understanding Angel Numbers</h2>
+                    
+                    <p class="text-lg text-center text-gray-300 mt-4">
+                        Discover the spiritual meaning behind recurring number patterns and how they guide you through life.               
                     </p>
-                    <p class="text-gray-600 dark:text-gray-400 mt-1"><strong>Message:</strong> {{ num_value.message }}
-                    </p>
-                    <p class="text-gray-600 dark:text-gray-400 mt-1"><strong>Advice:</strong> {{ num_value.advice }}</p>
+
+                    <div class="relative flex flex-col gap-4 mt-12 h-auto">
+                        <!-- Introduction -->
+                        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
+                            <h4 class="text-xl font-bold text-gray-300">🌟 Angel Numbers: Signs from the Universe 🌟
+                            </h4>
+                            <p class="text-sm text-gray-500 mt-4">
+                                Have you ever glanced at the clock at exactly 11:11 or noticed a license plate with 333? Perhaps you've
+                                seen a receipt
+                                totaling 444 or a phone number ending in 777. These seemingly coincidental patterns are known as Angel
+                                Numbers —
+                                messages from the universe or your guardian angels guiding you on your path.
+                            </p>
+                        </div>
+                    
+                        <!-- What Are Angel Numbers -->
+                        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
+                            <h4 class="text-xl font-bold text-gray-300">💫 What Are Angel Numbers?</h4>
+                            <p class="text-sm text-gray-500 mt-4">
+                                Angel Numbers are repeating sequences of numbers that appear in your everyday life. Whether it's a
+                                random street sign,
+                                your total at a coffee shop, or the time on your phone, these numbers often carry spiritual meanings and
+                                messages. They
+                                act as gentle nudges from the universe, reminding you that you are guided, supported, and aligned with
+                                your life’s
+                                purpose.
+                            </p>
+                        </div>
+                    
+                        <!-- Why Are Angel Numbers Important -->
+                        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
+                            <h4 class="text-xl font-bold text-gray-300">🧘 Why Are Angel Numbers Important?</h4>
+                            <p class="text-sm text-gray-500 mt-4">
+                                Many people believe that Angel Numbers are a way for higher powers to communicate guidance,
+                                encouragement, and support.
+                                When you repeatedly notice a certain number pattern, it could be a sign to pay attention to your
+                                thoughts and
+                                intentions. These numbers might be:
+                            <ul class="mt-4 space-y-2 list-disc list-inside text-gray-500">
+                                <li>Encouraging you to stay positive.</li>
+                                <li>Reminding you to focus on your goals.</li>
+                                <li>Reassuring you that you are on the right path.</li>
+                            </ul>
+                            </p>
+                        </div>
+                    
+                        <!-- How to Interpret Angel Numbers -->
+                        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
+                            <h4 class="text-xl font-bold text-gray-300">🌱 How to Interpret Angel Numbers</h4>
+                            <p class="text-sm text-gray-500 mt-4">
+                                Understanding Angel Numbers involves tuning into your intuition and reflecting on what’s going on in
+                                your life when you
+                                see them. While each number carries its own unique meaning, it's essential to consider:
+                            <ul class="mt-4 space-y-2 list-disc list-inside text-gray-500">
+                                <li>Your current thoughts and feelings when noticing the number.</li>
+                                <li>The context of your life — challenges, decisions, or changes.</li>
+                                <li>Your inner voice and how the number resonates with you.</li>
+                            </ul>
+                            </p>
+                        </div>
+                    
+                        <!-- Angel Numbers and Their Meanings -->
+                        <div class="container mx-auto px-6 py-8 lg:px-20 text-left">
+                            <h4 class="text-xl font-bold text-gray-300">🌟 Angel Numbers and Their Meanings</h4>
+                            <div class="text-sm grid gap-6 space-y-2 space-x-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
+                                {% for num_key, num_value in angel_numbers.items %}
+                                <div
+                                    class="p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                    <h2 class="text-2xl font-bold text-gray-300">{{ num_key }} - {{ num_value.title}}
+                                    </h2>
+                                    <p class="text-gray-500  mt-2"><strong>Meaning:</strong> {{ num_value.meaning }}
+                                    </p>
+                                    <p class="text-gray-500  mt-1"><strong>Message:</strong> {{ num_value.message }}
+                                    </p>
+                                    <p class="text-gray-500  mt-1"><strong>Advice:</strong> {{ num_value.advice }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>          
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
+            </section>
         </div>
     </div>
-</div>
-
+</main>
 {% endblock %}

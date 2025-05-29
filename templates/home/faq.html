@@ -1,0 +1,89 @@
+{% extends "includes/base.html" %}
+{% block title %}Frequently asked questions{% endblock %}
+{% block content %}
+<main>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-center p-4">
+            <section class="py-16">
+                <div class="container mx-auto px-6 space-y-8 lg:px-20">
+                    <h2 class="text-4xl font-bold text-center text-white mb-6">Frequently asked questions</h2>
+                   
+                    <p class="text-lg text-center text-gray-500 mt-4">
+                        Find answers to common questions about our astrology services.
+                    </p>
+
+                    <div class="py-8">
+                        <div>
+                            <div class="question cursor-pointer flex flex-row py-4 border-b border-gray-700 justify-between items-center">
+                                <p>1. How accurate are your astrology readings?</p>
+                                <span class="text-2xl font-medium">+</span>
+                            </div>
+                            <div class="answer hidden px-4 py-3 text-gray-500">
+                                Our astrology readings are based on time-tested calculations using your birth details. While we strive for accuracy,
+                                predictions are interpretive and may vary based on external factors..
+                            </div>
+                        </div>
+                        <div>
+                            <div class="question cursor-pointer flex flex-row py-4 border-b border-gray-700 justify-between items-center">
+                                <p>2. What information do I need to provide for a reading?</p>
+                                <span class="text-2xl font-medium">+</span>
+                            </div>
+                            <div class="answer hidden px-4 py-3 text-gray-500">
+                                You’ll need to provide your full birth date, time, and location to generate an accurate natal chart and personalized
+                                prediction.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="question cursor-pointer flex flex-row py-4 border-b border-gray-700 justify-between items-center">
+                                <p>3. Can I speak to a live astrologer?</p>
+                                <span class="text-2xl font-medium">+</span>
+                            </div>
+                            <div class="answer hidden px-4 py-3 text-gray-500">
+                                Yes! We offer one-on-one consultations with certified astrologers. You can schedule a session directly through our
+                                website.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="question cursor-pointer flex flex-row py-4 border-b border-gray-700 justify-between items-center">
+                                <p>4. Is my data secure?</p>
+                                <span class="text-2xl font-medium">+</span>
+                            </div>
+                            <div class="answer hidden px-4 py-3 text-gray-500">
+                                Yes, all your personal details are encrypted and handled securely. We do not share or sell your information to third
+                                parties.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="question cursor-pointer flex flex-row py-4 border-b border-gray-700 justify-between items-center">
+                                <p>5. Do you offer refunds?</p>
+                                <span class="text-2xl font-medium">+</span>
+                            </div>
+                            <div class="answer hidden px-4 py-3 text-gray-500">
+                                Due to the personalized nature of our services, refunds are generally not provided unless there's a technical issue.
+                                Please contact support for help.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="question cursor-pointer flex flex-row py-4 border-b border-gray-700 justify-between items-center">
+                                <p>6. What languages are available?</p>
+                                <span class="text-2xl font-medium">+</span>
+                            </div>
+                            <div class="answer hidden px-4 py-3 text-gray-500">
+                                Currently, our services are available in English. We're working on adding support for regional languages soon.
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="mt-12 text-center text-gray-500">
+                        <p>Still have questions?</p>
+                        Contact our support team →
+                        <a href="mailto:support@astrolive.com" class="text-white hover:underline font-medium">
+                             support@astrolive.com
+                        </a>
+                    </div>           
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+{% endblock %}

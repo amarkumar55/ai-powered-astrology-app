@@ -352,6 +352,21 @@ $(document).ready(function () {
     function hideAlert() {
        document.getElementById("alertBox").classList.add("hidden");
     }
+
+
+    $(".question").on("click", function () {
+        const $answer = $(this).next(".answer");
+        const $icon = $(this).find("span");
+
+        // Toggle the clicked answer
+        $answer.slideToggle(200);
+
+        // Toggle the "+" to "-" and vice versa
+        $icon.text($icon.text() === "+" ? "−" : "+");
+
+        $(".answer").not($answer).slideUp(200);
+        $(".question span").not($icon).text("+");
+    });
 });
 
 
@@ -655,12 +670,26 @@ $(document).ready(function () {
     const menuList = document.getElementById("mobile-menu-list");
     const hamburger = document.getElementById("hamburger");
     const closeIcon = document.getElementById("close");
+    const numberlogy_button = document.getElementById("numberlogy_list_button");
+    const numberlogy_menu_list = document.getElementById("numberlogy_list");
+    const horoscope_button = document.getElementById("horoscope_list_button");
+    const horoscope_list = document.getElementById("horoscope_list");
 
     menuToggle.addEventListener("click", () => {
+        
         menuList.classList.toggle("hidden");
         hamburger.classList.toggle("hidden");
         closeIcon.classList.toggle("hidden");
     });
+
+    numberlogy_button.addEventListener("click", () => {
+        numberlogy_menu_list.classList.toggle("hidden");
+    });
+
+    horoscope_button.addEventListener("click", () => {
+        horoscope_list.classList.toggle("hidden");
+    });
+
 
 });
 
@@ -669,10 +698,33 @@ $('#user-menu-button').on('click', function (e) {
 });
 
 
+$('#horoscope_list_button').on('click', function (e) {
+    e.stopPropagation();
+});
+
+$('#numberlogy_list_button').on('click', function (e) {
+    e.stopPropagation();
+});
+
 
 $(document).on('click', function (e) {
     if (!$(e.target).closest('#user-menu-button, #user-menu-list').length) {
         $('#user-menu-list').hide();
+       
+    }
+});
+
+$(document).on('click', function (e) {
+    if (!$(e.target).closest('#numberlogy_list_button, #numberlogy_list').length) {
+        $('#numberlogy_list').hide();
+       
+    }
+});
+
+
+$(document).on('click', function (e) {
+    if (!$(e.target).closest('#horoscope_list_button, #horoscope_list').length) {
+        $('#horoscope_list').hide();
        
     }
 });

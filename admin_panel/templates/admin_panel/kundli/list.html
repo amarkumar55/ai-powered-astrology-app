@@ -1,0 +1,218 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Kundli Reports - Astro Admin Panel{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-800">Kundli Reports</h2>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <div class="flex-1">
+                <input type="text" id="searchInput" placeholder="Search by name, place, or birth details..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+            <div class="w-full md:w-48">
+                <select id="birthSignFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                    <option value="">All Birth Signs</option>
+                    <option value="Aries">Aries</option>
+                    <option value="Taurus">Taurus</option>
+                    <option value="Gemini">Gemini</option>
+                    <option value="Cancer">Cancer</option>
+                    <option value="Leo">Leo</option>
+                    <option value="Virgo">Virgo</option>
+                    <option value="Libra">Libra</option>
+                    <option value="Scorpio">Scorpio</option>
+                    <option value="Sagittarius">Sagittarius</option>
+                    <option value="Capricorn">Capricorn</option>
+                    <option value="Aquarius">Aquarius</option>
+                    <option value="Pisces">Pisces</option>
+                </select>
+            </div>
+            <div class="w-full md:w-48">
+                <select id="ascendantFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                    <option value="">All Ascendants</option>
+                    <option value="Aries">Aries</option>
+                    <option value="Taurus">Taurus</option>
+                    <option value="Gemini">Gemini</option>
+                    <option value="Cancer">Cancer</option>
+                    <option value="Leo">Leo</option>
+                    <option value="Virgo">Virgo</option>
+                    <option value="Libra">Libra</option>
+                    <option value="Scorpio">Scorpio</option>
+                    <option value="Sagittarius">Sagittarius</option>
+                    <option value="Capricorn">Capricorn</option>
+                    <option value="Aquarius">Aquarius</option>
+                    <option value="Pisces">Pisces</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Kundli Reports Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birth Details</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birth Sign</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ascendant</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for report in kundli_reports %}
+                    <tr class="kundli-row" data-birth-sign="{{ report.birth_sign }}" data-ascendant="{{ report.ascendant }}">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ report.name }}&background=0D8ABC&color=fff" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ report.name }}</div>
+                                    <div class="text-sm text-gray-500">{{ report.place }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ report.birth_details }}</div>
+                            <div class="text-sm text-gray-500">{{ report.birth_time }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                {{ report.birth_sign }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                {{ report.ascendant }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ report.created_at|date:"M d, Y" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="deleteKundli({{ report.id }})" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                            No Kundli reports found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if kundli_reports.has_other_pages %}
+        <div class="flex justify-between items-center mt-6">
+            <div class="text-sm text-gray-700">
+                Showing {{ kundli_reports.start_index }} to {{ kundli_reports.end_index }} of {{ kundli_reports.paginator.count }} reports
+            </div>
+            <div class="flex space-x-2">
+                {% if kundli_reports.has_previous %}
+                <a href="?page={{ kundli_reports.previous_page_number }}" class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% for num in kundli_reports.paginator.page_range %}
+                    {% if kundli_reports.number == num %}
+                    <span class="px-3 py-1 rounded-md bg-indigo-600 text-white">{{ num }}</span>
+                    {% elif num > kundli_reports.number|add:'-3' and num < kundli_reports.number|add:'3' %}
+                    <a href="?page={{ num }}" class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                        {{ num }}
+                    </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if kundli_reports.has_next %}
+                <a href="?page={{ kundli_reports.next_page_number }}" class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.kundli-row');
+        
+        rows.forEach(row => {
+            const name = row.querySelector('.text-gray-900').textContent.toLowerCase();
+            const place = row.querySelector('.text-gray-500').textContent.toLowerCase();
+            const birthDetails = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            
+            if (name.includes(searchTerm) || place.includes(searchTerm) || birthDetails.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Filter functionality
+    function applyFilters() {
+        const birthSignFilter = document.getElementById('birthSignFilter').value;
+        const ascendantFilter = document.getElementById('ascendantFilter').value;
+        const rows = document.querySelectorAll('.kundli-row');
+        
+        rows.forEach(row => {
+            const birthSign = row.dataset.birthSign;
+            const ascendant = row.dataset.ascendant;
+            
+            const birthSignMatch = !birthSignFilter || birthSign === birthSignFilter;
+            const ascendantMatch = !ascendantFilter || ascendant === ascendantFilter;
+            
+            if (birthSignMatch && ascendantMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    document.getElementById('birthSignFilter').addEventListener('change', applyFilters);
+    document.getElementById('ascendantFilter').addEventListener('change', applyFilters);
+
+    // Delete Kundli report functionality
+    function deleteKundli(reportId) {
+        if (confirm('Are you sure you want to delete this Kundli report?')) {
+            fetch(`/admin/kundli/${reportId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error deleting Kundli report: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting Kundli report. Please try again.');
+            });
+        }
+    }
+</script>
+{% endblock %} 

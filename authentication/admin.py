@@ -1,23 +1,39 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser, UserActivity, UserOtp
 # Register your models here.
 
 
 @admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'username', 'email', 'is_email_verified', 
-                    'cell', 'is_cell_verified','birth_date','gender','date_joined', 'is_superuser','is_admin','is_staff','is_user','is_accepted_terms')
-    search_fields = ('email', 'username','cell')
-    list_filter = ('username', 'email')
+class CustomUserAdmin(UserAdmin):
+    list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined')
+    list_filter = ('is_staff', 'is_active', 'is_superuser', 'is_admin', 'is_user', 'date_joined')
+    search_fields = ('email', 'username', 'first_name', 'last_name')
+    ordering = ('-date_joined',)
+    fieldsets = (
+        (None, {'fields': ('email', 'username', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'birth_date', 'gender', 'profile_picture')}),
+        ('Contact info', {'fields': ('country_code', 'cell', 'birth_place', 'latitude', 'longitude', 'timezone')}),
+        ('Preferences', {'fields': ('language_preference', 'notification_preference', 'time_format')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_admin', 'is_user', 'groups', 'user_permissions')}),
+        ('Security', {'fields': ('is_email_verified', 'is_cell_verified', 'two_factor_enabled', 'is_profile_block')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'username', 'password1', 'password2', 'first_name', 'last_name', 'birth_date', 'gender'),
+        }),
+    )
 
 
 @admin.register(UserActivity)
 class UserActivityAdmin(admin.ModelAdmin):
-    list_display = ('user', 'activity_type', 'data','ip_address', 'action_date_time','browser','browser_version','os',
-    'os_version','device_brand','device_model')
-    search_fields = ('user', 'activity_type','ip_address','action_date_time')
-    list_filter = ('action_date_time', 'activity_type')
-
+    list_display = ('user', 'activity_type', 'ip_address', 'action_date_time', 'device_type')
+    list_filter = ('activity_type', 'action_date_time', 'device_type')
+    search_fields = ('user__email', 'user__username', 'activity_type', 'ip_address')
+    readonly_fields = ('action_date_time',)
+    ordering = ('-action_date_time',)
 
 
 @admin.register(UserOtp)
