@@ -16,9 +16,10 @@ class BlockUnverifiedUserMiddleware:
             # Reverse the named URLs
             resend_verification_url = reverse('resend_verification')
             logout_url = reverse('auth.logout')
-            
 
+            is_api_request = path.startswith('/api/') or request.headers.get('Accept') == 'application/json'
 
+        
             # Also allow verification URLs (like /verify/uid/token/)
             is_verification_path = re.match(r'^/authentication/verify/[\w-]+/[\w-]+/?$', path)
 
@@ -26,7 +27,8 @@ class BlockUnverifiedUserMiddleware:
             if (not path.startswith(resend_verification_url) and
                 not path.startswith(logout_url) and
                 not is_verification_path and
-                not path.startswith('/admin')):
+                not path.startswith('/admin') and
+                not is_api_request ):
 
                 return redirect('resend_verification')
 

@@ -1,5 +1,7 @@
+import uuid
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from .forms import CompatibilityForm
 from utlity.helper import store_activity
@@ -18,11 +20,19 @@ class CompatibilityView(View):
     def get(self, request):
         show_captcha, context = handle_captcha_logic(request, {})
         form = CompatibilityForm(show_captcha=show_captcha)
-        
+        tag = request.GET.get('tag', '').strip()
+        session_key = f'match_result_{tag}'
+        data = request.session.get(session_key)
+        is_report_generate = data is not None
+
         context.update({
             "form": form,
-            "is_report_generate": False,
-            "show_captcha" : show_captcha
+            "is_report_generate": is_report_generate,
+            "show_captcha": show_captcha,
+            "compatibility_scores": data.get("compatibility_scores") if data else None,
+            "total_score": data.get("total_score") if data else None,
+            "boy_name": data.get("boy_name") if data else None,
+            "girl_name": data.get("girl_name") if data else None,
         })
 
         return render(request, self.template_name, context)
@@ -96,15 +106,18 @@ class CompatibilityView(View):
                 
               
                 messages.success(request, "Your Compatibility prediction is generated.")
-                
-                return render(request, self.template_name, {
-                    "form": form,
-                    "is_report_generate": True,
+
+                data = {
                     "compatibility_scores": match_data,
                     "total_score": match['total_score'],
                     "boy_name": boy_name,
                     "girl_name": girl_name,
-                })
+                }
+                
+                tag = uuid.uuid4().hex 
+                request.session[f'match_result_{tag}'] = data
+    
+                return redirect(f"{reverse('matching.index')}?tag={tag}")   
 
             except Exception as e:
                 increment_failed_attempts(request)

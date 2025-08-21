@@ -1,94 +1,102 @@
 {% extends "includes/base.html" %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-       <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div class="relative flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar -->
             <div class="md:flex w-full">
                 {% include 'dashboard/sidebar.html' %}
-                <div class="space-y-4 px-6 text-medium text-gray-500 dark:text-gray-400 dark:bg-gray-800 rounded-lg w-full">
+                
+                <!-- Main Content -->
+                <div class="flex-1 space-y-6">
                     {% if subscription and subscription.plan %}
-                        <div class="w-full space-y-4">
-                            <div
-                                class="space-y-4  rounded-2xl shadow-lg shadow-blue-100 hover:shadow-lg hover:shadow-blue-500 bg-white p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10">
-                            
-                                <div class="flex flex-row justify-between">
-                                    <div>
-                                        <h3 id="tier-enterprise" class="text-3xl font-semibold text-gray-900">Your Active Subscription ({{subscription.plan.name }})</h3>
-                                    </div>
-                                    <div>
-                                        <span class="text-3xl font-semibold tracking-tight text-gray-600">₹{{ subscription.plan.price }}</span>
-                                    </div>
+                        <!-- Subscription Card -->
+                        <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-8 border border-gray-100">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div>
+                                    <h3 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                                        Your Active Subscription
+                                    </h3>
+                                    <p class="text-gray-600 mt-2">{{subscription.plan.name}}</p>
                                 </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-4xl font-bold text-gray-800">₹{{ subscription.plan.price }}</span>
+                                    <span class="text-gray-500">/month</span>
+                                </div>
+                            </div>
                             
-                                <p class="text-sm text-gray-600 mt-2">
-                                    Valid from {{ subscription.start_date|date:"d M Y" }} to {{ subscription.end_date|date:"d M Y" }}
-                                </p>
-                                <p class="mt-6 text-base/7 text-gray-600">{{subscription.plan.description}}</p>
-                                <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-600 sm:mt-10">
+                            <div class="mt-6 space-y-4">
+                                <div class="flex items-center gap-2 text-gray-600">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Valid from {{ subscription.start_date|date:"d M Y" }} to {{ subscription.end_date|date:"d M Y" }}</span>
+                                </div>
+                                
+                                <p class="text-gray-600">{{subscription.plan.description}}</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                                     {% for feature in subscription.plan.features.all %}
-                                    <li class="flex gap-x-3">
-                                        <svg class="h-6 w-5 flex-none text-gray-900" viewBox="0 0 20 20" fill="currentColor"
-                                            aria-hidden="true" data-slot="icon">
-                                            <path fill-rule="evenodd"
-                                                d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z"
-                                                clip-rule="evenodd" />
+                                    <div class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                                        <svg class="w-5 h-5 text-green-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
                                         </svg>
-                                        {{feature.name}}
-                                    </li>
+                                        <span class="text-gray-700">{{feature.name}}</span>
+                                    </div>
                                     {% endfor %}
-                                </ul>
+                                </div>
                             </div>
                         </div>
-                        <div class="w-full space-y-4 flex flex-row justify-between">
-                            <div class="p-2">Your Last Login Activty: {{ request.user.last_login }}</div>
-                            <div class="p-2">
-                                    <form action="{% url 'auth.logout' %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit"
-                                            class="inline-flex gap-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                                <polyline points="16 17 21 12 16 7" />
-                                                <line x1="21" y1="12" x2="9" y2="12" />
-                                            </svg>
-                                            Logout
-                                          
-                                        </button>
-                                    </form>
+
+                        <!-- User Activity Section -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 class="text-xl font-semibold text-gray-800">Last Login Activity</h3>
+                                </div>
+                                <div class="text-gray-600">{{ request.user.last_login }}</div>
                             </div>
                         </div>
                     {% else %}
-                        <div class="w-full flex flex-col space-y-2 justify-between">
-                            
-                            <div class="p-2 flex-grow">
-                                <p class="text-gray-400">No active subscription found.</p>
-                            </div>
-                            <div class="flex flex-row justify-between">
-                                <div class="p-2">Your Last Login Activty: {{ request.user.last_login }}</div>
-
-                                <div class="p-2">
-                                    <form action="{% url 'auth.logout' %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit"
-                                            class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                                <polyline points="16 17 21 12 16 7" />
-                                                <line x1="21" y1="12" x2="9" y2="12" />
-                                            </svg>
-                                            Logout
-                                        </button>
-                                    </form>
+                        <!-- No Subscription State -->
+                        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                            <div class="text-center space-y-4">
+                                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                                    <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
                                 </div>
+                                <h3 class="text-2xl font-bold text-gray-800">No Active Subscription</h3>
+                                <p class="text-gray-600">Get started by choosing a subscription plan to access premium features.</p>
+                                <a href="#" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                                    View Plans
+                                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                </a>
                             </div>
-                        </div>      
+                        </div>
+
+                        <!-- User Activity Section -->
+                        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 class="text-xl font-semibold text-gray-800">Last Login Activity</h3>
+                                </div>
+                                <div class="text-gray-600">{{ request.user.last_login }}</div>
+                            </div>
+                        </div>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
-</main>
+</div>
 {% endblock %}

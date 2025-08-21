@@ -19,8 +19,9 @@
     --color-btn-background: #6670f6;
     --color-btn-text: #fbefff;
     --color-bgcard: rgba(22, 125, 255, 0.3); 
-    --color-navbar:#180715;
-}
+    --color-navbar:#180715;  
+} 
+
     
 body {
     margin: 0;
@@ -66,4 +67,10 @@ body {
      margin-top: 1.5rem;
      opacity: 0;
      transform: translateY(30px);
+}
+
+
+.peer:checked~.peer-checked\:translate-x-5 {
+    --tw-translate-x: 1.25rem;
+    transform: translateX(var(--tw-translate-x)); 
 }

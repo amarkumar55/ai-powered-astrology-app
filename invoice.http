@@ -1,0 +1,19 @@
+GET  https://astro.local/api/1.0/invoices/list/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+####
+GET  https://astro.local/api/1.0/invoices/<str:invoice_number>/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+####
+GET  https://astro.local/api/1.0/invoices/<str:invoice_number>/download/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes

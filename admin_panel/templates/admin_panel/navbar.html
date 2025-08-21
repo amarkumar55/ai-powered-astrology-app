@@ -1,0 +1,69 @@
+{% load static %}
+<nav
+    class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4">
+
+    <div class="w-full mx-auto items-center  flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4">
+        
+        <div class="flex flex-col space">
+            <a class="text-white flex flex-row gap-2 text-md uppercase hidden lg:inline-block font-semibold" href="{% url 'admin_panel:admin.dashboard' %}"> <i class="fa fa-home mt-1" aria-hidden="true"></i> Dashboard </a>
+         
+            <span class="p-4 flex flex-row gap-2 text-xs leading-5 rounded-lg shadow-lg shadow-blue-500 font-semibold bg-blue-100 text-blue-800">
+                <i class="fa fa-list mt-1" aria-hidden="true"></i>  {{ page_title }}
+            </span>
+        </div>
+     
+        <!-- Search Bar -->
+        <form action="{% url 'admin_panel:admin.dashboard' %}" class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">
+            {% csrf_token %}
+            <div class="shadow-lg shadow-blue-500 relative flex w-full flex-wrap items-stretch">
+                <span
+                    class="z-10 h-full leading-snug font-normal absolute text-center text-slate-300 bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" placeholder="Search here..."
+                    class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10" />
+            </div>
+        </form>
+
+        <!-- User Icon / Avatar and Dropdown -->
+        <ul class="shadow-lg shadow-blue-500 flex-col md:flex-row list-none items-center hidden md:flex">
+            <li class="relative"> <!-- This is key for proper dropdown positioning -->
+        
+                <!-- Avatar / Button -->
+                <a class="text-slate-500 block" href="#" id="admin_user_menu">
+                    <div class="items-center flex">
+                        <span
+                            class="w-12 h-12 text-sm text-white bg-slate-200 inline-flex items-center justify-center rounded-full">
+                            <img alt="User Avatar" class="w-full rounded-full align-middle border-none shadow-lg"
+                                src="{% static 'path/to/avatar.jpg' %}" />
+                        </span>
+                    </div>
+                </a>
+        
+                <!-- Dropdown -->
+                <div id="admin_user_menu_list"
+                    class="hidden absolute right-0 top-full mt-2 bg-white text-base z-50 py-2 list-none text-left rounded shadow-lg min-w-48">
+                    <a href="{% url 'admin_panel:admin.dashboard' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        General Dashboard
+                    </a>
+                    <a href="{% url 'admin_panel:admin.analytics_dashboard' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        Analytics Dashboard
+                    </a>
+                 
+                    <a href="{% url 'dashboard.get_profile' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        Profile
+                    </a>
+
+                    <div class="h-0 my-2 border border-solid border-slate-100"></div>
+                    <a href="{% url 'auth.logout' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

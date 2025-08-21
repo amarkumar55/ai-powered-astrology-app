@@ -17,3 +17,5 @@ def global_env_variables(request):
         "social_icons": ["facebook", "twitter", "linkedin", "github"],
         "time_format":["AM","PM"],
     }
+
+

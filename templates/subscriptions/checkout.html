@@ -1,10 +1,9 @@
 {% extends "includes/base.html" %}
 {% block title %} {{plan.name}} - Subscription | Checkout {% endblock %}
 {% block content %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
-            <section class="py-8 space-y-4 antialiased dark:bg-gray-900 md:py-16">
+            <div class="py-8 space-y-4 antialiased dark:bg-gray-900 md:py-16">
                 <ol
                     class="items-center flex justify-center w-full gap-4 max-w-2xl text-center text-md font-medium text-gray-500 dark:text-gray-400 sm:text-base">
                     <li
@@ -199,10 +198,9 @@
                         </div>
                     </div>
                 </form>
-            </section>
+            </div>
         </div>
-    </div>
-</main>
+</div>
 {% endblock %}
 {% block script %}
 {% endblock %}

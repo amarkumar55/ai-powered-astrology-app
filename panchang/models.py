@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
+from home.models import TimeStampMixin
 # Create your models here.
 
 User = get_user_model()
 
-class UserPanchang(models.Model):
+class UserPanchang(TimeStampMixin):
 
     alphabetic = RegexValidator(
         regex=r'^[a-zA-Z]*$',
@@ -32,13 +33,16 @@ class UserPanchang(models.Model):
     gulika_kaal = models.CharField(max_length=50)
     yamaganda = models.CharField(max_length=50)
     abhijit_muhurat = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Panchang for {self.name} on {self.date_of_birth}"
     
 
-class Panchang(models.Model):
+    def __str__(self):
+        return f"Panchang for {self.first_name} {self.last_name} on {self.date_of_birth}"
+    
+    class Meta:
+        app_label = 'astrology'
+    
+
+class Panchang(TimeStampMixin):
      
     date = models.DateField()
     tithi = models.CharField(max_length=50)
@@ -52,7 +56,9 @@ class Panchang(models.Model):
     gulika_kaal = models.CharField(max_length=50)
     yamaganda = models.CharField(max_length=50)
     abhijit_muhurat = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-
+  
     def __str__(self):
         return f"Panchang for {self.date}"
+    
+    class Meta:
+        app_label = 'astrology'

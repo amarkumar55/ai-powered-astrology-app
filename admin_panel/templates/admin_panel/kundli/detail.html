@@ -3,28 +3,34 @@
 {% block title %}{{ report.name }}'s Kundli - Astro Admin Panel{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-semibold text-gray-800">Kundli Report Details</h2>
-            <div class="flex space-x-3">
-                <a href="{% url 'admin_panel:admin_kundli_edit' report.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <i class="fas fa-edit mr-2"></i>Edit Report
-                </a>
-                <a href="{% url 'admin_panel:admin_kundli_list' %}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    <i class="fas fa-arrow-left mr-2"></i>Back to List
-                </a>
-            </div>
-        </div>
+<div class="min-h-screen w-full p-2 mx-auto">
 
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Kundli Report Details</h2>
+            <p class="text-sm text-gray-100">{{ report.user.username }} Kundli Preview</p>
+        </div>
+        <div class="flex space-x-3">
+            <a href="{% url 'admin_panel:kundli_report_edit' report.id %}"
+                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <i class="fas fa-edit mr-2"></i>Edit Report
+            </a>
+            <a href="{% url 'admin_panel:admin_kundli' %}"
+                class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <i class="fas fa-arrow-left mr-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+      
         <!-- Main Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Basic Information -->
             <div class="lg:col-span-1">
                 <div class="bg-gray-50 rounded-lg p-6">
                     <div class="flex flex-col items-center mb-6">
-                        <img class="h-32 w-32 rounded-full object-cover mb-4" src="https://ui-avatars.com/api/?name={{ report.name }}&background=0D8ABC&color=fff&size=128" alt="{{ report.name }}">
                         <h3 class="text-xl font-semibold text-gray-900">{{ report.name }}</h3>
                         <p class="text-gray-500">{{ report.place }}</p>
                     </div>
@@ -32,23 +38,60 @@
                     <div class="space-y-4">
                         <div>
                             <h4 class="text-sm font-medium text-gray-500">Birth Details</h4>
-                            <p class="mt-1 text-sm text-gray-900">{{ report.birth_details }}</p>
+                            <p class="mt-1 text-sm text-gray-900">{{ report.birth_details.birth_date }}</p>
                         </div>
+                        
                         <div>
                             <h4 class="text-sm font-medium text-gray-500">Birth Time</h4>
-                            <p class="mt-1 text-sm text-gray-900">{{ report.birth_time }}</p>
+                            <p class="mt-1 text-sm text-gray-900">{{ report.birth_details.birth_time }}</p>
                         </div>
+                        
                         <div>
                             <h4 class="text-sm font-medium text-gray-500">Birth Sign</h4>
                             <span class="mt-1 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                                 {{ report.birth_sign }}
                             </span>
                         </div>
+                        
                         <div>
                             <h4 class="text-sm font-medium text-gray-500">Ascendant</h4>
                             <span class="mt-1 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
                                 {{ report.ascendant }}
                             </span>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Payment Status</h4>
+                            <p class="text-gray-700">
+                                {% if report.paid == True %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-green-800">
+                                    Paid
+                                </span>
+                                {% else %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-red-800">
+                                    Unpaid
+                                </span> 
+                                {% endif %}
+                            </p>     
+                        </div>
+
+                        <div>
+                            <form method="POST" action="{% url 'admin_panel:kundli_report_edit' report.id %}"
+                                class="flex flex-row items-center gap-4">
+                                {% csrf_token %}
+                                
+                                <div>
+                                    <select name="status" id="status" required
+                                        class="mt-1 block w-full p-2 text-gray-700 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                                        <option value="1" {% if report.paid == '1' %}selected{% endif %}>Paid</option>
+                                        <option value="0" {% if report.paid == '0' %}selected{% endif %}>Unpaid</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="flex justify-end">
+                                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">Update Paymemt Status</button>
+                                </div>      
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -61,7 +104,7 @@
                     <div class="bg-white rounded-lg border border-gray-200 p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Planetary Positions</h3>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {% for planet, position in report.planetary_positions.items %}
+                            {% for planet, position in report.planet_positions.items %}
                             <div class="bg-gray-50 rounded-lg p-4">
                                 <div class="text-sm font-medium text-gray-500">{{ planet }}</div>
                                 <div class="mt-1 text-sm text-gray-900">{{ position }}</div>

@@ -1,0 +1,102 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Plans - Astro Admin Panel{% endblock %}
+{% block content %}
+
+<div class="min-h-screen w-full mx-auto p-2">
+  
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Plans List</h2>
+            <p class="text-sm text-gray-100">Manage your plans list</p>
+        </div>
+    </div>
+
+
+    <div class="bg-white rounded-lg flex flex-row justify-end items-center shadow-md p-4 mb-6">
+        <form method="POST" action="{% url 'admin_panel:admin_plans' %}" class="flex items-center space-x-4">
+            {% csrf_token %}
+            {% include 'admin_panel/fields/search.html' with name="search" value=request.GET.search %}
+            {% include 'admin_panel/fields/select.html' with name="status" options=status_choices selected=request.GET.status %}
+            {% include 'admin_panel/fields/button.html' %}
+        </form>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration Days</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Active</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for plan in plans %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ plan.name|capfirst }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ plan.description }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ₹{{ plan.price }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ plan.duration_days }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {% if plan.is_active %}
+                            Active
+                            {% else %}
+                            No
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                            {{ plan.created_at|date:"M, d Y, H:i:s" }}
+                        </td>
+                        <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                            <a href="{% url 'admin_panel:admin_plans_edit' plan.id %}" class="text-blue-600 hover:text-blue-900">
+                                <i class="fa fa-edit" area-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                        No Plan found.
+                    </td>
+                </tr>
+                {% endfor %}  
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-4 flex justify-between items-center">
+        <div class="text-sm text-gray-500">
+            Showing {{ plans.start_index }} to {{ plans.end_index }} of {{ plans.paginator.count}} entries
+        </div>
+        <div class="flex space-x-2">
+            {% if plans.has_previous %}
+                <a href="?page={{ plans.previous_page_number }}" class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Previous</a>
+            {% endif %}
+
+            {% for num in plans.paginator.page_range %}
+                <a href="?page={{ num }}"
+                    class="px-3 py-1 rounded-md {% if num == plans.number %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                    {{ num }}
+                </a>
+            {% endfor %}
+
+            {% if plans.has_next %}
+            <a href="?page={{ plans.next_page_number }}"  class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Next</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

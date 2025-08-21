@@ -1,105 +1,121 @@
 {% extends 'admin_panel/base.html' %}
-
+{% load custom_filters %}
 {% block title %}{{ user.username }} - Astro Admin Panel{% endblock %}
-
 {% block content %}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="min-h-screen w-full p-2">
     <!-- User Information -->
-    <div class="md:col-span-1">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex flex-col items-center">
-                <img class="h-32 w-32 rounded-full object-cover mb-4" src="https://ui-avatars.com/api/?name={{ user.username }}&background=0D8ABC&color=fff&size=128" alt="{{ user.username }}">
+    <div class="mb-6">
+        <h2 class="text-2xl font-semibold text-white">User Information</h2>
+        <p class="text-sm text-gray-100">Overview of {{user.username}} profile</p>
+    </div>
+    
+    <div class="bg-white flex flex-col gap-4 rounded-lg shadow-md py-6 px-4">
+       
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Profile Column -->
+            <div class="space-y-4">
+                {% if user.profile_picture %}
+                <img class="h-32 w-32 rounded-full object-cover mb-2" src="{{ user.profile_picture }}"
+                    alt="{{ user.username }}">
+                {% else %}
+                <div class="h-32 w-32 flex items-center justify-center rounded-full bg-gray-200 text-gray-500">
+                    <i class="fa fa-user text-4xl"></i>
+                </div>
+                {% endif %}
                 <h2 class="text-xl font-semibold text-gray-800">{{ user.get_full_name }}</h2>
                 <p class="text-gray-500">{{ user.email }}</p>
-                <div class="mt-4 flex space-x-2">
-                    <a href="{% url 'admin_panel:admin_user_edit' user.id %}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                <div class="mt-4">
+                    <a href="{% url 'admin_panel:admin_user_edit' user.id %}"
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
                         Edit User
                     </a>
                 </div>
             </div>
-
-            <div class="mt-6 space-y-4">
+        
+            <!-- Account Info Column -->
+            <div class="space-y-4">
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Status</h3>
-                    <p class="mt-1">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if user.is_active %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    <p class="text-sm font-medium text-gray-500">Status</p>
+                    <p>
+                        <span
+                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if user.is_active %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
                             {{ user.is_active|yesno:"Active,Inactive" }}
                         </span>
                     </p>
                 </div>
-
+        
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Role</h3>
-                    <p class="mt-1 text-sm text-gray-900">
-                        {% if user.is_superuser %}
-                            Superuser
-                        {% elif user.is_admin %}
-                            Admin
-                        {% elif user.is_staff %}
-                            Staff
-                        {% else %}
-                            User
+                    <p class="text-sm font-medium text-gray-500">Role</p>
+                    <p class="text-sm text-gray-900">
+                        {% if user.is_superuser %}Superuser
+                        {% elif user.is_admin %}Admin
+                        {% elif user.is_staff %}Staff
+                        {% else %}User
                         {% endif %}
                     </p>
                 </div>
-
+        
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Joined</h3>
-                    <p class="mt-1 text-sm text-gray-900">{{ user.date_joined|date:"F d, Y" }}</p>
+                    <p class="text-sm font-medium text-gray-500">Joined</p>
+                    <p class="text-sm text-gray-900">{{ user.date_joined|date:"F d, Y" }}</p>
                 </div>
-
+            </div>
+        
+            <!-- Personal Info Column -->
+            <div class="space-y-4">
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Last Login</h3>
-                    <p class="mt-1 text-sm text-gray-900">{{ user.last_login|date:"F d, Y H:i" }}</p>
+                    <p class="text-sm font-medium text-gray-500">Last Login</p>
+                    <p class="text-sm text-gray-900">{{ user.last_login|date:"F d, Y H:i" }}</p>
                 </div>
-
+        
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Phone</h3>
-                    <p class="mt-1 text-sm text-gray-900">{{ user.cell|default:"Not provided" }}</p>
+                    <p class="text-sm font-medium text-gray-500">Phone</p>
+                    <p class="text-sm text-gray-900">{{ user.cell|default:"Not provided" }}</p>
                 </div>
-
+        
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Birth Date</h3>
-                    <p class="mt-1 text-sm text-gray-900">{{ user.birth_date|date:"F d, Y" }}</p>
+                    <p class="text-sm font-medium text-gray-500">Birth Date</p>
+                    <p class="text-sm text-gray-900">{{ user.birth_date|date:"F d, Y" }}</p>
                 </div>
-
+        
                 <div>
-                    <h3 class="text-sm font-medium text-gray-500">Gender</h3>
-                    <p class="mt-1 text-sm text-gray-900">{{ user.gender }}</p>
+                    <p class="text-sm font-medium text-gray-500">Gender</p>
+                    <p class="text-sm text-gray-900">{{ user.gender|capfirst }}</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- User Activity and Subscriptions -->
-    <div class="md:col-span-2 space-y-6">
-        <!-- Recent Activity -->
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <hr class="my-4 text-gray-300 md:min-w-full" />
+
+        <div>
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activity</h3>
             <div class="space-y-4">
+               
                 {% for activity in activities %}
                 <div class="flex items-start">
+                    
                     <div class="flex-shrink-0">
                         <div class="p-2 rounded-full bg-blue-100 text-blue-500">
                             <i class="fas fa-history"></i>
                         </div>
                     </div>
+                    
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-900">{{ activity.activity_type }}</p>
-                        <p class="text-sm text-gray-500">{{ activity.action_date_time|date:"F d, Y H:i" }}</p>
-                        {% if activity.data %}
-                        <p class="text-sm text-gray-600 mt-1">{{ activity.data }}</p>
-                        {% endif %}
+                        <p class="text-sm font-medium text-gray-900">{{ activity.activity_type|capfirst|replace:"_, " }}, {{ activity.action_date_time|date:"F d, Y H:i" }}</p>
+                        <p class="text-sm text-gray-600 mt-1">{{ activity.browser }} {{ activity.browser_version }}, {{activity.os }} , {{activity.device_type}}</p>
                     </div>
                 </div>
+
                 {% empty %}
                 <p class="text-gray-500">No recent activity</p>
                 {% endfor %}
             </div>
         </div>
-
+        
+        <hr class="my-4 text-gray-300 md:min-w-full" />
         <!-- Subscriptions -->
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <div>
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Subscriptions</h3>
             <div class="space-y-4">
                 {% for subscription in subscriptions %}
@@ -110,7 +126,8 @@
                             <p class="text-sm text-gray-500">Started: {{ subscription.start_date|date:"F d, Y" }}</p>
                             <p class="text-sm text-gray-500">Ends: {{ subscription.end_date|date:"F d, Y" }}</p>
                         </div>
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if subscription.status == 'active' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        <span
+                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if subscription.status == 'active' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
                             {{ subscription.status|title }}
                         </span>
                     </div>

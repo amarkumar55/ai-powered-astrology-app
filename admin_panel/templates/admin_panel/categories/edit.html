@@ -1,0 +1,44 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Edit Category - Astro Admin Panel{% endblock %}
+{% block content %}
+<div class="w-full mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Edit Category</h2>
+            <p class="text-sm text-gray-800">Edit the category "{{ category.name }}"</p>
+        </div>
+        <a href="{% url 'admin_panel:admin_categories' %}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+            <i class="fas fa-arrow-left mr-2"></i>Back to List
+        </a>
+    </div>
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="text-{{ message.tags }}-600">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input type="text" name="name" id="name" value="{{ category.name }}" required class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
+                <input type="text" name="slug" id="slug" value="{{ category.slug }}" required class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                <p class="mt-1 text-sm text-gray-500">Unique identifier for the category (e.g. 'astrology-tips')</p>
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea name="description" id="description" rows="3" class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ category.description }}</textarea>
+                <p class="mt-1 text-sm text-gray-500">A short description of the category (optional)</p>
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">Update Category</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

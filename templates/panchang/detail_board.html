@@ -1,14 +1,18 @@
 {% load custom_filters %}
 <div class="mx-auto max-w-7xl px-6 py-8">
-    <div class="text-center mb-6">
-        <h2 class="text-4xl font-bold text-gray-800 dark:text-white">✨ Your Personalized Panchang Prediction ✨</h2>
-        <p class="text-gray-600 dark:text-gray-400 mt-2">Hii {{ data.name }}, here’s your birth panchang prediction ❤️</p>
+
+    <div class="text-center mb-8">
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8">
+            <h2 class="text-4xl font-bold text-white mb-3">✨ Your Personalized Panchang Prediction ✨</h2>
+            <p class="text-gray-300 mt-2">Hii {{ data.name }}, here’s your birth panchang prediction ❤️</p>
+        </div>
     </div>
 
-    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+
+    <div class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 mt-12 max-w-3xl mx-auto p-8">
         <div class="mb-6">
-            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300"><strong>Birth Date:</strong> {{ data.birth_date }}</p>
-            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300"><strong>Birth Place:</strong> {{ data.birth_place }}</p>
+            <p class="text-xl font-semibold text-gray-500"><strong>Birth Date:</strong> {{ data.birth_date }}</p>
+            <p class="text-xl font-semibold text-gray-500"><strong>Birth Place:</strong> {{ data.birth_place }}</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

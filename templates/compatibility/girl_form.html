@@ -2,7 +2,7 @@
 
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-1 lg:grid-cols-1">
-    <label for="girl_birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Birth<sup
+    <label for="girl_birth_date" class="block mb-2 text-sm font-medium text-gray-900">Date of Birth<sup
             class="text-red-500">*</sup></label>
 
     <div class="grid grid-cols-3 gap-2">
@@ -13,7 +13,7 @@
 </div>
 
 
-<label for="girl_birth_time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birth Time<sup
+<label for="girl_birth_time" class="block mb-2 text-sm font-medium text-gray-900">Birth Time<sup
         class="text-red-500">*</sup></label>
 <div class="grid grid-cols-2 lg:grid-cols-4  gap-2">
     {% include "fields/birth_select.html" with label='Hours' name='girl_hours' item=hours type='day' %}
@@ -35,11 +35,11 @@
     <div class="bg-white w-full max-w-lg p-6 rounded-lg shadow-xl relative max-h-[80vh] overflow-y-auto">
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold">Select Birth Place</h2>
+            <h2 class="text-xl font-bold text-gray-400">Select Birth Place</h2>
             <button onclick="closeModal('girl')" class="text-gray-600 text-2xl leading-none">&times;</button>
         </div>
 
-        <div id="girl_suggestions" class="space-y-2">
+        <div id="girl_suggestions" class="space-y-2 text-gray-600">
 
         </div>
     </div>

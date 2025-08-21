@@ -1,68 +1,211 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}AI Analysis - {{ kundli.name }}'s Kundli - Astro Admin Panel{% endblock %}
+{% block title %}{{ kundli.name }}'s Kundli Analysis - Astro Admin Panel{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <!-- Header -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header with Gradient Background -->
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8 mb-8">
+        <div class="flex justify-between items-center">
+            <div class="text-white">
+                <h2 class="text-3xl font-bold mb-2">{{ kundli.name }}'s Kundli Analysis</h2>
+                <p class="text-purple-100">
+                    <svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Generated on {{ kundli.created_at|date:"F d, Y" }}
+                </p>
+            </div>
+            <a href="{% url 'admin_panel:admin_kundli' %}" 
+               class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-all duration-300 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to List
+            </a>
+        </div>
+    </div>
+
+    <!-- Basic Information Card -->
+    <div class="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg p-8 mb-8 border border-gray-100">
+        <div class="flex items-center mb-6">
+            <svg class="w-8 h-8 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <h3 class="text-2xl font-semibold text-gray-800">Basic Information</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Name</p>
+                <p class="font-medium text-gray-800">{{ kundli.name }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Birth Date</p>
+                <p class="font-medium text-gray-800">{{ kundli.birth_date|date:"F d, Y" }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Birth Time</p>
+                <p class="font-medium text-gray-800">{{ kundli.birth_time|time:"H:i" }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Birth Place</p>
+                <p class="font-medium text-gray-800">{{ kundli.place }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Birth Sign</p>
+                <p class="font-medium text-gray-800">{{ kundli.birth_sign }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <p class="text-sm text-gray-500 mb-1">Ascendant</p>
+                <p class="font-medium text-gray-800">{{ kundli.ascendant }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Analysis Card -->
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg p-8 mb-8 border border-blue-100">
         <div class="flex justify-between items-center mb-6">
-            <div>
-                <h2 class="text-xl font-semibold text-gray-800">AI Analysis: {{ kundli.name }}'s Kundli</h2>
-                <p class="text-sm text-gray-500">Generated on {{ kundli.updated_at|date:"F d, Y H:i" }}</p>
+            <div class="flex items-center">
+                <svg class="w-8 h-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="text-2xl font-semibold text-gray-800">Basic Analysis</h3>
             </div>
-            <div class="flex space-x-4">
-                <a href="{% url 'admin_panel:admin_kundli_detail' kundli.id %}" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-arrow-left"></i> Back to Kundli
-                </a>
-                <button onclick="printAnalysis()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-print"></i> Print
-                </button>
+            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Free Report
+            </span>
+        </div>
+        <div class="prose max-w-none bg-white rounded-xl p-6 shadow-sm">
+            {{ basic_description|safe|linebreaks }}
+        </div>
+    </div>
+
+    <!-- Premium Analysis Card -->
+    <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl shadow-lg p-8 border border-purple-100">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center">
+                <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <h3 class="text-2xl font-semibold text-gray-800">Premium Analysis</h3>
             </div>
+            <span class="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Premium Report
+            </span>
         </div>
 
-        <!-- Basic Information -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-gray-50 rounded-lg p-4">
-                <h3 class="text-sm font-medium text-gray-500">Birth Details</h3>
-                <p class="mt-1 text-sm text-gray-900">{{ kundli.birth_date|date:"F d, Y" }}</p>
-                <p class="text-sm text-gray-900">{{ kundli.birth_time|time:"H:i" }}</p>
+        <!-- Analysis Sections -->
+        <div class="space-y-8">
+            <!-- Personality Analysis -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Personality Analysis</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ personality_analysis|safe|linebreaks }}
+                </div>
             </div>
-            <div class="bg-gray-50 rounded-lg p-4">
-                <h3 class="text-sm font-medium text-gray-500">Birth Place</h3>
-                <p class="mt-1 text-sm text-gray-900">{{ kundli.place }}</p>
-            </div>
-            <div class="bg-gray-50 rounded-lg p-4">
-                <h3 class="text-sm font-medium text-gray-500">Birth Sign</h3>
-                <p class="mt-1 text-sm text-gray-900">{{ kundli.birth_sign }}</p>
-            </div>
-            <div class="bg-gray-50 rounded-lg p-4">
-                <h3 class="text-sm font-medium text-gray-500">Ascendant</h3>
-                <p class="mt-1 text-sm text-gray-900">{{ kundli.ascendant }}</p>
-            </div>
-        </div>
 
-        <!-- AI Analysis -->
-        <div class="prose max-w-none">
-            {{ ai_analysis|linebreaks }}
-        </div>
+            <!-- Career Analysis -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Career Analysis</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ career_analysis|safe|linebreaks }}
+                </div>
+            </div>
 
-        <!-- Disclaimer -->
-        <div class="mt-8 p-4 bg-yellow-50 rounded-lg">
-            <h3 class="text-sm font-medium text-yellow-800">Disclaimer</h3>
-            <p class="mt-1 text-sm text-yellow-700">
-                This analysis is generated using artificial intelligence and should be used as a general guide only. 
-                For personalized and detailed astrological guidance, please consult with a professional astrologer.
-            </p>
+            <!-- Relationship Analysis -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Relationship Analysis</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ relationship_analysis|safe|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Health Analysis -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Health Analysis</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ health_analysis|safe|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Financial Analysis -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Financial Analysis</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ financial_analysis|safe|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Spiritual Analysis -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Spiritual Analysis</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ spiritual_analysis|safe|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Life Periods -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Life Periods</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ life_periods|safe|linebreaks }}
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <div class="flex items-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h4 class="text-xl font-semibold text-gray-800">Recommendations</h4>
+                </div>
+                <div class="prose max-w-none">
+                    {{ recommendations|safe|linebreaks }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    function printAnalysis() {
-        window.print();
-    }
-</script>
 {% endblock %} 

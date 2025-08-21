@@ -1,45 +1,107 @@
 {% extends "includes/base.html" %}
-{% block title %} Dashboard | Account Setting & Security {% endblock %}
+{% load custom_filters %}
+{% block title %} Dashboard | Settings {% endblock %}
 {% block content %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div class="relative flex flex-col lg:flex-row gap-8">
             <div class="md:flex w-full">
                 {% include 'dashboard/sidebar.html' %}
-                <div
-                    class="w-full space-y-4 px-6 text-medium rounded-lg">
-                    <div class="bg-white rounded-lg p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Secure Your Account</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            You can enhance your account's security by updating your password regularly.
-                            For additional protection, enable <strong>Two-Factor Authentication (2FA)</strong>.
-                            This ensures only you can access your account—even if someone else knows your password.
-                        </p>
-                        <div class="flex gap-3">
-                            <a href="{% url 'password_change' %}"
-                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
-                                Change Password
-                            </a>
-                            <a href="{% url 'dashboard.enable.2fa' %}"
-                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
-                                Enable 2FA
-                            </a>
-                        </div>
-                    </div>
                 
-                    <div class="bg-white rounded-lg p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Change Account Email</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            Keep your account secure by regularly updating your email and password.
-                            For enhanced protection, enable <strong>Two-Factor Authentication (2FA)</strong>.
-                            This adds an extra layer of security, ensuring that only you can access your account—even if someone else knows
-                            your password.
-                        </p>
-                        <div class="flex gap-3">
-                            <a href="{% url 'dashboard.change_email' %}"
-                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg">
-                                Change Email Address
-                            </a>
+                <!-- Main Content -->
+                <div class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                        <div class="space-y-8">
+                            <!-- Header Section -->
+                            <div class="border-b border-gray-200 pb-6">
+                                <h2 class="text-2xl rounded-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                                    Account Settings
+                                </h2>
+                                <p class="mt-2 text-gray-600">Manage your account preferences and settings</p>
+                            </div>
+
+                            <!-- Settings Sections -->
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Profile Settings -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-purple-200 transition-all duration-300">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-lg font-semibold text-gray-800">Profile Settings</h3>
+                                                <p class="text-sm text-gray-500">Update your personal information and preferences</p>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'dashboard.get_profile' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Manage Profile
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Email Settings -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-purple-200 transition-all duration-300">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-lg font-semibold text-gray-800">Email Settings</h3>
+                                                <p class="text-sm text-gray-500">Manage your email preferences and notifications</p>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'dashboard.change_email' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Change Email
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Security Settings -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-purple-200 transition-all duration-300">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-lg font-semibold text-gray-800">Security Settings</h3>
+                                                <p class="text-sm text-gray-500">Manage your password and security preferences</p>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'dashboard.change_password' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Change Password
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <!-- Notification Settings -->
+                                <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-purple-200 transition-all duration-300">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="flex-shrink-0">
+                                                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-lg font-semibold text-gray-800">Notification Settings</h3>
+                                                <p class="text-sm text-gray-500">Manage your notification preferences</p>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'dashboard.notification_settings' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            Manage Notifications
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,49 @@
+GET https://astro.local/api/1.0/payments/list/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+####
+
+GET https://astro.local/api/1.0/payments/refunds/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+####
+GET https://astro.local/api/1.0/payments/15/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+####
+GET https://astro.local/api/1.0/payments/refunds/15/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+####
+POST https://astro.local/api/1.0/payments/process/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+--boundary123
+Content-Disposition: form-data; name="amount"
+
+100
+--boundary123
+Content-Disposition: form-data; name="payment_method"
+
+upi
+--boundary123
+Content-Disposition: form-data; name="description"
+
+This is my contact query message
+--boundary123--

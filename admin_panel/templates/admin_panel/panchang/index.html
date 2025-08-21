@@ -1,0 +1,124 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Panchang - Astro Admin Panel{% endblock %}
+{% block content %}
+
+<div class="min-h-screen w-full mx-auto p-2">
+
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Panchang List</h2>
+            <p class="text-sm text-gray-100">Manage your panchang list</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg flex flex-row justify-end items-center shadow-md p-4 mb-6">
+
+        <form method="GET" action="{% url 'admin_panel:admin_panchang' %}" class="flex items-center space-x-4">
+            {% csrf_token %}
+            {% include 'admin_panel/fields/date.html' with name="date" value=request.GET.date %}
+            {% include 'admin_panel/fields/button.html' %}
+        </form>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tithi</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vara</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nakshatra</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yoga</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">karana</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sunrise</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sunset</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rahu kaal</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Gulika kaal</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Yamaganda</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Abhijit Muhurat</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for panchang in panchangs %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ panchang.date|date:'F, m Y' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.tithi }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.vara }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.nakshatra }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ panchang.yoga }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.karana }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.sunrise }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.sunset }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ panchang.rahu_kaal }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.gulika_kaal }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.yamaganda }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ panchang.abhijit_muhurat }}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                        {{ panchang.created_at|date:"M, d Y, H:i:s" }}
+                    </td>
+                   
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="13" class="px-6 py-4 text-center text-sm text-gray-500">
+                        No Panchag list found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-4 flex justify-between items-center">
+        <div class="text-sm text-gray-500">
+            Showing {{ panchangs.start_index }} to {{ panchangs.end_index }} of {{ panchangs.paginator.count}} entries
+        </div>
+        <div class="flex space-x-2">
+            {% if panchangs.has_previous %}
+            <a href="?page={{ panchangs.previous_page_number }}"
+                class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Previous</a>
+            {% endif %}
+
+            {% for num in panchangs.paginator.page_range %}
+            <a href="?page={{ num }}"
+                class="px-3 py-1 rounded-md {% if num == panchangs.number %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                {{ num }}
+            </a>
+            {% endfor %}
+
+            {% if panchangs.has_next %}
+            <a href="?page={{ panchangs.next_page_number }}"
+                class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Next</a>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

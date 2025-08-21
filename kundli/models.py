@@ -1,30 +1,38 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from dasha.models import BirthDetails
+from home.models import TimeStampMixin
 # Create your models here.
 User = get_user_model()
-class Location(models.Model):
-    place =  models.CharField(max_length=50)
+
+class Location(TimeStampMixin):
+    place = models.CharField(max_length=50)
     latitude = models.DecimalField(max_digits=10, decimal_places=6)
     longitude = models.DecimalField(max_digits=10, decimal_places=6)
+    
+    def __str__(self):
+        return f"Location: {self.place}"
+    
+    class Meta:
+        app_label = 'astrology'
 
 
-class KundliReport(models.Model):
+class KundliReport(TimeStampMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100,  blank=True, null=True,default='')
-    place = models.CharField(max_length=200,  blank=True, null=True,default='')
+    name = models.CharField(max_length=100, blank=True, null=True, default='')
+    place = models.CharField(max_length=200, blank=True, null=True, default='')
     birth_details = models.ForeignKey(BirthDetails, on_delete=models.CASCADE) 
     ascendant = models.CharField(max_length=50)
-    asc_deg = models.FloatField(max_length=20)
+    asc_deg = models.FloatField()
     asc_sign = models.CharField(max_length=50)
     birth_sign = models.CharField(max_length=50)
     lagna_chart = models.JSONField()
-    chart_url = models.CharField(max_length=200, blank=True, null=True , default='')
-    nakshatra= models.CharField(max_length=150, blank=True, null=True,default='')
-    ganra = models.CharField(max_length=10, blank=True, null=True,default='')
-    nadi  = models.CharField(max_length=15, blank=True, null=True,default='')
-    yoni  = models.CharField(max_length=10, blank=True, null=True,default='')
-    varna = models.CharField(max_length=15, blank=True, null=True,default='')
+    chart_url = models.CharField(max_length=200, blank=True, null=True, default='')
+    nakshatra = models.CharField(max_length=150, blank=True, null=True, default='')
+    ganra = models.CharField(max_length=10, blank=True, null=True, default='')
+    nadi = models.CharField(max_length=15, blank=True, null=True, default='')
+    yoni = models.CharField(max_length=10, blank=True, null=True, default='')
+    varna = models.CharField(max_length=15, blank=True, null=True, default='')
     houses = models.JSONField()
     planet_positions = models.JSONField()
     planets_longitudes = models.JSONField()
@@ -38,6 +46,11 @@ class KundliReport(models.Model):
     gaja_kesari_yoga = models.BooleanField()
     budha_aditya_yoga = models.BooleanField()
     pitra_dosha = models.JSONField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"Kundli Report for {self.name} - {self.place}"
+    
+    class Meta:
+        app_label = 'astrology'
     

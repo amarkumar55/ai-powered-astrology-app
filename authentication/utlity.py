@@ -59,6 +59,28 @@ def send_otp_message(email, message):
         fail_silently=False,
     )
 
+def send_otp_message_api(email, message, request):
+       
+    try:
+        validate_email(email)  # Check if the email is valid
+    except ValidationError:
+        raise ValueError("Invalid email address provided.")  # Raise 
+    
+    otp = generate_otp()
+    EmailOTP.objects.using(request.db).update_or_create(
+        email=email,
+        defaults={'otp': otp, 'otp_created_at': timezone.now()}
+    )
+  
+    send_mail(
+        message,
+        f'Your OTP is: {otp}',
+        settings.DEFAULT_FROM_EMAIL,
+        [email],
+        fail_silently=False,
+    )
+
+
 
 def send_verification_email(request, user):
 
@@ -71,8 +93,35 @@ def send_verification_email(request, user):
         'user': user,
     })
 
+  
+    app_name = 'AstroLive'
+
     send_mail(
-        subject='Verify Your Email – YourApp',
+        subject= f'Verify Your Email –  {app_name}',
+        message=f'Click here to verify: {accont_verification}',  # fallback for non-HTML readers
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+        html_message=html_message
+    )
+
+def send_verification_email_api(request, user):
+
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    accont_verification = request.build_absolute_uri(reverse('api_verify_email', kwargs={'uidb64': uid, 'token': token}))
+
+    html_message = render_to_string('emails/verify_email_confirm_mail.html', {
+        'accont_verification': accont_verification,
+        'user': user,
+    })
+
+    if request.db == 'smartnotes':
+        app_name = 'SmartNote'
+    else:
+        app_name = 'AstroLive'
+
+    send_mail(
+        subject=f'Verify Your Email – {app_name}',
         message=f'Click here to verify: {accont_verification}',  # fallback for non-HTML readers
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[user.email],

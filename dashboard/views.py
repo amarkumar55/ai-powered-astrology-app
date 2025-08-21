@@ -19,7 +19,7 @@ from django.contrib.auth import get_user_model,logout
 from django.contrib.auth.decorators import login_required
 from authentication.utlity import send_otp_message, send_error_log
 from .utlity import handle_profile_upload, get_cache_key, get_attempt_key
-from .forms import ProfileForm, AccountDeleteForm, DisableTwoFactorForm,Enable2FAForm,VerifyOTPForm, VerifyEmailChangeForm, VerifyEmailChangeOTP
+from .forms import ProfileForm, AccountDeleteForm, DisableTwoFactorForm,Enable2FAForm,VerifyOTPForm, VerifyEmailChangeForm, VerifyEmailChangeOTP,NotificationPreferenceForm
 
 # Create your views here.
 User = get_user_model()
@@ -94,7 +94,7 @@ def get_setting(request):
 @login_required()
 def kundlies(request):
 
-    kundlies = KundliReport.objects.filter()
+    kundlies = KundliReport.objects.filter(paid=True)
     paginator = Paginator(kundlies, 10) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -149,7 +149,6 @@ class ProfileUpdateView(View):
                 user.birth_time = time(hours, cd["minutes"], cd["seconds"])
                 user.timezone = cd["timezone"]
                 user.birth_place = cd["place"]
-                user.notification_preference = bool(cd["notification_preference"])
                 user.time_format = cd['time_format']
 
                 # Handle profile picture
@@ -171,10 +170,20 @@ class ProfileUpdateView(View):
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
-class AccountDeleteView(View):
+class AccountManageView(View):
     template_name = "dashboard/account/index.html"
-    success_template = "dashboard/account/profile_disable.html"
+  
+    def get(self, request):
+        form = AccountDeleteForm()
+        return render(request, self.template_name, {"form": form})
 
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
+class AccountDeleteView(View):
+    template_name = "dashboard/account/delete.html"
+    success_template = "dashboard/account/profile_disable.html"
+  
     def get(self, request):
         form = AccountDeleteForm()
         return render(request, self.template_name, {"form": form})
@@ -195,7 +204,7 @@ class AccountDeleteView(View):
                 if delete_type == "temp":
                     user.is_temporarily_disabled = True
                 elif delete_type == "permanent":
-                    user.is_parament_disabled = True
+                    user.is_permanent_disabled = True
 
                 user.is_is_profile_block = True
                 user.save()
@@ -215,8 +224,7 @@ class AccountDeleteView(View):
             messages.error(request, "Unable to delete your profile due to invalid form.")
 
         return render(request, self.template_name, {"form": form})
-
-
+    
 @method_decorator(login_required, name='dispatch')
 @method_decorator(ratelimit(key='user_or_ip', rate='20/m', method='POST', block=True), name='dispatch')
 class DisableTwoFactorView(View):
@@ -299,11 +307,10 @@ class VerifyTwoFactorOTPView(View):
 
         if form.is_valid():
            
-            otp_entered = request.POST.get('email_otp', '').strip()
-        
+            otp_entered = request.POST.get('email_otp', '').strip();
 
             try:
-                device = EmailOTP.objects.get(email='amar@astrolive.com')
+                device = EmailOTP.objects.get(email = request.user.email)
             except EmailOTP.DoesNotExist:
                 messages.error(request, 'otp not matched.')
                 return render(request, self.template_name, {'post_email_enter': True})
@@ -413,3 +420,36 @@ class VerifyOTPForEmailChangeView(View):
         else:
             cache.set(attempt_key, attempts + 1, 600)  # 10-minute expiry
             return JsonResponse({'status': 'error', 'message': 'Incorrect OTP'}, status=401)
+        
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(ratelimit(key='user_or_ip', rate='200/m', method='POST', block=True), name='dispatch')
+class ManageNotificationView(View):
+    template_name = 'dashboard/notification/index.html'
+
+    def get(self, request):
+        
+        form = NotificationPreferenceForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = NotificationPreferenceForm(request.POST)
+
+        if form.is_valid():
+            try:
+                user = request.user
+
+                request.user.notification_preference = form.cleaned_data['notification_preference']
+                request.user.save()
+
+                store_activity(request, {} , "notification _setting_update", user)
+                messages.success(request, 'Your notification setting was updated successfully.')
+            
+            except Exception as e:
+                send_error_log(e)
+                messages.error(request, 'Unable to update notification setting. Please try later.')
+        else:
+            messages.error(request, 'Invalid data. Please try again.')
+
+        return render(request, self.template_name, {"form": form})

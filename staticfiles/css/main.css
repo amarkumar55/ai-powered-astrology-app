@@ -23,3 +23,32 @@
 .bgcard {
    background-color: rgba(22, 125, 255, 0.3);
 }
+
+.predition-card {
+   background-color: #171234;
+}
+
+.-top-8{
+   margin-top:-24px;
+}
+
+
+.peer:checked~.toggle-track {
+   background-color: #2563eb;
+   /* tailwind blue-600 */
+}
+
+/* Toggle thumb move when checked */
+.peer:checked~.toggle-track .toggle-thumb {
+   transform: translateX(1.25rem);
+   /* Tailwind's translate-x-5 */
+}
+
+.toggle-track {
+   transition: background-color 0.3s ease;
+}
+
+.toggle-thumb {
+   transition: transform 0.3s ease;}
+
+   

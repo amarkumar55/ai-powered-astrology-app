@@ -1,0 +1,86 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}horoscope Edit - Astro Admin Panel{% endblock %}
+{% block content %}
+<div class="w-full min-h-screen mx-auto p-2">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Edit Horoscope</h2>
+            <p class="text-sm text-gray-100">Edit #{{horoscope.id}} details</p>
+        </div>
+    </div>
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <form method="post" action="{% url 'admin_panel:admin_horoscope_edit' horoscope.id %}" class="space-y-6">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="mb-4">
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-2">{{ error }}</div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div>
+                <label for="sign" class="block text-sm font-medium text-gray-700">Sign</label>
+                <input type="text" name="sign" value="{{horoscope.sign}}" id="sign"
+                    readonly 
+                    value="{{horoscope.sign}}"
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+                <input type="text" name="date" value="{{horoscope.date|date:'Y-m-d' }}"
+                    id="date" readonly
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                <input type="text" name="type" id="type" value="{{ horoscope.type }}"
+                    readonly
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="general" class="block text-sm font-medium text-gray-700">General Prediction</label>
+                <textarea name="general" id="general" rows="4" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ horoscope.general }}</textarea>
+            </div>
+
+            <div>
+                <label for="love" class="block text-sm font-medium text-gray-700">Love Prediction</label>
+                <textarea name="love" id="love" rows="4" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ horoscope.love }}</textarea>
+            </div>
+
+            <div>
+                <label for="career" class="block text-sm font-medium text-gray-700">Career Prediction</label>
+                <textarea name="career" id="career" rows="4" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ horoscope.career }}</textarea>
+            </div>
+
+            <div>
+                <label for="health" class="block text-sm font-medium text-gray-700">Health Prediction</label>
+                <textarea name="health" id="health" rows="4" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ horoscope.health }}</textarea>
+            </div>
+
+            <div>
+                <label for="finance" class="block text-sm font-medium text-gray-700">Finance Prediction</label>
+                <textarea name="finance" id="finance" rows="4" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ horoscope.finance }}</textarea>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
+                    Update Horoscope
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

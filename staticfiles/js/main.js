@@ -650,6 +650,20 @@ $(document).ready(function () {
             e.preventDefault(); // Always prevent default
         });
     }
+
+    const notification_preference =  $('#notification_preference');
+    if (notification_preference.length > 0) { 
+        notification_preference.parsley().on('form:validate', function (formInstance) {
+            if (formInstance.isValid()) {
+                notification_preference.off('submit');  // Prevent recursion
+                notification_preference[0].submit(); 
+            }
+        });
+        notification_preference.on('submit', function(e) {
+            e.preventDefault(); // Always prevent default
+        });
+    }
+       
         
     $('#refresh_capcha').click(function () {
         $.getJSON("/captcha/refresh/", function (result) {
@@ -670,27 +684,53 @@ $(document).ready(function () {
     const menuList = document.getElementById("mobile-menu-list");
     const hamburger = document.getElementById("hamburger");
     const closeIcon = document.getElementById("close");
+
     const numberlogy_button = document.getElementById("numberlogy_list_button");
     const numberlogy_menu_list = document.getElementById("numberlogy_list");
     const horoscope_button = document.getElementById("horoscope_list_button");
     const horoscope_list = document.getElementById("horoscope_list");
 
-    menuToggle.addEventListener("click", () => {
+    if (menuToggle) {
+        menuToggle.addEventListener("click", () => {
         
-        menuList.classList.toggle("hidden");
-        hamburger.classList.toggle("hidden");
-        closeIcon.classList.toggle("hidden");
-    });
+            menuList.classList.toggle("hidden");
+            hamburger.classList.toggle("hidden");
+            closeIcon.classList.toggle("hidden");
+        });    
+    }
 
-    numberlogy_button.addEventListener("click", () => {
-        numberlogy_menu_list.classList.toggle("hidden");
-    });
+    if (numberlogy_button) {
+        numberlogy_button.addEventListener("click", () => {
+            numberlogy_menu_list.classList.toggle("hidden");
+        });
+    }
+  
+    if (horoscope_button) {
+        horoscope_button.addEventListener("click", () => {
+            horoscope_list.classList.toggle("hidden");
+        });
+    }
 
-    horoscope_button.addEventListener("click", () => {
-        horoscope_list.classList.toggle("hidden");
-    });
+    const adminMenuButton = document.getElementById("admin_user_menu");
+    const adminMenuList = document.getElementById("admin_user_menu_list");
 
+    if (adminMenuButton && adminMenuList) {
+        // Toggle menu visibility
+        adminMenuButton.addEventListener("click", function (e) {
+            e.stopPropagation();
+            adminMenuList.classList.toggle("hidden");
+        });
 
+        // Close when clicking outside
+        document.addEventListener("click", function (e) {
+            if (!adminMenuList.classList.contains("hidden")) {
+                if (!adminMenuButton.contains(e.target) && !adminMenuList.contains(e.target)) {
+                    adminMenuList.classList.add("hidden");
+                }
+            }
+        });
+    }
+    
 });
 
 $('#user-menu-button').on('click', function (e) {
@@ -708,24 +748,21 @@ $('#numberlogy_list_button').on('click', function (e) {
 
 
 $(document).on('click', function (e) {
+
     if (!$(e.target).closest('#user-menu-button, #user-menu-list').length) {
         $('#user-menu-list').hide();
        
     }
-});
-
-$(document).on('click', function (e) {
+   
     if (!$(e.target).closest('#numberlogy_list_button, #numberlogy_list').length) {
         $('#numberlogy_list').hide();
        
     }
-});
 
-
-$(document).on('click', function (e) {
     if (!$(e.target).closest('#horoscope_list_button, #horoscope_list').length) {
         $('#horoscope_list').hide();
        
     }
 });
+
 

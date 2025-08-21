@@ -1,0 +1,170 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}{{ invoice.invoice_number }} Details - Astro Admin Panel{% endblock %}
+
+{% block content %}
+<div class="min-h-screen w-full p-2 mx-auto">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Invoice Details</h2>
+            <p class="text-sm text-gray-100">{{ invoice.invoice_number }} Invoice Preview</p>
+        </div>
+        <div class="flex space-x-3">
+            <a href="{% url 'admin_panel:admin_invoice_list' %}"
+                class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <i class="fas fa-arrow-left mr-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Basic Information -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <div class="flex flex-col items-center mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900">{{ invoice.invoice_number }}</h3>
+                        <p class="text-gray-500">{{ invoice.created_at|date:'M, d Y' }}</p>
+                    </div>
+
+                    <div class="space-y-4">
+                     
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">User Details</h4>
+                            <p class="mt-1 text-sm text-gray-900">{{ invoice.user.first_name }} {{ invoice.user.last_name }}</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Email</h4>
+                            <p class="mt-1 text-sm text-gray-900">{{ invoice.user.email }}</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Invoice Type</h4>
+                            <span
+                                class="mt-1 inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                {{ invoice.invoice_type }}
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Item Description</h4>
+                            <p class="mt-1 text-sm text-gray-900">{{ invoice.item_description }}</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500">Invoice Status</h4>
+                            <p class="text-gray-700">
+                                {% if invoice.paid == True %}
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-green-800">
+                                    Paid
+                                </span>
+                                {% else %}
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-red-800">
+                                    Unpaid
+                                </span>
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div>
+                            <form method="POST" action="{% url 'admin_panel:admin_invoice_detail' invoice.id %}"
+                                class="flex flex-row items-center gap-4">
+                                {% csrf_token %}
+
+                                <div>
+                                    <select name="status" id="status" required
+                                        class="mt-1 block w-full p-2 text-gray-700 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                                        <option value="1" {% if invoice.paid == '1' %}selected{% endif %}>Paid</option>
+                                        <option value="0" {% if invoice.paid == '0' %}selected{% endif %}>Unpaid</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <button type="submit"
+                                        class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">Update
+                                        Paymemt Status</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice Details -->
+            <div class="lg:col-span-2">
+                <div class="space-y-6">
+                    <!-- Planetary Positions -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Item Description</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <p class="text-gray-700">
+                                {{invoice.item_description}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Item Qty</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <p class="text-gray-700">
+                                {{invoice.qty}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Sub Total</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <p class="text-gray-700">
+                                {{invoice.sub_total}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Discount</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <p class="text-gray-700">
+                                {{invoice.discount}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Tax</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <p class="text-gray-700">
+                                {{invoice.tax}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Invoice Total</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <p class="text-gray-700">
+                                {{invoice.total_amount}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="mt-6 pt-6 border-t border-gray-200">
+            <div class="flex justify-between items-center text-sm text-gray-500">
+                <div>
+                    <span class="mr-4">Created: {{ invoice.created_at|date:"F d, Y H:i" }}</span>
+                    <span>Last Updated: {{ invoice.created_at|date:"F d, Y H:i" }}</span>
+                </div>
+                <div>
+                    <span>Invoice ID: {{ invoice.id }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

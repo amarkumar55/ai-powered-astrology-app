@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from home.models import TimeStampMixin
 User = get_user_model()
 
-class Invoice(models.Model):
+class Invoice(TimeStampMixin):
     INVOICE_TYPE_CHOICES = (
         ('subscription', 'Subscription'),
         ('onetime', 'One-Time Service'),
@@ -15,7 +15,7 @@ class Invoice(models.Model):
         ('failed', 'Failed'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('core.CustomUser', on_delete=models.CASCADE)
     invoice_number = models.CharField(max_length=100, unique=True, blank=True)
     invoice_type = models.CharField(max_length=20, choices=INVOICE_TYPE_CHOICES)
     subscription = models.OneToOneField('subscription.UserSubscription', on_delete=models.SET_NULL, null=True, blank=True)
@@ -31,8 +31,7 @@ class Invoice(models.Model):
     billing_email = models.EmailField(blank=True, null=True)
     billing_name = models.CharField(max_length=100, blank=True, null=True)
     billing_address = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
+   
     def save(self, *args, **kwargs):
         if not self.invoice_number:
             from uuid import uuid4
@@ -41,3 +40,6 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.invoice_number} - {self.invoice_type} - {self.status}"
+    
+    class Mata:
+        app_label = "common"

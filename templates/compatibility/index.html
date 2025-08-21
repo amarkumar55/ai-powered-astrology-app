@@ -3,50 +3,49 @@
 {% block content %}
 
 {% if not is_report_generate %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-center p-4">
-            <section class="py-16">
-                <div class="container mx-auto px-6 space-y-8 lg:px-20">
-                    <h2 class="text-4xl text-center font-bold  text-white">🔮Find Marriage Compatibility Predition ❤️</h2>
-               
-                    <div class="w-full mx-auto lg:w-8/12 p-2 lg:p-8">
-                        <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-200 border-0">
-                    
-                            <div class="mt-6 px-4 lg:px-10 py-10 pt-0">
-                                <div class="text-slate-400 text-center mb-3 font-bold">
-                                    <small>Enter Boy & Girl Birth Details</small>
-                                </div>
-                                <form id="kundli_matching_form" method="POST" action="{% url 'matching.index' %}" class="mt-6"
-                                    data-parsley-validate>
-                    
-                                    {% csrf_token %}
-                    
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                        <div class="flex-auto p-4 lg:px-10 py-4">
-                                            {% include "compatibility/boy_form.html" %}
-                                        </div>
-                                        <div class="flex-auto p-4 lg:px-10 py-4">
-                                            {% include "compatibility/girl_form.html" %}
-                                        </div>
-                                    </div>
-                
-                                    <div class="px-10 flex flex-col items-center gap-0 justify-center">
-                                        {% if show_captcha %}
-                                        {% include 'fields/captcha_custom.html' %}
-                                        {% endif %}
-                                        {% include 'fields/term_field.html' %}
-                                        {% include 'fields/submit_button.html' with value='Submit' %}
-                                    </div>    
-                                </form>
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-center p-4">
+        <section class="py-16">
+            <div class="container mx-auto px-6 space-y-8 lg:px-20">
+                <h2 class="text-4xl text-center font-bold  text-white">🔮Find Marriage Compatibility Predition ❤️</h2>
+
+                <div class="w-full mx-auto p-2 lg:p-8">
+                    <div
+                        class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-200 border-0">
+
+                        <div class="mt-6 px-4 lg:px-10 py-10 pt-0">
+                            <div class="text-slate-400 text-center mb-3 font-bold">
+                                <small>Enter Boy & Girl Birth Details</small>
                             </div>
-                        </div>  
+                            <form id="kundli_matching_form" method="POST" action="{% url 'matching.index' %}"
+                                class="mt-6" data-parsley-validate>
+
+                                {% csrf_token %}
+
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    <div class="flex-auto p-4 lg:px-4 py-4">
+                                        {% include "compatibility/boy_form.html" %}
+                                    </div>
+                                    <div class="flex-auto p-4 lg:px-4 py-4">
+                                        {% include "compatibility/girl_form.html" %}
+                                    </div>
+                                </div>
+
+                                <div class="px-4 flex flex-col items-center gap-0 justify-center">
+                                    {% if show_captcha %}
+                                    {% include 'fields/captcha_custom.html' %}
+                                    {% endif %}
+                                    {% include 'fields/term_field.html' %}
+                                    {% include 'fields/submit_button.html' with value='Submit' %}
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </div>
-</main>
+</div>
 {% else %}
 {% include 'compatibility/detail_board.html' %}
 {% endif %}

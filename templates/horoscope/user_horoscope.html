@@ -3,37 +3,36 @@
 {% block content %}
 
 <div class="mx-auto max-w-7xl px-2 py-10 sm:px-6 lg:px-8">
-
     <div class="mx-auto max-w-7xl px-6 py-8">
-        <div class="text-center mb-6">
-            <h2 class="text-4xl font-bold text-gray-800 dark:text-white">✨Daily and Weekly Horoscope Prediction For You ✨</h2>
+
+        <div class="text-center mb-8">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8">
+                <h2 class="text-4xl font-bold text-white mb-3">✨ Your Personalized Horoscope Prediction ✨</h2>
+            </div>
         </div>
 
-        <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+        <div class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 max-w-3xl mx-auto p-8">
             <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4">
                 <div
-                    class="bg-blue-50 dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
-                    <h3>Today Horoscope</h3>
-                    <dl class="mt-4 w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-
-                       
+                    class="p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+                    <h3 class="text-gray-300">Today Horoscope</h3>
+                    <dl class="mt-4 w-full text-gray-500 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                         <div class="flex flex-col pb-3">
-                            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">{{ daily_horoscope.sign }}</dt>
+                            <dt class="mb-1  md:text-lg">{{ daily_horoscope.sign }}</dt>
                             <dd class="text-lg font-semibold">{{ daily_horoscope.prediction }}</dd>
                         </div>
                         
                     </dl>
                 </div>
-                <div
-                    class="bg-blue-50 dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
-                    <h3>Weekly Horoscope</h3>
-                    <dl class="mt-4 w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                 
+                <div
+                    class="p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
+                    <h3 class="text-gray-300">Weekly Horoscope</h3>
+                    <dl class="mt-4 w-full text-gray-400 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                         <div class="flex flex-col pb-3">
-                            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">{{ weekly_horoscope.sign }}</dt>
-                            <dd class="text-lg font-semibold">{{ weekly_horoscope.prediction }}</dd>
+                            <dt class="mb-1 text-gray-500">{{ weekly_horoscope.sign }}</dt>
+                            <dd class="text-lg text-gray-500 font-semibold">{{ weekly_horoscope.prediction }}</dd>
                         </div>
-                       
                     </dl>
                 </div>
             </div>

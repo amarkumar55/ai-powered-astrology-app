@@ -1,0 +1,277 @@
+{% extends "chat/base_chat.html" %}
+
+{% block title %}Consultant Dashboard - AstroLive{% endblock %}
+
+{% block chat_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">👨‍💼 Consultant Dashboard</h1>
+        </div>
+    </div>
+
+    <!-- Video Call Ratings & Reviews -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-star"></i> Video Call Ratings</h5>
+                </div>
+                <div class="card-body">
+                    <h3>
+                        {% if vendor.aggregate_avg_rating %}
+                            <span style="color:#ffc107;">&#9733;</span> {{ vendor.aggregate_avg_rating|floatformat:1 }}/5
+                        {% else %}
+                            <span class="text-muted">No ratings yet</span>
+                        {% endif %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-comments"></i> Recent Video Call Reviews</h5>
+                </div>
+                <div class="card-body">
+                    {% if vendor.recent_reviews %}
+                        <ul class="list-unstyled">
+                        {% for review in vendor.recent_reviews %}
+                            <li class="mb-3">
+                                <div>
+                                    <span style="color:#ffc107;">{% for i in "12345"|slice:":review.rating" %}&#9733;{% endfor %}</span>
+                                    <strong>{{ review.rating }}/5</strong>
+                                </div>
+                                <div class="text-muted small">{{ review.start_time|date:"Y-m-d H:i" }}</div>
+                                <div>{{ review.review|default:"(No comment)" }}</div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span class="text-muted">No reviews yet.</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-star text-warning" style="font-size: 2rem;"></i>
+                    <h3 class="mt-2">{{ vendor.rating|floatformat:1 }}</h3>
+                    <p class="text-muted">Average Rating</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-comments text-primary" style="font-size: 2rem;"></i>
+                    <h3 class="mt-2">{{ vendor.total_sessions }}</h3>
+                    <p class="text-muted">Total Sessions</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-dollar-sign text-success" style="font-size: 2rem;"></i>
+                    <h3 class="mt-2">${{ today_earnings|floatformat:2 }}</h3>
+                    <p class="text-muted">Today's Earnings</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-clock text-info" style="font-size: 2rem;"></i>
+                    <h3 class="mt-2">{{ active_chats.count }}</h3>
+                    <p class="text-muted">Active Chats</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Active Chats -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-comments"></i> Active Chats</h5>
+                </div>
+                <div class="card-body">
+                    {% if active_chats %}
+                        {% for chat in active_chats %}
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                            <div>
+                                <h6 class="mb-1">{{ chat.user.get_full_name }}</h6>
+                                <small class="text-muted">Started: {{ chat.start_time|timesince }} ago</small>
+                            </div>
+                            <a href="{% url 'chat.chat_room' chat.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-comment"></i> Chat
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No active chats at the moment.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Completed Chats -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> Recent Sessions</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_chats %}
+                        {% for chat in recent_chats %}
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                            <div>
+                                <h6 class="mb-1">{{ chat.user.get_full_name }}</h6>
+                                <small class="text-muted">
+                                    Duration: {{ chat.duration_formatted }} | 
+                                    Cost: ${{ chat.total_cost|floatformat:2 }}
+                                </small>
+                                {% if chat.rating %}
+                                    <br>
+                                    <small class="text-warning">
+                                        <i class="fas fa-star"></i> {{ chat.rating }}/5
+                                    </small>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">{{ chat.end_time|timesince }} ago</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center">No recent sessions.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Management -->
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-user-edit"></i> Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            {% if vendor.profile_image %}
+                                <img src="{{ vendor.profile_image.url }}" alt="{{ vendor.full_name }}" class="vendor-avatar" style="width: 120px; height: 120px;">
+                            {% else %}
+                                <div class="vendor-avatar" style="width: 120px; height: 120px; background: #ddd; display: flex; align-items: center; justify-content: center; color: #666;">
+                                    <i class="fas fa-user" style="font-size: 3rem;"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{ vendor.full_name }}</h4>
+                            <p class="text-muted">{{ vendor.get_specialization_display }}</p>
+                            
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>Experience:</strong> {{ vendor.experience_years }} years<br>
+                                    <strong>Rate:</strong> ${{ vendor.hourly_rate }}/hour<br>
+                                    <strong>Status:</strong> 
+                                    <span class="badge {% if vendor.is_available %}bg-success{% else %}bg-danger{% endif %}">
+                                        {% if vendor.is_available %}Available{% else %}Unavailable{% endif %}
+                                    </span>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Total Sessions:</strong> {{ vendor.total_sessions }}<br>
+                                    <strong>Total Earnings:</strong> ${{ vendor.total_earnings|floatformat:2 }}<br>
+                                    <strong>Rating:</strong> {{ vendor.rating|floatformat:1 }}/5
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <a href="{% url 'chat.vendor_profile_edit' %}" class="btn btn-primary">
+                                    <i class="fas fa-edit"></i> Edit Profile
+                                </a>
+                                <button class="btn btn-outline-primary" onclick="toggleAvailability()">
+                                    <i class="fas fa-toggle-on"></i> Toggle Availability
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> Quick Stats</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">This Week</label>
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 75%"></div>
+                        </div>
+                        <small class="text-muted">75% of weekly goal</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">This Month</label>
+                        <div class="progress mb-2">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 90%"></div>
+                        </div>
+                        <small class="text-muted">90% of monthly goal</small>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6>💡 Tips</h6>
+                        <ul class="mb-0 small">
+                            <li>Keep your profile updated</li>
+                            <li>Respond quickly to chat requests</li>
+                            <li>Maintain high ratings</li>
+                            <li>Set competitive rates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const vendorId = '{{ vendor.id }}';
+const isCurrentlyAvailable = {{ vendor.is_available|yesno:"true,false" }};
+
+function toggleAvailability() {
+    fetch(`/chat/vendor/${vendorId}/status/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({
+            is_available: !isCurrentlyAvailable
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Failed to update availability');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update availability');
+    });
+}
+</script>
+{% endblock %} 

@@ -1,8 +1,9 @@
 from django.db import models
 from dasha.models import BirthDetails
+from home.models import TimeStampMixin
 # Create your models here.
 
-class KundliMatching(models.Model):
+class KundliMatching(TimeStampMixin):
     boy_birth = models.ForeignKey(
         BirthDetails,
         on_delete=models.CASCADE,
@@ -21,3 +22,10 @@ class KundliMatching(models.Model):
     gana_score = models.IntegerField()
     bhakoot_score = models.IntegerField()
     nadi_score = models.IntegerField()
+
+    class Meta:
+        app_label = 'astrology'
+    
+    def __str__(self):
+        return f"Kundli Matching: {self.boy_birth} & {self.girl_birth}"
+    

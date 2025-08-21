@@ -1,36 +1,32 @@
 {% extends "includes/base.html" %}
 {% block title %}Mahadasha and Antar Dasha Predition{% endblock %}
 {% block content %}
-
 {% if not is_report_generate %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-center p-4">
-            <section class="py-16">
-                <div class="container mx-auto px-6 space-y-8 lg:px-20">
-                    <h2 class="text-4xl text-center font-bold  text-white">🔮 Find Your Dasha and Antar Dasha Predition ❤️
-                    </h2>
-                    <p class="text-lg text-center text-gray-300 mt-4">
-                        Discover your strengths, weaknesses, and life path through accurate dasha and antar dasha analysis! 🔮🔍
-                        Align your energy for success, love, and prosperity. 💖🌟
-                    </p>
-                    <div class="flex flex-row items-center gap-0 justify-center p-4">
-                        <div class="w-full mx-auto lg:w-6/12 p-10 mb-5">
-                            <div class="relative flex flex-col min-w-0 break-words w-full mb-8 shadow-lg bg-slate-200 rounded-lg">
-                                <div class="mt-6 px-4 lg:px-10 py-10 pt-0">
-                                    <div class="text-slate-400 text-center mb-3 font-bold">
-                                        <small>Enter Your Details</small>
-                                    </div>
-                                    {% include 'dasha/dasha_form.html' %}
-                                </div>
+<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-center px-4 py-16">
+        <div class="container mx-auto px-6 space-y-8 lg:px-20">
+            <h2 class="text-4xl text-center font-bold  text-white">🔮 Find Your Dasha and Antar Dasha Predition ❤️
+            </h2>
+            <p class="text-lg text-center text-gray-300 mt-4">
+                Discover your strengths, weaknesses, and life path through accurate dasha and antar dasha analysis!
+                🔮🔍
+                Align your energy for success, love, and prosperity. 💖🌟
+            </p>
+            <div class="flex flex-row items-center gap-0 justify-center p-4">
+                <div class="w-full mx-auto lg:w-8/12 p-10 mb-5">
+                    <div class="relative flex flex-col min-w-0 break-words w-full mb-8 shadow-lg bg-slate-200 rounded-lg">
+                        <div class="mt-6 px-4 lg:px-10 py-10 pt-0">
+                            <div class="text-slate-400 text-center mb-3 font-bold">
+                                <small>Enter Your Details</small>
                             </div>
-                        </div>      
+                            {% include 'dasha/dasha_form.html' %}
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
-</main>
+</div>
 {% else %}
 {% include 'dasha/detail_board.html' %}
 {% endif %}

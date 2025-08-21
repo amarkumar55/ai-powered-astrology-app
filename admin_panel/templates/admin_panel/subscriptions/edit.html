@@ -1,0 +1,49 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Subscription - Astro Admin Panel{% endblock %}
+
+{% block content %}
+<div class="min-h-screen w-full mx-auto p-2">
+
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Subscription Information</h2>
+            <p class="text-sm text-gray-100">Manage #{{subscription.id}} details</p>
+        </div>
+    </div>
+
+
+    <div class="bg-white flex flex-col gap-4 rounded-lg shadow-md py-6 px-4">
+    
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <p class="text-gray-500">{{subscription.user.username}}</p>
+                <p class="text-gray-700">{{subscription.user.email}}</p>
+                <p class="text-gray-700">{{subscription.plan.name}}</p>
+                <p class="text-gray-700">{{subscription.start_date|date:'M, d Y'}} - {{subscription.end_date|date:'M, d Y'}}</p>
+                <p class="text-gray-700">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-green-800">
+                        {{subscription.status}}
+                    </span>
+                </p>
+            </div>
+            <div>
+                <form method="POST" action="{% url 'admin_panel:admin_subscription_detail' subscription.id %}" class="flex flex-row items-center gap-4">
+                    {% csrf_token %}
+                    <div>
+                        <select name="status" id="status" required
+                            class="mt-1 block w-full p-2 text-gray-700 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                            <option value="active" {% if subscription.status == 'active' %}selected{% endif %}>Active</option>
+                            <option value="expired" {% if subscription.status == 'expired' %}selected{% endif %}>Expired</option>
+                            <option value="cancelled" {% if subscription.status == 'cancelled' %}selected{% endif %}>Cancelled</option>    
+                        </select>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">Update Status</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

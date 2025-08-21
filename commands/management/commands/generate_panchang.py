@@ -22,21 +22,21 @@ class Command(BaseCommand):
         today = date.today()
         latitue = "22.5744 N"
         longtiute = "88.3629 E"
-        panchang = calculate_panchang(latitue, longtiute, now().year, now().month, now().day, now().hour, now().minute, now().second)
+        panchang_data = calculate_panchang(latitue, longtiute, now().year, now().month, now().day, now().hour, now().minute, now().second)
 
         # Example: Creating a dummy Panchang entry
         panchang = Panchang.objects.create(
-            date=today.isoformat(), 
-            tithi=panchang['tithi'],
-            nakshatra=panchang['nakshatra'],
-            yoga=panchang['yoga'],
-            karana=panchang['karana'],
-            vara=panchang['vara'],
-            sunrise=panchang['sunrise'],
-            sunset=panchang['sunset'],
-            rahu_kaal=panchang['rahu_kaal'],
-            gulika_kaal=panchang['gulika_kaal'],
-            yamaganda=panchang['yamaganda'],
-            abhijit_muhurat=panchang['abhijit_muhurat'],
+            date=today, 
+            tithi=panchang_data['tithi'],
+            nakshatra=panchang_data['nakshatra'],
+            yoga=panchang_data['yoga'],
+            karana=panchang_data['karana'],
+            vara=panchang_data['vara'],
+            sunrise=panchang_data['sunrise'],
+            sunset=panchang_data['sunset'],
+            rahu_kaal=panchang_data['rahu_kaal'],
+            gulika_kaal=panchang_data['gulika_kaal'],
+            yamaganda=panchang_data['yamaganda'],
+            abhijit_muhurat=panchang_data['abhijit_muhurat'],
         )
         self.stdout.write(self.style.SUCCESS("Panchag generated successfully!"))

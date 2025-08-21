@@ -1,121 +1,118 @@
 {% extends "includes/base.html" %}
-{% block title %} Dashboard | Your Generated Kundli {% endblock %}
+{% load custom_filters %}
+{% block title %} Dashboard | Kundli {% endblock %}
 {% block content %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div class="relative flex flex-col lg:flex-row gap-8">
             <div class="md:flex w-full">
                 {% include 'dashboard/sidebar.html' %}
-                <div class="w-full space-y-4  rounded-2xl  p-4 ring-1  ring-gray-900/10 sm:p-4">
-                    {% if page_obj.object_list %}
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="p-2">Full Name</th>
-                                <th scope="col" class="p-2">Birth Date</th>
-                                <th scope="col" class="p-2">Birth Time</th>
-                                <th scope="col" class="p-2">Birth Place</th>
-                                <th scope="col" class="p-2">Birth Sign</th>
-                                <th scope="col" class="p-2">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for kundli in page_obj %}
-                            <tr class="border-b dark:border-gray-700 border-gray-200">
-                                <td scope="row" class="p-2">{{kundli.name}}</td>
-                                <td class="p-2">{{kundli.birth_details.birth_date}}</td>
-                                <td class="p-2">{{kundli.birth_details.birth_time}}</td>
-                                <td class="p-2">{{kundli.place}}</td>
-                                <td class="p-2">{{kundli.birth_sign}}</td>
-                                           
-                                <td class="p-2">
-                                    <a href="{% url 'dashboard.kundli_view' kundli.id %}"
-                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-700 hover:bg-gray-800 cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg ">
-                                        Download
-                                        <svg class="w-3.5 h-3.5 ms-2" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M5 1v12m0 0l4-4m-4 4L1 9" />
-                                        </svg>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    <div class="mt-4">
-                        <div class="flex items-center justify-between mt-6">
-                            <div class="flex-1 flex justify-between sm:hidden">
-                                {% if page_obj.has_previous %}
-                                <a href="?page={{ page_obj.previous_page_number }}"
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
-                                    Previous
-                                </a>
-                                {% endif %}
-
-                                {% if page_obj.has_next %}
-                                <a href="?page={{ page_obj.next_page_number }}"
-                                    class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
-                                    Next
-                                </a>
-                                {% endif %}
+                
+                <!-- Main Content -->
+                <div class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                        <div class="space-y-8">
+                            <!-- Header Section -->
+                            <div class="border-b border-gray-200 pb-6">
+                                <h2 class="text-2xl rounded-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                                    Your Kundli
+                                </h2>
+                                <p class="mt-2 text-gray-600">View and manage your astrological charts</p>
                             </div>
 
-                            <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                                <div>
-                                    <p class="text-sm text-gray-700">
-                                        Page <span class="font-medium">{{ page_obj.number }}</span> of <span
-                                            class="font-medium">{{page_obj.paginator.num_pages }}</span>
-                                    </p>
-                                </div>
-                                <div>
-                                    <nav class="relative z-0 inline-flex -space-x-px rounded-md shadow-sm"
-                                        aria-label="Pagination">
-                                        {% if page_obj.has_previous %}
-                                        <a href="?page={{ page_obj.previous_page_number }}"
-                                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-100">
-                                            ‹
-                                        </a>
-                                        {% else %}
-                                        <span
-                                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
-                                            ‹
-                                        </span>
-                                        {% endif %}
+                            <!-- Kundli List -->
+                            <div class="space-y-6">
+                                {% if kundlis %}
+                                    {% for kundli in kundlis %}
+                                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-purple-200 transition-all duration-300">
+                                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                <div class="flex items-start gap-4">
+                                                    <div class="flex-shrink-0">
+                                                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h3 class="text-lg font-semibold text-gray-800">{{ kundli.name }}</h3>
+                                                        <p class="mt-1 text-sm text-gray-600">{{ kundli.description }}</p>
+                                                        <div class="mt-2 flex flex-wrap gap-2">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                                {{ kundli.created_at|date:"M d, Y" }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-4">
+                                                    <div class="flex gap-2">
+                                                        <a href="{% url 'dashboard.kundli_detail' kundli.id %}" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                            View Details
+                                                        </a>
+                                                        <a href="{% url 'dashboard.kundli_edit' kundli.id %}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                            </svg>
+                                                            Edit
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
 
-                                        {% for num in page_obj.paginator.page_range %}
-                                        {% if page_obj.number == num %}
-                                        <span aria-current="page"
-                                            class="z-10 bg-indigo-600 border-indigo-600 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                            {{ num }}
-                                        </span>
-                                        {% else %}
-                                        <a href="?page={{ num }}"
-                                            class="bg-white border-gray-300 text-gray-700 hover:bg-gray-100 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                            {{ num }}
-                                        </a>
-                                        {% endif %}
-                                        {% endfor %}
+                                    <!-- Pagination -->
+                                    {% if kundlis.has_other_pages %}
+                                        <div class="flex justify-center mt-8">
+                                            <nav class="inline-flex rounded-md shadow">
+                                                {% if kundlis.has_previous %}
+                                                    <a href="?page={{ kundlis.previous_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
+                                                        Previous
+                                                    </a>
+                                                {% endif %}
+                                                
+                                                {% for num in kundlis.paginator.page_range %}
+                                                    {% if kundlis.number == num %}
+                                                        <span class="px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-purple-600">
+                                                            {{ num }}
+                                                        </span>
+                                                    {% else %}
+                                                        <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">
+                                                            {{ num }}
+                                                        </a>
+                                                    {% endif %}
+                                                {% endfor %}
 
-                                        {% if page_obj.has_next %}
-                                        <a href="?page={{ page_obj.next_page_number }}"
-                                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-100">
-                                            ›
-                                        </a>
-                                        {% else %}
-                                        <span
-                                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
-                                            ›
-                                        </span>
-                                        {% endif %}
-                                    </nav>
-                                </div>
+                                                {% if kundlis.has_next %}
+                                                    <a href="?page={{ kundlis.next_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
+                                                        Next
+                                                    </a>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="text-center py-12">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                        <h3 class="mt-2 text-sm font-medium text-gray-900">No Kundli found</h3>
+                                        <p class="mt-1 text-sm text-gray-500">Get started by creating your first Kundli.</p>
+                                        <div class="mt-6">
+                                            <a href="{% url 'kundli.index' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-gray-700 bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                                Create New Kundli
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    {% else %}
-                    <p class="text-gray-400">No kundli found.</p>
-                    {% endif %}
                 </div>
             </div>
         </div>

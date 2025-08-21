@@ -1,0 +1,39 @@
+# API Authentication Dependencies
+# Core Django REST Framework
+djangorestframework>=3.14.0
+
+# Rate Limiting
+django-ratelimit>=4.1.0
+
+# Security and Validation
+django-axes>=6.0.0
+django-csp>=3.7
+
+# Email and Token Management
+django-templated-mail>=1.1.1
+
+# Input Sanitization
+bleach>=6.0.0
+
+# User Agent Parsing
+user-agents>=2.2.0
+
+# Date/Time Handling
+python-dateutil>=2.8.2
+
+# HTTP Client for Testing
+requests>=2.31.0
+
+# Development and Testing
+pytest>=7.4.0
+pytest-django>=4.5.0
+factory-boy>=3.3.0
+
+# Documentation
+drf-yasg>=1.21.0  # For API documentation
+
+# Optional: JWT Support (if needed)
+# djangorestframework-simplejwt>=5.3.0
+
+# Optional: CORS Support (if needed)
+# django-cors-headers>=4.3.0 

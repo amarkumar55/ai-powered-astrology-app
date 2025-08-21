@@ -1,0 +1,47 @@
+{% extends 'chat/base_chat.html' %}
+
+{% block title %}Video Call History{% endblock %}
+
+{% block chat_content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Video Call History</h2>
+    {% if calls %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>With</th>
+                    <th>Role</th>
+                    <th>Duration</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for call in calls %}
+                <tr>
+                    <td>{{ call.start_time|date:"Y-m-d H:i" }}</td>
+                    <td>
+                        {% if request.user == call.chat_room.user %}
+                            {{ call.chat_room.vendor.full_name }}
+                        {% else %}
+                            {{ call.chat_room.user.get_full_name }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if request.user == call.chat_room.user %}User{% else %}Vendor{% endif %}
+                    </td>
+                    <td>{{ call.duration_minutes }} min</td>
+                    <td>₹{{ call.duration_minutes|add:"0"|floatformat:0|mul:5 }}</td>
+                    <td>{{ call.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">No video calls found.</div>
+    {% endif %}
+</div>
+{% endblock %} 

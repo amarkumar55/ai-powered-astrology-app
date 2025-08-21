@@ -3,8 +3,6 @@ import pdfkit
 import environ
 from pathlib import Path
 from datetime import timedelta
-from logging.handlers import RotatingFileHandler
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,16 +14,13 @@ SECRET_KEY = 'django-insecure-(aoqsk*es*)vlb7r6ydwht$5zm_c!nekyn^1j5$hu1%093&*8!
 
 PDFKIT_CONFIG = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
 
-DEBUG = True
+DEBUG = False
 
-
-ALLOWED_HOSTS = ['astro.local']
-
+ALLOWED_HOSTS = ['*']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -34,9 +29,15 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp', 
+    'rest_framework',
+    'rest_framework.authtoken',
+    'channels',
+    'corsheaders',
     'compressor',
     'captcha',
     'django_crontab',
+    'fontawesomefree',
+    'ckeditor',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -44,8 +45,12 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_ratelimit',
     'csp',
-    'home',
+    'core',
+    'astrology',
+    'smartnotes',
     'authentication',
+    'admin_panel',
+    'home',
     'numberlogy',
     'compatibility',
     'dasha',
@@ -59,10 +64,29 @@ INSTALLED_APPS = [
     'invoice',
     'blogs',
     'payment',
+    'chat',
+    'apis.api_auth',
+    'apis.api_blogs',
+    'apis.api_compatibility',
+    'apis.api_dasha',
+    'apis.api_dashboard',
+    'apis.api_home',
+    'apis.api_horoscope',
+    'apis.api_invoice',
+    'apis.api_kundli',
+    'apis.api_loshugrid',
+    'apis.api_notes',
+    'apis.api_numberlogy',
+    'apis.api_panchang',
+    'apis.api_payment',
+    'apis.api_subscription',
+    'apis.api_notifiaction',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -71,13 +95,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    "csp.middleware.CSPMiddleware", 
     "django_otp.middleware.OTPMiddleware",
     "authentication.middleware.BlockUnverifiedUserMiddleware",
+ 
+    # API Authentication Middleware
+    'apis.api_auth.middleware.DatabaseSelectionMiddleware',
+    'apis.api_auth.middleware.APIRateLimitMiddleware',
+    'apis.api_auth.middleware.APITokenMiddleware',
+    'apis.api_auth.middleware.APIRequestLoggingMiddleware',
+    'apis.api_auth.middleware.APISecurityHeadersMiddleware',
+ 
+]
+
+CORS_ALLOW_ALL_ORIGINS = True  # 🔥 Use only in development!
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    '*'
+]
+
+CORS_ALLOW_METHODS = [
+    '*'
 ]
 
 ROOT_URLCONF = 'astro.urls'
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -87,6 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
+    'apis.api_auth.auth_backends.MultiDBAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
     'axes.backends.AxesStandaloneBackend',
@@ -127,16 +168,22 @@ X_FRAME_OPTIONS = "DENY"  # Prevents clickjacking
 
 CSP_IMG_SRC = ["'self'", "data:"]
 CSP_FONT_SRC = ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"]
-CSP_SCRIPT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'",'https://fonts.googleapis.com')
+CSP_SCRIPT_SRC = ("'self'","https://cdn.jsdelivr.net")
 CSP_FRAME_SRC = ("'self'",)
-CSP_INCLUDE_NONCE_IN = ['script-src']
+
+CSP_STYLE_SRC = (
+    "'self'",
+    'https://fonts.googleapis.com',
+    'https://cdn.jsdelivr.net'
+)
+
+CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']  # ✅ Important!
 
 INSTALLED_APPS += ['axes']
 
 MIDDLEWARE.insert(0, 'axes.middleware.AxesMiddleware')
 
-AUTH_USER_MODEL = 'authentication.CustomUser'
+AUTH_USER_MODEL = 'core.CustomUser'
 
 
 # AXES Config 
@@ -180,12 +227,14 @@ LOG_DIR.mkdir(exist_ok=True)  # Ensure the logs/ directory exists
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
     'formatters': {
         'verbose': {
             'format': '[{asctime}] {levelname} {name}: {message}',
             'style': '{',
         },
     },
+
     'handlers': {
         'file': {
             'level': 'WARNING',
@@ -202,28 +251,51 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': LOG_DIR / 'payment.log',
-            'maxBytes': 5 * 1024 * 1024,  # 5 MB
+            'maxBytes': 5 * 1024 * 1024,
             'backupCount': 5,
             'formatter': 'verbose',
         },
-    },
-    'loggers': {
-        'django.security': {
-            'handlers': ['file'],
+        'db': {
             'level': 'ERROR',
-            'propagate': True,
+            'class': 'home.log_handler.DBLogHandler',
+            'formatter': 'verbose',
         },
-        'two_factor': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+        },
+    },
+
+    'loggers': {
+        'django': {
             'handlers': ['console'],
             'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file', 'db', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['file', 'db'],
+            'level': 'ERROR',
+            'propagate': False,
         },
         'payment': {
             'handlers': ['payment_file', 'console'],
             'level': 'DEBUG',
             'propagate': False,
         },
-    },
+        'custom': {
+            'handlers': ['file', 'db'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    }
 }
+
 
 
 # SERVER Config
@@ -232,11 +304,27 @@ WSGI_APPLICATION = 'astro.wsgi.application'
 
 # Database config
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+  
+    'default':{
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'astro',
+        'USER': 'amarkumar',
+        'PASSWORD': '@amar9691',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    },
+  
+    'smartnotes': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'smartnotes',
+        'USER': 'amarkumar',
+        'PASSWORD': '@amar9691',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+
 }
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Cache Config
@@ -250,6 +338,7 @@ CACHES = {
     }
 }
 
+DATABASE_ROUTERS = ['home.db_routers.DBRouterManager']
 
 # Local config
 LANGUAGE_CODE = 'en-us'
@@ -301,7 +390,58 @@ CRONJOBS = [
     ('15 0 * * *', 'django.core.management.call_command', ['generate_horoscopes']),
 ]
 
-RAZOR_KEY_ID='#####'
-RAZOR_KEY_SECRET='####'
+RAZOR_KEY_ID=''
+RAZOR_KEY_SECRET=''
 
 
+#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
+#Tech9691@@'
+#AKt610xBTSuKSXmxD1S46g2
+#dbA@amar9691
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    },
+}
+
+ADMINS = [
+    ('Your Name', 'admin@astrolive.com'),
+]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        "apis.api_auth.middleware.CookieOrHeaderJWTAuthentication",
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10, 
+}
+
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),   
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),    
+    "ROTATE_REFRESH_TOKENS": True,                 
+    "BLACKLIST_AFTER_ROTATION": True,              
+}
+
+# Channels Configuration
+ASGI_APPLICATION = 'astro.asgi.application'
+
+# Channel Layers for WebSocket support
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

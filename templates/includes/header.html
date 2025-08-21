@@ -1,4 +1,4 @@
-<nav class="bgNavbar w-full p-2 shadow-lg shadow-[bg-hcolor] z-50 bg-opacity-90 fixed top-0 left-0 right-0  border-b border-white/10">
+<nav>
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
             <!-- App Name -->
@@ -34,17 +34,14 @@
                     
                         <!-- Dropdown -->
                         <div id="horoscope_list"
-                            class="absolute hidden top-full left-0 mt-2 z-20 w-48 rounded-md py-1 ring-1 shadow-lg ring-black/5 bg-hcolor text-white"
+                            class="absolute hidden top-full left-0 mt-2 z-20 w-48 rounded-md py-1 ring-1 shadow-lg ring-black/5 bgNavbar text-white"
                             role="menu" aria-orientation="vertical" aria-labelledby="numberlogy_list_button" tabindex="-1">
                     
-                            <a href="{% url 'horoscope.daily_horoscope' %}" class="block px-4 nav-item py-2 text-sm"
-                                role="menuitem">Daily Horoscope</a>
-                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Weekly
-                                Horoscope</a>
-                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Monthly Horoscope</a>
-                            
-                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Yearly Horoscope</a>
-                  
+                            <a href="{% url 'horoscope.daily_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Daily Horoscope</a>
+                            <a href="{% url 'horoscope.weekly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Weekly Horoscope</a>
+                            <a href="{% url 'horoscope.monthly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Monthly Horoscope</a>
+                            <a href="{% url 'horoscope.yearly_horoscope' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Yearly Horoscope</a>
+                
                         </div>
                     </div>
 
@@ -61,7 +58,7 @@
                     
                         <!-- Dropdown -->
                         <div id="numberlogy_list"
-                            class="absolute hidden top-full left-0 mt-2 z-20 w-48 rounded-md py-1 ring-1 shadow-lg ring-black/5 bg-hcolor text-white"
+                            class="absolute hidden top-full left-0 mt-2 z-20 w-48 rounded-md py-1 ring-1 shadow-lg ring-black/5 bgNavbar text-white"
                             role="menu" aria-orientation="vertical" aria-labelledby="numberlogy_list_button" tabindex="-1">
                     
                             <a href="{% url 'numerology.driver_conductor.index' %}" class="block px-4 nav-item py-2 text-sm" role="menuitem">Driver And Conductor</a>

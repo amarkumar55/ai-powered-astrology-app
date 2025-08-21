@@ -1,10 +1,13 @@
 {% load custom_filters %}
-<div class="mx-auto max-w-7xl px-10">
+<div class="mx-auto max-w-7xl px-10 py-16">
     <div class="relative flex py-4 flex-col gap-4 h-auto mb-5">
-        <div class="container mx-auto px-6 py-6 lg:px-20 text-center">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Hii {{ data.name }}, Your Maha Dasha and Antar Dasha Predition Here ❤️</h2>
+        <div class="text-center mb-8">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8">
+                <h2 class="text-4xl font-bold text-white mb-3">✨ Your Personalized Maha Dasha and Antar Dasha Prediction ✨</h2>
+                <p class="text-gray-300 mt-2">Hii {{ data.name }}, here’s your dasha and antar prediction ❤️</p>
+            </div>
         </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 mt-12 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="p-4">
@@ -26,16 +29,16 @@
                 <tr
                     class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                     <th scope="row" class="p-4">
-                        {{item.major_dasha}}
+                        {{ item.fields.major_dasha }}
                     </th>
                     <td class="p-4">
-                        {{item.antar_dasha_planet}}
+                        {{ item.fields.antar_dasha_planet }}
                     </td>
                     <td class="p-4">
-                        {{item.start_date}}
+                        {{ item.fields.start_date }}
                     </td>
                     <td class="p-4">
-                        {{item.end_date}}
+                        {{ item.fields.end_date }}
                     </td>
                 </tr>
                 {% empty %}
@@ -45,16 +48,15 @@
                         No Antar Dasha details found.
                     </td>
                 </tr>
-                {% endfor %}
+                {% endfor %}    
             </tbody>
         </table>
-
         <div class="container mx-auto px-6 py-6 lg:px-20 text-center">
-            <h2 class="text-2xl font-bold text-gray-400 dark:text-white">Current Running Dasha and Antar Dasha</h2>
-            <p class="mt-2 text-gray-400">You can check the effects here and see whether they are currently active by comparing them with your Dasha and Antar
+            <h2 class="text-2xl font-bold text-white">Current Running Dasha and Antar Dasha</h2>
+            <p class="mt-2 text-gray-300">You can check the effects here and see whether they are currently active by comparing them with your Dasha and Antar
             Dasha periods shown in the table above.</p>
         </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <table class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="p-4">
@@ -83,22 +85,22 @@
                 <tr
                     class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                     <th scope="row" class="p-4">
-                        {{item.mahadasha_planet}}
+                        {{item.fields.mahadasha_planet}}
                     </th>
                     <td class="p-4">
-                        {{item.antar_dasha_planet}}
+                        {{item.fields.antar_dasha_planet}}
                     </td>
                     <td class="p-4">
-                        {{item.start_date}}
+                        {{item.fields.start_date}}
                     </td>
                     <td class="p-4">
-                        {{item.end_date}}
+                        {{item.fields.end_date}}
                     </td>
                     <td class="p-4">
-                        {{item.mahadasha_effect}}
+                        {{item.fields.mahadasha_effect}}
                     </td>
                     <td class="p-4">
-                        {{item.antardasha_effect}}
+                        {{item.fields.antardasha_effect}}
                     </td>
                 </tr>
                 {% empty %}

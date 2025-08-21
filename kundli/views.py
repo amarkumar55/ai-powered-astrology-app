@@ -1,3 +1,4 @@
+import uuid
 import os
 import json
 import pdfkit
@@ -6,6 +7,8 @@ import logging
 from .models import Location
 from .forms import KundliForm
 from django.views import View
+from django.urls import reverse
+from kundli.models import KundliReport
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
@@ -30,11 +33,26 @@ class KundliPreditionView(View):
     def get(self, request):
         show_captcha, context = handle_captcha_logic(request, {})
         form = KundliForm(show_captcha=show_captcha)
+        tag = request.GET.get('tag', '').strip()
+        session_key = f'kundli_result_{tag}'
+        kundliId = request.session.get(session_key) 
+        is_report_generate = kundliId is not None  
+        kundli =  KundliReport.objects.filter(id=kundliId).first() if kundliId else None
 
         context.update({
             "form": form,
-            "is_report_generate": False,
+            "is_report_generate": is_report_generate,
             "show_captcha": show_captcha,
+            "kundli": kundli,
+            "sade_sati_result": kundli.sade_sati_result if kundli else None,
+            "sade_sati_phases": kundli.sade_sati_phases if kundli else None,
+            "manglik_dosha": kundli.manglik_dosha if kundli else None,
+            "kaal_sarp_dosha": kundli.kaal_sarp_dosha if kundli else None,
+            "mahapurush_yogas": kundli.mahapurush_yogas if kundli else None,
+            "gaja_kesari_yoga": kundli.gaja_kesari_yoga if kundli else None,
+            "budha_aditya_yoga": kundli.budha_aditya_yoga if kundli else None,
+            "pitra_dosha": kundli.pitra_dosha if kundli else None,
+            "kundli_data": clean_chart_data(kundli.kundli_data) if kundli else None,
         })
         return render(request, self.template_name, context)
 
@@ -60,21 +78,13 @@ class KundliPreditionView(View):
                         store_activity(request, form.cleaned_data.copy(), "kundli_predition_generate", None)
                                         
                     messages.success(request, "Your Personalized Kundli prediction is generated.")
+                     
+                
+                    tag = uuid.uuid4().hex 
+                    request.session[f'kundli_result_{tag}'] = kundli.id
+                    return redirect(f"{reverse('kundli.index')}?tag={tag}")   
                     
-                    return render(request, self.template_name, {
-                        "form": form,
-                        "is_report_generate": True,
-                        "kundli": kundli,
-                        "sade_sati_result": json.loads(kundli.sade_sati_result),
-                        "sade_sati_phases": json.loads(kundli.sade_sati_phases),
-                        "manglik_dosha": kundli.manglik_dosha,
-                        "kaal_sarp_dosha":kundli.kaal_sarp_dosha,
-                        "mahapurush_yogas":json.loads(kundli.mahapurush_yogas),
-                        "gaja_kesari_yoga":kundli.gaja_kesari_yoga,
-                        "budha_aditya_yoga":kundli.budha_aditya_yoga,
-                        "pitra_dosha":kundli.pitra_dosha,
-                        "kundli_data":clean_chart_data(kundli.kundli_data) 
-                    })
+
 
             except Exception as e:
                 increment_failed_attempts(request)
@@ -98,7 +108,7 @@ class KundliPreditionView(View):
 
 
 
-@method_decorator(login_required, name='dispatch')
+#@method_decorator(login_required, name='dispatch')
 @method_decorator(ratelimit(key='user_or_ip', rate='30/m', method='POST', block=True), name='dispatch')
 class KundliPremiumView(View):
     template_name = "kundli/index.html"
@@ -233,7 +243,7 @@ class KundliDownloadView(View):
         return response
 
 
-@method_decorator(login_required, name='dispatch')
+
 @method_decorator(ratelimit(key='user_or_ip', rate='5/m', block=True), name='dispatch')
 class SearchLocationView(View):
 
@@ -261,6 +271,7 @@ class SearchLocationView(View):
                 return JsonResponse({"error": "Location not found"}, status=404)
 
             locations = []
+            
             for item in data:
                 # Avoid duplicates (adjusted logic)
                 Location.objects.get_or_create(

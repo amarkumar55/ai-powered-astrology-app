@@ -1,45 +1,108 @@
 {% extends "includes/base.html" %}
 {% load custom_filters %}
-{% block title %} Dashboard | Your Activities {% endblock %}
+{% block title %} Dashboard | Activity {% endblock %}
 {% block content %}
-<main >
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div class="relative flex flex-col lg:flex-row gap-8">
             <div class="md:flex w-full">
                 {% include 'dashboard/sidebar.html' %}
-                <div
-                    class="space-y-4 w-full  rounded-2xl p-4 ring-1 ring-gray-900/10 sm:p-4">
-                    <h2 class="text-xs text-gray-700 uppercase dark:text-gray-400">Your Recent 10 Activities</h2>
-                    {% if activities.count > 0 %}
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="p-2">Activity Type</th>
-                                    <th scope="col" class="p-2">Ip Address</th>
-                                    <th scope="col" class="p-2">Browser</th>
-                                    <th scope="col" class="p-2">System</th>
-                                    <th scope="col" class="p-2">Device</th>
-                                    <th scope="col" class="p-2">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for activity in activities %}
-                                <tr
-                                    class="border-b dark:border-gray-700 border-gray-200">
-                                    <td scope="row" class="p-2">{{activity.activity_type|replace:"_, "}}</td>
-                                    <td class="p-2">{{activity.ip_address}}</td>
-                                    <td class="p-2">{{activity.browser}} {{activity.browser_version}}</td>
-                                    <td class="p-2">{{activity.os}} {{activity.os_version}}</td>
-                                    <td class="p-2">{{activity.device_brand}} {{activity.device_model}}</td>
-                                    <td class="p-2">{{activity.action_date_time}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                   
-                    {% else %}
-                    <p class="text-gray-400">No Recent Activity found.</p>
-                    {% endif %}
+                
+                <!-- Main Content -->
+                <div class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                        <div class="space-y-8">
+                            <!-- Header Section -->
+                            <div class="border-b border-gray-200 pb-6">
+                                <h2 class="text-2xl rounded-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                                    Activity History
+                                </h2>
+                                <p class="mt-2 text-gray-600">Track your recent activities and interactions</p>
+                            </div>
+
+                            <!-- Activity List -->
+                            <div class="space-y-6">
+                                {% if activities %}
+                                    {% for activity in activities %}
+                                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:border-purple-200 transition-all duration-300">
+                                            <div class="flex items-start gap-4">
+                                                <div class="flex-shrink-0">
+                                                    {% if activity.activity_type == 'account_login' %}
+                                                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                                        </svg>
+                                                    {% elif activity.activity_type == 'account_logout' %}
+                                                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                        </svg>
+                                                    {% elif activity.activity_type == 'kundli' %}
+                                                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                        </svg>
+                                                    {% elif activity.activity_type == 'payment' %}
+                                                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                        </svg>
+                                                    {% else %}
+                                                        <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="flex items-center justify-between">
+                                                        <h3 class="text-lg font-semibold text-gray-800">{{ activity.activity_type|capfirst|replace:"_, " }}</h3>
+                                                        <span class="text-sm text-gray-500">{{ activity.action_date_time|timesince }} ago</span>
+                                                    </div>
+                                                    <p class="mt-1 text-sm text-gray-700">{{ activity.browser }} {{ activity.browser_version }}, {{ activity.os }} , {{activity.device_type}} </p>        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    <!-- Pagination -->
+                                    {% if activities.has_other_pages %}
+                                        <div class="flex justify-center mt-8">
+                                            <nav class="inline-flex rounded-md shadow">
+                                                {% if activities.has_previous %}
+                                                    <a href="?page={{ activities.previous_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
+                                                        Previous
+                                                    </a>
+                                                {% endif %}
+                                                
+                                                {% for num in activities.paginator.page_range %}
+                                                    {% if activities.number == num %}
+                                                        <span class="px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-purple-600">
+                                                            {{ num }}
+                                                        </span>
+                                                    {% else %}
+                                                        <a href="?page={{ num }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">
+                                                            {{ num }}
+                                                        </a>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                {% if activities.has_next %}
+                                                    <a href="?page={{ activities.next_page_number }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
+                                                        Next
+                                                    </a>
+                                                {% endif %}
+                                            </nav>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="text-center py-12">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <h3 class="mt-2 text-sm font-medium text-gray-900">No activity found</h3>
+                                        <p class="mt-1 text-sm text-gray-500">Get started by performing some actions on your account.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

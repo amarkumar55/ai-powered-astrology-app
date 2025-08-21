@@ -15,4 +15,9 @@ urlpatterns = [
    path('password/reset/done/',ratelimit(key='user_or_ip', rate='5/m', block=True) (auth_views.PasswordResetDoneView.as_view(template_name='authentication/password_reset_done.html')), name='password_reset_done'),
    path('reset/<uidb64>/<token>/',ratelimit(key='user_or_ip', rate='5/m', block=True) (views.CustomPasswordResetConfirmView.as_view()), name='password_reset_confirm'),
    path('reset/done/', ratelimit(key='user_or_ip', rate='5/m', block=True)(auth_views.PasswordResetCompleteView.as_view(template_name='authentication/password_reset_complete.html')), name='password_reset_complete'),
+   path(
+      'account/restore',
+      ratelimit(key='user_or_ip', rate='5/m', block=True)(views.AccountRestoreView.as_view()),
+      name='account.restore'
+   )
 ]

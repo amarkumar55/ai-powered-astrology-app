@@ -2,12 +2,13 @@ from django.db import models
 from invoice.models import Invoice
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
+from home.models import TimeStampMixin
 
 User = get_user_model()
 
     
 
-class Feature(models.Model):
+class Feature(TimeStampMixin):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=False)
     qty = models.IntegerField()
@@ -21,30 +22,38 @@ class Feature(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.qty}" 
+    
+    class Mata:
+        app_label = "core"
+    
+ 
 
 
-class Plan(models.Model):
+class Plan(TimeStampMixin):
 
     name = models.CharField(max_length=100)
-    features = models.ManyToManyField(Feature, related_name='features')    
+    features = models.ManyToManyField(Feature, related_name='features', blank=False)    
     description = models.TextField(null=True, blank=True)
     slug = models.SlugField(unique=True, blank=False)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     duration_days = models.IntegerField(help_text="Number of days the plan is valid")
     razorpay_plan_id = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super(Plan, self).save(*args, **kwargs)
 
+
+    class Mata:
+        app_label = "core"
+    
+
     
 
 
-class UserSubscription(models.Model):
+class UserSubscription(TimeStampMixin):
    
     STATUS_CHOICES = (
         ("active", "Active"),
@@ -52,8 +61,9 @@ class UserSubscription(models.Model):
         ("cancelled", "Cancelled"),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('core.CustomUser', on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+    is_trial = models.BooleanField(default=False)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="active")
@@ -61,23 +71,31 @@ class UserSubscription(models.Model):
     payment_paid = models.BooleanField(default=False)
     razorpay_subscription_id = models.CharField(max_length=200, blank=True, null=True)
     razorpay_payment_id = models.CharField(max_length=200, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user} - {self.plan.name} ({self.status})"
+    
+
+    class Mata:
+        app_label = "core"
+    
 
 
-class UserFeatureUsage(models.Model):
+class UserFeatureUsage(TimeStampMixin):
     subscription = models.ForeignKey(UserSubscription, on_delete=models.CASCADE, related_name='feature_usages')
     feature = models.ForeignKey(Feature, on_delete=models.CASCADE)
     remain_quantity = models.IntegerField(default=0)
 
     def remaining(self):
         return max(0, self.feature.qty - self.remain_quantity)
+    
+   
+    class Mata:
+        app_label = "core"
+    
 
 
-class UserTransaction(models.Model):
+class UserTransaction(TimeStampMixin):
   
     PAYMENT_METHOD_CHOICES = [
         ("Credit Card", "Credit Card"),
@@ -96,7 +114,7 @@ class UserTransaction(models.Model):
         ("Cancelled", "Cancelled"),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
+    user = models.ForeignKey('core.CustomUser', on_delete=models.CASCADE, related_name='users')
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoices')
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
     transaction_id = models.CharField(max_length=255, unique=True,  blank=False, null=False)
@@ -107,10 +125,9 @@ class UserTransaction(models.Model):
     refund_id = models.CharField(max_length=255, blank=True, null=True)
     refunded_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     transaction_date = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['-transaction_date']
-
+        app_label = "core"
     def __str__(self):
         return f"{self.transaction_id} - {self.status}"

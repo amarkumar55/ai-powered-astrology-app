@@ -1,0 +1,71 @@
+{% extends "includes/base.html" %}
+{% load custom_filters %}
+{% block title %} Dashboard | Account | Change Notification Setting {% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div class="relative flex flex-col lg:flex-row gap-8">
+            <div class="md:flex w-full">
+                {% include 'dashboard/sidebar.html' %}
+                <div class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                        <form  id="notification_preference" method="POST" action="{% url 'dashboard.notification_settings' %}">
+                            {% csrf_token %}
+
+                            <div class="border-b border-gray-200 pb-6">
+                                <h2
+                                    class="text-2xl rounded-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                                    Change Notification Setting
+                                </h2>
+                                <p class="mt-2 text-gray-600">Update your preferences weather you want to receive updates from us 
+                                  
+                                </p>
+                            </div>
+
+                    
+                            <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <!-- Hidden checkbox -->
+                                    <input type="checkbox" name="notification_preference" class="sr-only peer" 
+                                        {% if request.user.notification_preference %}checked{% endif %}>
+                            
+                                    <!-- Toggle track -->
+                                    <div class="toggle-track w-11 h-6 bg-gray-200 rounded-full relative">
+                                        <div class="toggle-thumb absolute left-1 top-1 w-4 h-4 bg-white rounded-full"></div>                             
+                                     </div>
+                            
+                                    <!-- Label text (optional, not affecting peer logic) -->
+                                    <span class="ml-3 text-sm text-gray-700">
+                                        Notification
+                                    </span>
+                                </label>
+                            
+                                {% if form.errors.notification_preference %}
+                                <p class="text-sm text-red-600 mt-2">{{ form.errors.notification_preference }}</p>
+                                {% endif %}
+                            </div>
+                              
+
+                            <div class="flex justify-end pt-6 border-t border-gray-200">
+                                <a href="{% url 'dashboard.get_account_view' %}"
+                                    class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 mr-4">
+                                    Cancel
+                                </a>
+                                <button type="submit" 
+                                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                    Update Setting
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

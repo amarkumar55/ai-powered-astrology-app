@@ -1,6 +1,10 @@
+import uuid
+import json
 import datetime
+from django.core import serializers
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.urls import reverse
 from django.contrib import messages
 from django.utils.timezone import now
 from panchang.forms import PanchangForm
@@ -23,14 +27,23 @@ class DashaAntarDashaView(View):
     template_name = "dasha/index.html"
 
     def get(self, request):
+        tag = request.GET.get('tag', '').strip()
+        session_key = f'dasha_result_{tag}'
+        data = request.session.get(session_key)
+        is_report_generate = data is not None
         show_captcha, context = handle_captcha_logic(request, {})
         form = PanchangForm(show_captcha=show_captcha)
 
         context.update({
             "form": form,
-            "is_report_generate": False,
+            "is_report_generate": is_report_generate,
             "show_captcha": show_captcha,
+            "name": data.get("name") if data else "",
+            "place": data.get("place") if data else "",
+            "antar_dasha_details": json.loads(data.get("antar_dasha_details", "[]")) if data else [],
+            "current_dasha_affect": json.loads(data.get("current_dasha_affect", "[]")) if data else []
         })
+
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -115,10 +128,24 @@ class DashaAntarDashaView(View):
                     antar_dasha_details = AntarDasha.objects.filter(birth_details=birth_details)
 
                 current_time = now()
+
                 current_dasha_affect = DashaEffect.objects.filter(
                     start_date__lte=current_time,
                     end_date__gte=current_time
                 )
+
+                antar_dasha_serialized = serializers.serialize('json', antar_dasha_details)
+                current_dasha_serialized = serializers.serialize('json', current_dasha_affect)
+
+                data = {
+                    "name": f"{first_name} {last_name}",
+                    "place": place,
+                    "antar_dasha_details": antar_dasha_serialized,
+                    "current_dasha_affect": current_dasha_serialized
+                }
+
+                tag = uuid.uuid4().hex 
+                request.session[f'dasha_result_{tag}'] = data
 
                 reset_failed_attempts(request)
                 if request.user.is_authenticated:
@@ -128,14 +155,7 @@ class DashaAntarDashaView(View):
 
                 messages.success(request, "Your Dasha and Antar Dasha prediction is generated.")
 
-                return render(request, self.template_name, {
-                    "form": form,
-                    "name": f"{first_name} {last_name}",
-                    "place": place,
-                    "is_report_generate": True,
-                    "antar_dasha_details": antar_dasha_details,
-                    "current_dasha_affect": current_dasha_affect
-                })
+                return redirect(f"{reverse('dasha.index')}?tag={tag}")
 
             except Exception as e:
                 increment_failed_attempts(request)

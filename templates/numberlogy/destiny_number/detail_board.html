@@ -1,15 +1,16 @@
 {% load custom_filters %}
-<div class="mx-auto max-w-7xl px-10">
+<div class="mx-auto max-w-7xl px-10 py-16">
     <div class="relative flex py-4 flex-col gap-4 h-auto mb-5">
-        <div class="container mx-auto px-6 py-6 lg:px-20 text-center">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Hii {{ data.name }}, Your Destiny Number Predition
-                Here ❤️</h2>
+        <div class="text-center mb-8">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8">
+                <h2 class="text-4xl font-bold text-white mb-3">✨ Your Personalized Destiny Number Prediction ✨</h2>
+            </div>
         </div>
 
         <div
-            class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
-            <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">✨Your Destiny Number is {{ data.destiny_number }}✨</h2>
-            <p class="text-md text-center text-gray-600 dark:text-gray-300">
+            class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100  flex flex-col items-center justify-center px-8 py-6 space-y-4">
+            <h2 class="text-3xl font-extrabold text-gray-300 mb-2">✨Your Destiny Number is {{ data.destiny_number }}✨</h2>
+            <p class="text-md text-center text-gray-500">
                 Discover the hidden meanings behind your destiny number and how they influence your personality and destiny.
                 Explore your strengths, challenges, to balance your life.
             </p>
@@ -19,7 +20,7 @@
                     <div
                         class="flex flex-row gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105">
                         <div class="flex flex-col justify-center space-y-2">
-                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                            <p class="text-sm text-gray-500">
                                 <strong>{{num_key | capfirst}}:</strong> {{ num_value |capfirst }}
                             </p>
                         </div>

@@ -1,0 +1,69 @@
+{% extends 'admin_panel/base.html' %}
+{% load custom_filters %}
+{% block title %} Log Details - Astro Admin Panel{% endblock %}
+{% block content %}
+<div class="min-h-screen w-full p-2">
+    <!-- User Information -->
+    <div class="mb-6">
+        <h2 class="text-2xl font-semibold text-white">Error Information</h2>
+        <p class="text-sm text-gray-100">Overview of #{{error.id}} Error</p>
+    </div>
+
+    <div class="bg-white flex flex-col gap-4 rounded-lg shadow-md py-6 px-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <p class="text-gray-500">{{error.level}}</p>
+                <p class="text-gray-700">{{error.timestamp}}</p>
+                <p class="text-gray-700">
+                {% if error.status == True %}
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-green-800">
+                    Solved
+                </span>
+                {% else %}
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-red-800">
+                    Pending
+                </span>
+                {% endif %}</p>
+            </div>
+            <div>
+                <form method="POST" action="{% url 'admin_panel:admin_logs_details' error.id %}" class="flex flex-row items-center gap-4">
+                   {% csrf_token %}    
+                   
+                    <div>
+                        <select name="status" id="status" required
+                            class="mt-1 block w-full p-2 text-gray-700 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                            <option value="1" {% if error.status == '1' %}selected{% endif %}>Resolved</option>
+                            <option value="0" {% if error.status == '0' %}selected{% endif %}>Pending</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">Update
+                            Status</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <hr class="my-4 text-gray-300 md:min-w-full" />
+
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Error Message</h3>
+            <div class="space-y-4">
+                <p class="text-gray-500">{{error.message}}</p>
+            </div>
+        </div>
+
+        <hr class="my-4 text-gray-300 md:min-w-full" />
+        <!-- Subscriptions -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Error Trackback</h3>
+            <div class="space-y-4">
+            <p class="text-sm text-gray-500">{{error.traceback}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

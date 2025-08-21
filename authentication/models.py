@@ -1,3 +1,6 @@
+from django.db import models
+
+# Create your models here.
 import bleach
 import random
 from django.db import models
@@ -6,6 +9,8 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from home.models import TimeStampMixin
+import secrets
 
 
 class CustomUserManager(BaseUserManager):
@@ -15,6 +20,7 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('The Email field must be set')
         
+
         if not password:
             raise ValueError('The Password field must be set')
         
@@ -44,7 +50,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
     
     
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class CustomUser(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
   
     alphabetic = RegexValidator(
         regex=r'^[a-zA-Z]*$',
@@ -55,7 +61,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, blank=False, null=False, validators=[alphabetic])
     last_name = models.CharField(max_length=30,  blank=False, null=False, validators=[alphabetic])
     email = models.EmailField(unique=True, blank=False, null=False, error_messages={
-        'unquie':'A user with this email already exists.'
+        'unique':'A user with this email already exists.'
     })
     is_email_verified=models.BooleanField(default=False)
     username = models.CharField(max_length=30, unique=True, blank=False, null=False)
@@ -80,12 +86,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     timezone = models.CharField(max_length=50, blank=True, null=True)    
-    language_preference = models.CharField(max_length=10, default="English")
+    language_preference = models.CharField(max_length=10, default="en")
     notification_preference = models.BooleanField(default=True)
     bio = models.TextField(blank=True, null=True)
     payment_method = models.CharField(max_length=20, null=True, blank=True)
     is_temporarily_disabled = models.BooleanField(default=False, blank=True, null=True)
-    is_parament_disabled = models.BooleanField(default=False,blank=True, null=True )
+    is_permanent_disabled = models.BooleanField(default=False,blank=True, null=True )
     is_remember_me = models.BooleanField(default=False, blank=True, null=True)
     password_reset_token = models.TextField(null=True, blank=True)
     is_profile_block = models.BooleanField(default=False)
@@ -95,9 +101,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active=models.BooleanField(default=True)
     objects = CustomUserManager()
     USERNAME_FIELD  = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'birth_date', 'last_login', 'date_joined', 'gender', 'username']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'birth_date',  'gender', 'username']
 
-
+    class Meta:
+        app_label = "core"
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+   
     def save(self, *args, **kwargs):
         self.first_name = bleach.clean(self.first_name, tags=[], strip=True)
         self.last_name = bleach.clean(self.last_name, tags=[], strip=True)
@@ -112,7 +122,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 User = get_user_model()
 
-class UserActivity(models.Model):
+
+class UserActivity(TimeStampMixin):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     activity_type = models.CharField(blank=False, null=False, max_length=100)
@@ -127,9 +138,14 @@ class UserActivity(models.Model):
     device_model = models.CharField(max_length=100, blank=True, null=True)
     device_type = models.CharField(max_length=100, blank=True, null=True)
 
+    class Meta:
+        verbose_name = "User Activities"
+        verbose_name_plural = "User Activities"
+        app_label = "core"
 
 
-class UserOtp(models.Model):
+
+class UserOtp(TimeStampMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     otp_validator = RegexValidator(r'^\d{8}$', 'OTP must be exactly 8 digits.')
 
@@ -150,14 +166,15 @@ class UserOtp(models.Model):
     def __str__(self):
         return f"OTP for {self.user}"
     
+    class Meta:
+        app_label = "core"
 
 
-class TwoFactorPhoneDevice(models.Model):
+class TwoFactorPhoneDevice(TimeStampMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='phone_devices')
     phone_number = models.CharField(max_length=15)
     otp = models.CharField(max_length=6, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
     otp_generated_at = models.DateTimeField(blank=True, null=True)
 
     def generate_otp(self):
@@ -177,9 +194,12 @@ class TwoFactorPhoneDevice(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.phone_number}"
     
+    class Meta:
+        app_label = "core"
+    
 
 
-class EmailOTP(models.Model):
+class EmailOTP(TimeStampMixin):
     email = models.EmailField()
     otp = models.CharField(max_length=6)
     otp_created_at = models.DateTimeField()
@@ -190,3 +210,72 @@ class EmailOTP(models.Model):
 
     def verify_otp(self, otp_input):
         return self.otp == str(otp_input)
+    
+    class Meta:
+        app_label = "core"
+
+
+class Wallet(TimeStampMixin):
+    user = models.OneToOneField('core.CustomUser', on_delete=models.CASCADE, related_name='wallet')
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    class Meta:
+        app_label = "core"
+        verbose_name = 'Wallet'
+        verbose_name_plural = 'Wallets'
+
+    def __str__(self):
+        return f"Wallet of {self.user.email} - Balance: ₹{self.balance}"
+
+    def can_afford(self, amount):
+        return self.balance >= amount
+
+    def deduct(self, amount):
+        if self.can_afford(amount):
+            self.balance -= amount
+            self.save()
+            return True
+        return False
+
+    def add(self, amount):
+        self.balance += amount
+        self.save()
+        return self.balance
+    
+  
+class WalletTransaction(TimeStampMixin):
+    TRANSACTION_TYPES = [
+        ('credit', 'Credit'),
+        ('debit', 'Debit'),
+    ]
+
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
+    description = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        app_label = "core"
+        verbose_name = 'Wallet Transaction'
+        verbose_name_plural = 'Wallet Transactions'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.transaction_type.title()} ₹{self.amount} for {self.wallet.user.email}"
+
+
+
+class Follow(TimeStampMixin):
+    follower = models.ForeignKey(User, related_name="following", on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name="followers", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = "core"
+        unique_together = ('follower', 'following')
+        verbose_name = 'User Followers & following list'
+        verbose_name_plural = 'User Followers & following list'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Total Follower {self.follower}, Total Following {self.following}"

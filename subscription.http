@@ -1,0 +1,59 @@
+GET https://astro.local/api/1.0/subscription/plans/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+####
+
+GET https://astro.local/api/1.0/subscription/plans/free-plan/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+####
+
+GET https://astro.local/api/1.0/subscription/my/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+####
+
+POST https://astro.local/api/1.0/subscription/checkout/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="plan_id"
+
+1
+--boundary123--
+
+
+####
+
+POST https://astro.local/api/1.0/subscription/assign/
+Authorization: Token 4519bc0fe68eb280c0d18223ba3c746812e6db22
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="plan_id"
+
+1
+--boundary123
+Content-Disposition: form-data; name="razorpay_payment_id"
+
+32432532
+--boundary123
+Content-Disposition: form-data; name="razorpay_order_id"
+
+35332432423
+--boundary123
+Content-Disposition: form-data; name="razorpay_signature"
+
+#rewt4w532w5v3wewarew
+--boundary123--

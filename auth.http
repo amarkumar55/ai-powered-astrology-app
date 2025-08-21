@@ -1,0 +1,253 @@
+POST https://astro.local/api/1.0/auth/register/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="first_name"
+
+Amar
+--boundary123
+Content-Disposition: form-data; name="last_name"
+
+Kumar
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com
+--boundary123
+Content-Disposition: form-data; name="password"
+
+Adevtest@44
+--boundary123
+Content-Disposition: form-data; name="confirm_password"
+
+Adevtest@44
+--boundary123
+Content-Disposition: form-data; name="birth_date"
+
+1995-12-08
+--boundary123
+Content-Disposition: form-data; name="gender"
+
+Male
+--boundary123--
+Content-Disposition: form-data; name="is_accepted_terms"
+
+True
+
+
+####
+POST https://astro.local/api/1.0/auth/login/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com
+--boundary123
+Content-Disposition: form-data; name="password"
+
+@Amar9691
+
+
+####
+POST https://astro.local/api/1.0/auth/account/restore/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com
+--boundary123
+Content-Disposition: form-data; name="password"
+
+@Amar9691
+
+
+####
+POST https://astro.local/api/1.0/auth/login/2fa/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com
+--boundary123
+Content-Disposition: form-data; name="otp"
+
+105740
+
+
+####
+POST https://astro.local/api/1.0/auth/logout/
+Authorization: Token 391d7cd7c74610765f5dace5613d231b265f96ff
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+####
+POST https://astro.local/api/1.0/auth/resend-verification/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com
+
+
+
+#### 
+POST https://astro.local/api/1.0/auth/verify-email/MTc/ct6tf2-3a2d544cc369c36b972e92b89b3f1632/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+
+
+#### 
+GET https://astro.local/api/1.0/auth/check-auth/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+####
+POST  https://astro.local/api/1.0/auth/password-reset-request/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com
+
+
+
+####
+POST  https://astro.local/api/1.0/auth/password-reset-confirm/MTc/ct77op-d78ec83801df96caaf7ba8db58bbb5da/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="new_password"
+
+@Amar9691
+
+--boundary123
+Content-Disposition: form-data; name="confirm_password"
+
+@Amar9691
+
+
+####
+GET  https://astro.local/api/1.0/auth/profile/
+Authorization: Token 9c17b39de50fd0c83c868d452b432216b8cad08b
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+
+
+####
+PUT  https://astro.local/api/1.0/auth/profile/
+Authorization: Token e24305e369695fb1b8c38248149b78cd240cf1c0
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+--boundary123
+Content-Disposition: form-data; name="bio"
+
+Amar kumar Accept-Encoding data
+
+--boundary123
+Content-Disposition: form-data; name="country_code"
+
+IN
+
+--boundary123
+Content-Disposition: form-data; name="cell"
+
+9685079691
+
+
+--boundary123
+Content-Disposition: form-data; name="birth_place"
+
+Antri, Gwalior, Madhya Pradesh
+
+
+--boundary123
+Content-Disposition: form-data; name="two_factor_enabled"
+
+True
+
+
+
+####
+POST  https://astro.local/api/1.0/auth/change-password/
+Authorization: Token e24305e369695fb1b8c38248149b78cd240cf1c0
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+--boundary123
+Content-Disposition: form-data; name="old_password"
+
+
+@Amar9691
+--boundary123
+Content-Disposition: form-data; name="new_password"
+
+@@Amar9695
+--boundary123
+Content-Disposition: form-data; name="confirm_password"
+
+@@Amar9695
+
+
+
+####
+POST  https://astro.local/api/1.0/auth/verify-password/
+Authorization: Token 391d7cd7c74610765f5dace5613d231b265f96ff
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+--boundary123
+Content-Disposition: form-data; name="password"
+
+
+@Amar9691
+
+
+
+####
+POST  https://astro.local/api/1.0/auth/2fa-setup/
+Authorization: Token 391d7cd7c74610765f5dace5613d231b265f96ff
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+
+--boundary123
+Content-Disposition: form-data; name="enable_2fa"
+
+1
+
+
+
+####
+POST https://astro.local/api/1.0/auth/resend/otp/
+Content-Type: multipart/form-data; boundary=boundary123
+X-App-Source: smartnotes
+
+--boundary123
+Content-Disposition: form-data; name="email"
+
+test@gmail.com

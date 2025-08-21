@@ -1,5 +1,4 @@
-<footer class="bg-hcolor shadow-lg shadow-[bg-hcolor] text-white w-full px-6 py-12 space-y-6 mt-auto border-t border-white/10">
- 
+<footer>
   <div class="mx-auto px-4 sm:px-6 lg:px-8  py-12 flex flex-col lg:flex-row justify-between items-start gap-12 text-sm">
       <!-- Company -->
       <div class="px-12">
@@ -28,7 +27,8 @@
             <li><a href="{% url 'matching.index' %}" class="hover:text-white transition duration-300">Kundli Matching</a></li>
             <li><a href="{% url 'horoscope.daily_horoscope' %}" class="hover:text-white transition duration-300">Daily Horoscope</a></li>
             <li><a href="{% url 'horoscope.weekly_horoscope' %}" class="hover:text-white transition duration-300">Weekly Horoscope</a></li>
-            <li><a href="#" class="hover:text-white transition duration-300">Monthly Horoscope</a></li>
+            <li><a href="{% url 'horoscope.monthly_horoscope' %}" class="hover:text-white transition duration-300">Monthly Horoscope</a></li>
+            <li><a href="{% url 'horoscope.yearly_horoscope' %}" class="hover:text-white transition duration-300">Yearly Horoscope</a></li>
           </ul>
       
           <ul class="space-y-2 text-gray-400">
@@ -63,6 +63,5 @@
         </ul>
       </div>
   </div>
-
   <p class="mt-12 text-center text-sm text-gray-400">© {{ year }} amaraiverse.com, Inc. All rights reserved.</p>
 </footer>

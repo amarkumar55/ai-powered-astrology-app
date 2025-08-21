@@ -1,96 +1,47 @@
+{% load static %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Astro Admin Panel{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    {% block extra_css %}{% endblock %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Page{% endblock %} - {{ APP_NAME }}</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" nonce="{{ nonce }}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" nonce="{{ nonce }}">
+    <link href="{% static 'fontawesomefree/css/all.css' %}" rel="stylesheet" type="text/css" nonce="{{ nonce }}">
+
 </head>
-<body class="bg-gray-100">
-    <div class="min-h-screen flex">
-        <!-- Sidebar -->
-        <div class="bg-gray-800 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out">
-            <div class="flex items-center space-x-2 px-4">
-                <i class="fas fa-star text-2xl"></i>
-                <span class="text-2xl font-extrabold">Astro Admin</span>
-            </div>
-            <nav>
-                <a href="{% url 'admin_dashboard' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-home mr-2"></i>Dashboard
-                </a>
-                <a href="{% url 'admin_users' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-users mr-2"></i>Users
-                </a>
-                <a href="{% url 'admin_blogs' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-blog mr-2"></i>Blogs
-                </a>
-                <a href="{% url 'admin_kundli' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-moon mr-2"></i>Kundli
-                </a>
-                <a href="{% url 'admin_horoscope' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-sun mr-2"></i>Horoscope
-                </a>
-                <a href="{% url 'admin_panchang' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-calendar mr-2"></i>Panchang
-                </a>
-                <a href="{% url 'admin_subscription' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-credit-card mr-2"></i>Subscriptions
-                </a>
-                <a href="{% url 'admin_settings' %}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                    <i class="fas fa-cog mr-2"></i>Settings
-                </a>
-            </nav>
-        </div>
 
-        <!-- Main Content -->
-        <div class="flex-1">
-            <!-- Top Navigation -->
-            <header class="bg-white shadow-lg">
-                <div class="flex items-center justify-between px-6 py-4">
-                    <div class="flex items-center">
-                        <button class="text-gray-500 focus:outline-none md:hidden">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <div class="relative mx-4">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                                <i class="fas fa-search text-gray-500"></i>
-                            </span>
-                            <input class="form-input w-32 sm:w-64 rounded-md pl-10 pr-4 py-2 border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" type="text" placeholder="Search">
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <button class="flex mx-4 text-gray-600 focus:outline-none">
-                            <i class="fas fa-bell"></i>
-                        </button>
-                        <div class="relative">
-                            <button class="flex items-center text-gray-600 focus:outline-none">
-                                <img class="h-8 w-8 rounded-full object-cover" src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff" alt="Admin">
-                                <span class="mx-2">{{ request.user.username }}</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                    </div>
+<body class="min-h-screen">
+
+    {% include 'admin_panel/sidebar.html' %}
+    
+    <div class="relative md:ml-64 bg-slate-100">
+
+        {% include 'admin_panel/navbar.html' %}
+        {% include 'admin_panel/header.html' %}
+        
+        <div class="bg-gray-100 px-4 md:px-10 mx-auto w-full -m-24">
+            <!-- Main content -->
+            <main class="flex-grow relative">
+                <div id="content">
+                    {% block content %}{% endblock %}
                 </div>
-            </header>
-
-            <!-- Page Content -->
-            <main class="p-6">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="mb-4 p-4 rounded {% if message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                
-                {% block content %}{% endblock %}
             </main>
+            {% include 'admin_panel/footer.html' %}
         </div>
+    
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% block extra_js %}{% endblock %}
+    <!-- Scripts -->     
+    <script src="{% static 'js/jquery.min.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/parsley.min.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/validation.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/main.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/chart.min.js' %}" nonce="{{ nonce }}"></script>
+    <script src="{% static 'ckeditor/ckeditor-init.js' %}"  nonce="{{ nonce }}"></script>
+    <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"  nonce="{{ nonce }}"></script>
+    {% block script %}{% endblock %}
 </body>
-</html> 
+</html>

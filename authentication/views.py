@@ -133,11 +133,11 @@ class CustomLoginView(LoginView):
         user = form.get_user()
 
         if  user.is_temporarily_disabled:
-            user.is_temporarily_disabled = False
-            user.is_profile_block = False
-            user.save()
-
-        if user.is_parament_disabled:
+            self.request.session['temporarily_user_email'] = self.request.POST.get('username')
+            return render(self.request, "dashboard/account/profile_disable.html", {"deletion_type": "temporarily"})
+         
+        if user.is_permanent_disabled:
+            
             return render(self.request, "dashboard/account/profile_disable.html", {"deletion_type": "permanent"})
 
         # Handle 2FA
@@ -346,3 +346,28 @@ class ResendVerificationView(View):
 
         context.update({'form': form, 'user': user})
         return render(request, self.template_name, context)
+
+
+
+class AccountRestoreView(View):
+    def get(self, request, *args, **kwargs):
+        email = request.session.get('temporarily_user_email')
+      
+        if not email:
+            return redirect('auth.login')
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return redirect('auth.login')
+
+        user.is_temporarily_disabled = False
+        user.is_profile_block = False
+        user.save()
+        store_activity(self.request, {}, "account_login", user) 
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        request.session.pop('temporarily_user_email')
+        
+        login(request, user)
+
+        return redirect('dashboard.index')

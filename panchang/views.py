@@ -1,3 +1,4 @@
+import uuid
 import datetime
 from .models import Panchang
 from django.views import View
@@ -6,6 +7,7 @@ from django.contrib import messages
 from django.utils.timezone import now
 from utlity.helper import store_activity
 from django.shortcuts import render,redirect
+from django.urls import reverse
 from utlity.panchag import calculate_panchang
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
@@ -28,19 +30,24 @@ class PanchangListView(View):
         
         
 
-@method_decorator([login_required, ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True)], name='dispatch')
+@method_decorator([login_required,ratelimit(key='user_or_ip', rate='1/m', method='POST', block=True)], name='dispatch')
 class UserPersonalizedPanchang(View):
    
     template_name = "panchang/user_personalized.html"
 
     def get(self, request): 
+        tag = request.GET.get('tag', '').strip()
+        session_key = f'panchang_result_{tag}'
+        data = request.session.get(session_key)
+        is_report_generate = data is not None
         show_captcha, context = handle_captcha_logic(request, {})
         form = PanchangForm(show_captcha=show_captcha)
 
         context.update({
             "form": form,
-            "is_report_generate": False,
+            "is_report_generate": is_report_generate,
             "show_captcha": show_captcha,
+            "data" : data
         })
         return render(request, self.template_name, context)
 
@@ -77,21 +84,20 @@ class UserPersonalizedPanchang(View):
                 data = {
                     "name": f"{first_name} {last_name}".strip(),
                     "panchang": panchag_data,
-                    "birth_date": birth_date,
+                    "birth_date": birth_date.isoformat(),
                     "birth_place":place,
                 }
         
              
+                tag = uuid.uuid4().hex 
+                request.session[f'panchang_result_{tag}'] = data
+                
                 reset_failed_attempts(request)
                 store_activity(request, form.cleaned_data.copy(), "panchang_predition_generate", request.user)
                 messages.success(request, "Your Personalized Panchag prediction is generated.")
 
-                return render(request, self.template_name, {
-                        "form": form,
-                        "is_report_generate": True,
-                        "data": data
-                    }   
-                )
+                return redirect(f"{reverse('panchang.user_personalized_panchang')}?tag={tag}")
+
 
             except Exception as e:
                 increment_failed_attempts(request)

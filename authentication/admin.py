@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, UserActivity, UserOtp
+from .models import CustomUser, UserActivity, UserOtp, Wallet
 # Register your models here.
 
 
@@ -41,3 +41,10 @@ class AdminUserOtp(admin.ModelAdmin):
     list_display = ('user','email_otp','mobile_otp',)
     search_fields = ('user',)
     list_filter = ('user',)
+
+
+@admin.register(Wallet)
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ('user', 'balance', 'created_at', 'updated_at')
+    search_fields = ('user__email', 'user__username')
+    readonly_fields = ('created_at', 'updated_at')

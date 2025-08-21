@@ -1,0 +1,351 @@
+{% load static %}
+<nav
+    class="hidden md:block md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
+    <div
+        class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
+
+        <!-- Mobile menu toggle -->
+        <button
+            class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
+            type="button">
+            <i class="fa fa-bars w-5 h-5"></i>
+        </button>
+
+        <!-- Brand -->
+        <a href="{% url 'admin_panel:admin.dashboard' %}" class="flex items-center gap-2 text-slate-600 text-sm uppercase font-bold p-4 px-0 whitespace-nowrap">
+            <i class="fas fa-home w-5 h-5"></i>
+            <span>{{ APP_NAME }} Panel</span>
+        </a>
+
+        <!-- Mobile dropdown -->
+        <ul class="md:hidden items-center flex flex-wrap list-none">
+            <li class="inline-block relative">
+            
+                <a href="#" class="text-slate-500 block py-1 px-3">
+                    <i class="fa fa-bell"></i>
+                </a>
+
+                <div id="dropdown1"
+                    class="hidden bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1 min-w-48">
+                    <a href="{% url 'admin_panel:admin.dashboard' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        General Dashboard
+                    </a>
+                    <a href="{% url 'admin_panel:admin.analytics_dashboard' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        Analytics Dashboard
+                    </a>
+                    <div class="h-0 my-2 border border-solid border-slate-100"></div>
+                    <a href="{% url 'dashboard.get_profile' %}"
+                        class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        Profile 
+                    </a>
+                    <a href="{% url 'auth.logout' %}" class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-slate-700">
+                        Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Sidebar -->
+        <div
+            class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded">
+
+            <!-- Collapsible header -->
+            <div class="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-slate-200">
+                <div class="flex flex-wrap">
+                    <div class="w-6/12">
+                        <a href="{% url 'admin_panel:admin.dashboard' %}"
+                            class="md:block text-left md:pb-2 text-slate-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+                            {{ APP_NAME }} Panel
+                        </a>
+                    </div>
+                    <div class="w-6/12 flex justify-end">
+                        <button type="button"
+                            class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile search -->
+            <form action="{% url 'admin_panel:admin.dashboard' %}" class="mt-6 mb-4 md:hidden">
+                <div class="mb-3 pt-0">
+                    <input type="text" placeholder="Search"
+                        class="border-0 px-3 py-2 h-12 border border-solid border-slate-500 placeholder-slate-300 text-slate-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal" />
+                </div>
+            </form>
+
+            <hr class="my-4 md:min-w-full" />
+
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Analytics Management
+            </h6>
+         
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin.dashboard' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-tachometer w-5 h-5 mr-2 text-sm"></i>
+                        General Dashboard
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin.analytics_dashboard' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-bar-chart w-5 h-5 mr-2 text-sm"></i>
+                        Analytics Dashboard
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Users Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_users' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-user w-5 h-5 mr-2 text-sm"></i>
+                        Users List
+                    </a>
+                </li>
+            </ul>
+
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Category Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_categories' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-file-text w-5 h-5 mr-2 text-sm"></i>
+                        Categories List
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_category_create' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-plus  w-5 h-5 mr-2 text-sm"></i>
+                        Create Category
+                    </a>
+                </li>
+            </ul>
+
+          
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Blog Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_blogs' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-file-text w-5 h-5 mr-2 text-sm"></i>
+                        Posts List
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_blog_create' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-plus  w-5 h-5 mr-2 text-sm"></i>
+                        Create Post
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Subscription Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_subscription' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-user-plus mr-2 h-5 w-5 text-sm"></i>
+                        All Subscriptions
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Plans Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_plans' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-user-plus mr-2 h-5 w-5 text-sm"></i>
+                        Plans List
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_plans_create' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-user-plus mr-2 h-5 w-5 text-sm"></i>
+                        Create Plan
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Invoice Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_invoice_list' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-file-text h-5 w-5 mr-2 text-sm"></i>
+                        Invoices List
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Payment Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_transactions' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-inr h-5 w-5 mr-2 text-sm"></i>
+                        Transactions List
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Panchang Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_panchang' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-tasks h-5 w-5 mr-2 text-sm"></i>
+                        Panchang List
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                HoroScope Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_horoscope_daily' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-h-square h-5 w-5 mr-2 text-sm"></i>
+                        Daily Horoscope
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_horoscope_weekly' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-h-square h-5 w-5 mr-2 text-sm"></i>
+                        Weekly Horoccope
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_horoscope_monthly' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-h-square h-5 w-5 mr-2 text-sm"></i>
+                        Monthly Horoccope
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_horoscope_yearly' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa fa-h-square h-5 w-5 mr-2 text-sm"></i>
+                        Yearly Horoccope
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Dasha And Antra Dasha Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_dasha_effect' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa-brands fa-dashcube h-5 w-5 mr-2 text-sm"></i>
+                      
+                       Dasha Effect List
+                    </a>
+                </li>
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_dasha_effect_create' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa-brands fa-dashcube h-5 w-5 mr-2 text-sm"></i>
+                        Create New Dasha
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Kundli Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_kundli' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa-solid fa-book h-5 w-5 mr-2 text-sm"></i>
+                        Premium Kundli List
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Setting Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_settings' %}" class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa-solid fa-gear w-5 h-5 mr-2 text-sm"></i>
+                        Configuration
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="my-4 md:min-w-full" />
+            <!-- Navigation -->
+            <h6 class="md:min-w-full text-slate-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+                Error Logs Management
+            </h6>
+            
+            <ul class="md:flex-col md:min-w-full text-slate-700 flex flex-col list-none">
+                <li class="items-center">
+                    <a href="{% url 'admin_panel:admin_logs' %}"
+                        class="flex items-center gap-2 text-xs uppercase py-3 font-bold block text-gray-400 hover:text-sky-600">
+                        <i class="fa-solid fa-flag w-5 h-5 mr-2 text-sm"></i>
+                        Logs
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>

@@ -11,8 +11,8 @@ urlpatterns = [
     path("profile/index", views.ProfileUpdateView.as_view(), name="dashboard.get_profile"),
     path("payment-history/index", views.get_payment_history, name="dashboard.get_payment_history"),
     path("payment-refund-history/index", views.get_refund_history, name="dashboard.get_refund_history"),
-    path("manage-account/index", views.AccountDeleteView.as_view(), name="dashboard.get_account_view"),
-    path('password_change/', auth_views.PasswordChangeView.as_view(template_name='authentication/password_change.html'), name='password_change'),
+    path("manage-account/index", views.AccountManageView.as_view(), name="dashboard.get_account_view"),
+    path('password_change/', auth_views.PasswordChangeView.as_view(template_name='authentication/password_change.html'), name='dashboard.change_password'),
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='authentication/password_change_done.html'), name='password_change_done'),    
     path("secure-your-account/index", views.get_setting, name='dashboard.get_setting'),
     path('secure-your-account/disable/2fa', views.DisableTwoFactorView.as_view(), name="dashboard.disable.2fa"),
@@ -21,4 +21,6 @@ urlpatterns = [
     path('change-email/', views.change_email_view, name='dashboard.change_email'),
     path('change-email/generate-otp/', views.SendOTPForEmailChangeView.as_view(), name='emai_generate_otp'),
     path('change-email/verify-otp/', views.VerifyOTPForEmailChangeView.as_view(), name='email_verify_otp'),
+    path('change-notification-setting/index', views.ManageNotificationView.as_view(), name ='dashboard.notification_settings'),
+    path('delete-or-deactive-account/', views.AccountDeleteView.as_view(), name='dashboard.get_delete_account'),
 ]

@@ -44,8 +44,7 @@ class ProfileForm(forms.Form):
     profile = forms.FileField(required=False)
     place = forms.CharField(max_length=255, required=False)
     timezone = forms.CharField(max_length=255, required=False)
-    notification_preference = forms.BooleanField(required=False)
-
+ 
     password = forms.CharField(
         min_length=8,
         error_messages={
@@ -431,3 +430,8 @@ class VerifyEmailChangeOTP(forms.Form):
                 cleaned_data[field] = bleach.clean(value, tags=[], strip=True)
 
         return cleaned_data
+    
+
+
+class NotificationPreferenceForm(forms.Form):
+    notification_preference = forms.BooleanField(required=False)

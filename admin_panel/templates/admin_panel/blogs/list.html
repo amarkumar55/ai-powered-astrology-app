@@ -1,216 +1,152 @@
 {% extends 'admin_panel/base.html' %}
 
-{% block title %}Blogs - Astro Admin Panel{% endblock %}
+{% block title %}Blog Posts - Astro Admin Panel{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-semibold text-gray-800">Blogs</h2>
-            <a href="{% url 'admin_panel:admin_blog_create' %}" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                <i class="fas fa-plus mr-2"></i>New Blog
-            </a>
+<div class="min-h-screen w-full mx-auto p-2">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Blog Posts</h2>
+            <p class="text-sm text-gray-100">Manage your blog posts and content</p>
         </div>
-
-        <!-- Search and Filter -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-            <div class="flex-1">
-                <input type="text" id="searchInput" placeholder="Search blogs..." class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
-            </div>
-            <div class="w-full md:w-48">
-                <select id="categoryFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
-                    <option value="">All Categories</option>
-                    <option value="Astrology">Astrology</option>
-                    <option value="Horoscope">Horoscope</option>
-                    <option value="Zodiac">Zodiac</option>
-                    <option value="Numerology">Numerology</option>
-                    <option value="Vastu">Vastu</option>
-                </select>
-            </div>
-            <div class="w-full md:w-48">
-                <select id="statusFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
-                    <option value="">All Status</option>
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Blogs Table -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for blog in blogs %}
-                    <tr class="blog-row" data-category="{{ blog.category }}" data-status="{{ blog.status }}">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                {% if blog.image %}
-                                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="h-10 w-10 rounded-full object-cover mr-3">
-                                {% else %}
-                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                                    <i class="fas fa-image text-gray-400"></i>
-                                </div>
-                                {% endif %}
-                                <div>
-                                    <div class="text-sm font-medium text-gray-900">{{ blog.title }}</div>
-                                    <div class="text-sm text-gray-500">{{ blog.slug }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                {{ blog.category }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ blog.author.get_full_name }}</div>
-                            <div class="text-sm text-gray-500">{{ blog.author.email }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if blog.status == 'published' %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
-                                {{ blog.status|title }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ blog.created_at|date:"M d, Y" }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex space-x-3">
-                                <a href="{% url 'admin_panel:admin_blog_detail' blog.id %}" class="text-indigo-600 hover:text-indigo-900">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{% url 'admin_panel:admin_blog_edit' blog.id %}" class="text-blue-600 hover:text-blue-900">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button onclick="deleteBlog({{ blog.id }})" class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                            No blogs found.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        {% if blogs.has_other_pages %}
-        <div class="flex justify-between items-center mt-6">
-            <div class="text-sm text-gray-700">
-                Showing {{ blogs.start_index }} to {{ blogs.end_index }} of {{ blogs.paginator.count }} blogs
-            </div>
-            <div class="flex space-x-2">
-                {% if blogs.has_previous %}
-                <a href="?page={{ blogs.previous_page_number }}" class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
-                    Previous
-                </a>
-                {% endif %}
-                
-                {% for num in blogs.paginator.page_range %}
-                    {% if blogs.number == num %}
-                    <span class="px-3 py-1 rounded-md bg-indigo-600 text-white">{{ num }}</span>
-                    {% elif num > blogs.number|add:'-3' and num < blogs.number|add:'3' %}
-                    <a href="?page={{ num }}" class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
-                        {{ num }}
-                    </a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if blogs.has_next %}
-                <a href="?page={{ blogs.next_page_number }}" class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
-                    Next
-                </a>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
+        <a href="{% url 'admin_panel:admin_blog_create' %}" class="bg-indigo-600 shadow-md shadow-blue-500  text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+            <i class="fas fa-plus mr-2"></i>New Post
+        </a>
     </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg flex flex-row justify-end items-center shadow-md p-4 mb-6">
+        <form method="get" accept="{% url 'admin_panel:admin_blogs' %}" class="flex items-center space-x-4">
+         
+            {% include 'admin_panel/fields/search.html' with name="search" value=request.GET.search %}
+            {% include 'admin_panel/fields/select.html' with name="status" options=status_choices selected=request.GET.status %}
+            <div>
+                <select name="category"
+                    class="w-full p-2 text-gray-700  rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"i" %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% include 'admin_panel/fields/button.html' %}         
+        </form>
+    </div>
+
+    <!-- Blog Posts Table -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for post in posts %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            {% if post.featured_image %}
+                            <img class="h-10 w-10 rounded-full object-cover mr-3" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                            {% else %}
+                            <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
+                                <i class="fas fa-image text-gray-400"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">{{ post.title }}</div>
+                                <div class="text-sm text-gray-500">{{ post.slug }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {{ post.category.name }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ post.author.get_full_name|default:post.author.username }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            {% if post.status == 'published' %}bg-green-100 text-green-800
+                            {% elif post.status == 'draft' %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ post.status|title }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ post.views }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ post.created_at|date:"M d, Y" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="{% url 'admin_panel:admin_blog_detail' post.id %}" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{% url 'admin_panel:admin_blog_edit' post.id %}" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'admin_panel:admin_blog_delete' post.id %}" class="text-red-600 hover:text-red-900"
+                            onclick="return confirm('Are you sure you want to delete this post?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                        No blog posts found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if posts.has_other_pages %}
+    <div class="flex justify-between items-center mt-6">
+        <div class="text-sm text-gray-700">
+            Showing {{ posts.start_index }} to {{ posts.end_index }} of {{ posts.paginator.count }} posts
+        </div>
+        <div class="flex space-x-2">
+            {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                Previous
+            </a>
+            {% endif %}
+            
+            {% for num in posts.paginator.page_range %}
+                {% if posts.number == num %}
+                <span class="px-3 py-1 rounded-md bg-indigo-600 text-white">{{ num }}</span>
+                {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                <a href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                    class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                    {{ num }}
+                </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" 
+                class="px-3 py-1 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                Next
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Search functionality
-    document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('.blog-row');
-        
-        rows.forEach(row => {
-            const title = row.querySelector('.text-gray-900').textContent.toLowerCase();
-            const slug = row.querySelector('.text-gray-500').textContent.toLowerCase();
-            const author = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            
-            if (title.includes(searchTerm) || slug.includes(searchTerm) || author.includes(searchTerm)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-
-    // Filter functionality
-    function applyFilters() {
-        const categoryFilter = document.getElementById('categoryFilter').value;
-        const statusFilter = document.getElementById('statusFilter').value;
-        const rows = document.querySelectorAll('.blog-row');
-        
-        rows.forEach(row => {
-            const category = row.dataset.category;
-            const status = row.dataset.status;
-            
-            const categoryMatch = !categoryFilter || category === categoryFilter;
-            const statusMatch = !statusFilter || status === statusFilter;
-            
-            if (categoryMatch && statusMatch) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-
-    document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-    document.getElementById('statusFilter').addEventListener('change', applyFilters);
-
-    // Delete blog functionality
-    function deleteBlog(blogId) {
-        if (confirm('Are you sure you want to delete this blog?')) {
-            fetch(`/admin/blogs/${blogId}/delete/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert('Error deleting blog: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error deleting blog. Please try again.');
-            });
-        }
-    }
-</script>
 {% endblock %} 

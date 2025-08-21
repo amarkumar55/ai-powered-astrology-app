@@ -1,71 +1,77 @@
 {% extends "includes/base.html" %}
-{% block title %} Dashboard | Account Setting & Security {% endblock %}
+{% load custom_filters %}
+{% block title %} Dashboard | Account | Enable Two-Factor Authentication {% endblock %}
 {% block content %}
-<main>
-    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex flex-col lg:flex-row gap-4 h-auto items-center justify-between p-4">
+<div class="min-h-screen bg-gray-50">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div class="relative flex flex-col lg:flex-row gap-8">
             <div class="md:flex w-full">
                 {% include 'dashboard/sidebar.html' %}
-                <div class="w-full space-y-4 px-6 text-medium rounded-lg">
-                    <div class="rounded-lg p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">
-                            Enable Two-Factor Authentication
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-300 mb-4">
-                            You can enhance your account's security by adding an extra step of security.
-                            For additional protection, enable <strong>Two-Factor Authentication (2FA)</strong>.
-                        </p>
-
-                        <div class="mt-4">
-                            <div class="space-y-4">
-                                {% if request.user.two_factor_enabled %}
-                                <p class="text-gray-600 dark:text-gray-300 mb-4">
-                                    <strong>Two-Factor Authentication (2FA) is already enabled.</strong>
+                <div class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                      
+                           <div class="border-b border-gray-200 pb-6">
+                                <h2
+                                    class="text-2xl rounded-xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                                    Enable Two-Factor Authentication
+                                </h2>
+                                <p class="mt-2 text-gray-600">
+                                    You can enhance your account's security by adding an extra step of security.
+                                    For additional protection, enable <strong>Two-Factor Authentication (2FA)</strong>.
                                 </p>
-                                <form id="disable_2fa_form" action="{% url 'dashboard.disable.2fa' %}" method="POST">
-                                    {% csrf_token %}
-                                    <div>
-                                        <label class="block">
-                                            {% include "fields/password_field.html" with label='Current Password'  name='password' %}
-                                        </label>
-                                    </div>
-                                    <div class="mt-4 justify-between items-center">
-                                        {% include "fields/submit_button.html" with value='Disable Two-Factor  Authentication' %}
-                                        <p class="mt-4 text-red-500 dark:text-gray-300 mb-4">
-                                            If you disable two-factor authentication, it puts your account at risk.
-                                        </p>
-                                    </div>
-                                </form>
-                                {% else %}
-                               
-                                <form id="enable_2fa_form" action="{% url 'dashboard.enable.2fa' %}" method="POST">
-                                    {% csrf_token %}
-                                    <div>
-                                        {% include "fields/email_field.html" with label='Email' name='email' value=request.user.email disabled=True %}
-                                    </div>
-                                    <div class="mt-4 justify-between items-center">
-                                        {% include "fields/submit_button.html" with value='Send OTP' %}
-                                    </div>
-                                </form>
-
-                                {% if post_email_enter %}
-                                <form id="verify_otp_form_2fa" action="{% url 'dashboard.verify_otp' %}" method="POST">
-                                    {% csrf_token %}
-                                    <div>
-                                        {% include "fields/otp_field.html" with label='Enter OTP (valid for 5 mins)' name='email_otp' %}
-                                    </div>
-                                    <div class="mt-4 justify-between items-center">
-                                        {% include "fields/submit_button.html" with value='Verify OTP' %}
-                                    </div>
-                                </form>
-                                {% endif %}
-                                {% endif %}
                             </div>
+
+                            <div class="mt-4">
+                                <div class="space-y-4">
+                                    {% if request.user.two_factor_enabled %}
+                                        <p class="text-gray-600 mb-4">
+                                            <strong>Two-Factor Authentication (2FA) is already enabled.</strong>
+                                        </p>
+                                        <form id="disable_2fa_form" action="{% url 'dashboard.disable.2fa' %}" method="POST">
+                                            {% csrf_token %}
+                                            <div>
+                                                <label class="block">
+                                                    {% include "fields/password_field.html" with label='Current Password' name='password' %}
+                                                </label>
+                                            </div>
+                                            <div class="mt-4  max-w-sm justify-between items-center">
+                                                {% include "fields/submit_button.html" with value='Disable Two-Factor Authentication' %}
+                                                <p class="mt-4 text-red-500 mb-4">
+                                                    If you disable two-factor authentication, it puts your account at risk.
+                                                </p>
+                                            </div>
+                                        </form>
+                                    {% else %}
+                            
+                                        <form id="enable_2fa_form" action="{% url 'dashboard.enable.2fa' %}" method="POST">
+                                            {% csrf_token %}
+                                            <div>
+                                                {% include "fields/email_field.html" with label='Email' name='email' value=request.user.email disabled=True %}
+                                            </div>
+                                            <div class="mt-4 max-w-sm justify-between items-center">
+                                                {% include "fields/submit_button.html" with value='Send OTP' %}
+                                            </div>
+                                        </form>
+                                
+                                        {% if post_email_enter %}
+                                        <form id="verify_otp_form_2fa" action="{% url 'dashboard.verify_otp' %}" method="POST">
+                                            {% csrf_token %}
+                                            <div>
+                                                {% include "fields/otp_field.html" with label='Enter OTP (valid for 5 mins)' name='email_otp' %}
+                                            </div>
+                                            <div class="mt-4 max-w-sm justify-between items-center">
+                                                {% include "fields/submit_button.html" with value='Verify OTP' %}
+                                            </div>
+                                        </form>
+                                        {% endif %}
+                                {% endif %}
+                                </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</div>
+
 {% endblock %}

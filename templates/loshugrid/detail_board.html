@@ -1,11 +1,14 @@
 {% load custom_filters %}
-<div class="mx-auto max-w-7xl px-10">
+<div class="mx-auto max-w-7xl px-10 py-6">
     <div class="relative flex py-4 flex-col gap-4 h-auto mb-5">
-        <div class="container mx-auto px-6 py-6 lg:px-20 text-center">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Hii {{ data.name }}, Your Lo Shu Grid Predition Here ❤️</h2>
+
+        <div class="text-center mb-8">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl shadow-xl p-8">
+                <h2 class="text-4xl font-bold text-white mb-3">✨ Your Personalized Lo Shu Grid Prediction ✨</h2>
+            </div>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-4 items-center justify-center"> 
+        <div class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 flex flex-col lg:flex-row gap-4 items-center justify-center"> 
             <div class="grid grid-cols-3 gap-4 bg-white p-6 rounded-lg shadow-lg">
                 {% for num_key, num_value in data.numbers.items %}
                     <div class="relative w-20 h-20 flex items-center justify-center text-2xl font-bold 
@@ -13,7 +16,7 @@
                         hover:bg-gray-500 hover:scale-105 transition-all">
                         {% if num_value.count == 0 %}
                          <span class="text-4xl">{{ num_key }}</span>
-                         <div class="absolute inset-0 flex items-center text-4xl justify-center text-slate-500">
+                         <div class="absolute inset-0 flex items-center text-4xl justify-center text-red-500">
                             x
                          </div>
                         {% else %}
@@ -27,9 +30,9 @@
         </div>
 
        <div
-        class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
-        <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">✨Your Loshu Grid Numbers✨</h2>
-        <p class="text-md text-center text-gray-600 dark:text-gray-300">
+        class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 flex flex-col items-center justify-center px-8 py-6 space-y-4">
+        <h2 class="text-3xl font-extrabold text-gray-300 mb-2">✨Your Loshu Grid Numbers✨</h2>
+        <p class="text-md text-center text-gray-500">
             Discover the hidden meanings behind your numbers and how they influence your personality and destiny.
             Explore your strengths, challenges, and recommended remedies to balance your life.
         </p>
@@ -61,7 +64,7 @@
                         {% endwith %}
                         {% endif %}
                     </p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
                         <strong>Remedies:</strong> {{ num_value.detail.remedis }}
                     </p>
                 </div>
@@ -71,10 +74,11 @@
         </div>
        </div>
 
+        {% if data.arrows_of_strength.count > 0 %}
         <div
-            class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
-            <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">✨Arrows of Strength In Your Gird✨</h2>
-            <p class="text-md text-center text-gray-600 dark:text-gray-300">
+            class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 flex flex-col items-center justify-center px-8 py-6 space-y-4">
+            <h2 class="text-3xl font-extrabold text-gray-300 mb-2">✨Arrows of Strength In Your Gird✨</h2>
+            <p class="text-md text-center text-gray-500">
                 Discover the hidden meanings behind your numbers and how they influence your personality and destiny.
                 Explore your strengths, challenges, and recommended remedies to balance your life.
             </p>
@@ -92,7 +96,7 @@
                             </div>
                         </div>
                         <div class="flex flex-col justify-center space-y-2">  
-                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
                                 <strong>Significance:</strong> {{ value }}
                             </p>
                         </div>
@@ -102,10 +106,11 @@
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
         <div
-            class="flex flex-col items-center justify-center px-8 py-6 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg space-y-4">
-            <h2 class="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">&#128549;Number Missing In Your Loshu Grid</h2>
-            <p class="text-md text-center text-gray-600 dark:text-gray-300">
+            class="predition-card rounded-2xl shadow-lg p-8 border border-gray-100 flex flex-col items-center justify-center px-8 py-6 space-y-4">
+            <h2 class="text-3xl font-extrabold text-gray-300  mb-2">&#128549;Number Missing In Your Loshu Grid</h2>
+            <p class="text-md text-center text-gray-500">
                 Discover the hidden meanings behind your numbers and how they influence your personality and destiny.
                 Explore your strengths, challenges, and recommended remedies to balance your life.
             </p>
@@ -125,9 +130,6 @@
                     <div class="flex flex-col justify-center space-y-2">
                         <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">This Number Show The Significance of
                             {{ num_value.detail.title }} in Your Life</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 italic">
-                            <strong>Remedies:</strong> {{ num_value.detail.remedis }}
-                        </p>
                     </div>
                 </div>
                 {% endif %}

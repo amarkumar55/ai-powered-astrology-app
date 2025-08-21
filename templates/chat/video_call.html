@@ -1,0 +1,398 @@
+{% extends 'chat/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="video-call-container">
+    <div class="video-section">
+        <video id="localVideo" autoplay muted playsinline class="video-box"></video>
+        <video id="remoteVideo" autoplay playsinline class="video-box remote"></video>
+        <div id="call-status" class="call-status">Connecting...</div>
+    </div>
+    <div class="controls-section">
+        <button id="muteBtn" class="btn btn-secondary">Mute</button>
+        <button id="videoBtn" class="btn btn-secondary">Video Off</button>
+        <button id="endCallBtn" class="btn btn-danger">End Call</button>
+    </div>
+    <div class="chat-overlay" id="chatOverlay">
+        <div class="chat-messages" id="chatMessages"></div>
+        <form id="chatForm" class="chat-form">
+            <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off" />
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+
+<div id="ringingModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div class="modal-dialog" style="background:#fff; border-radius:12px; padding:2rem; max-width:400px; margin:auto; text-align:center;">
+        <div id="ringingContent"></div>
+        <div id="ringingActions" style="margin-top:1.5rem;"></div>
+    </div>
+</div>
+
+<div id="ratingModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:1100; align-items:center; justify-content:center;">
+    <div class="modal-dialog" style="background:#fff; border-radius:12px; padding:2rem; max-width:400px; margin:auto; text-align:center;">
+        <h4>Rate Your Call</h4>
+        <form id="ratingForm">
+            <div id="starRating" style="font-size:2rem; margin:1rem 0;"></div>
+            <input type="hidden" name="rating" id="ratingInput" required>
+            <textarea name="review" id="reviewInput" class="form-control" rows="3" placeholder="Share your feedback (optional)"></textarea>
+            <button type="submit" class="btn btn-primary mt-3">Submit Rating</button>
+        </form>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'admin/css/base.css' %}">
+<style>
+.video-call-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    background: #f8f9fa;
+    padding: 2rem;
+}
+.video-section {
+    position: relative;
+    width: 640px;
+    height: 400px;
+    background: #222;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+.video-box {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+    border-radius: 12px;
+}
+.video-box.remote {
+    position: absolute;
+    width: 180px;
+    height: 120px;
+    bottom: 16px;
+    right: 16px;
+    border: 2px solid #fff;
+    z-index: 2;
+}
+.call-status {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    z-index: 3;
+}
+.controls-section {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.btn {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-secondary { background: #6c757d; color: #fff; }
+.btn-secondary:hover { background: #495057; }
+.btn-danger { background: #dc3545; color: #fff; }
+.btn-danger:hover { background: #a71d2a; }
+.btn-primary { background: #007bff; color: #fff; }
+.btn-primary:hover { background: #0056b3; }
+.chat-overlay {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 320px;
+    height: 100%;
+    background: rgba(255,255,255,0.95);
+    border-left: 1px solid #eee;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+.chat-form {
+    display: flex;
+    border-top: 1px solid #eee;
+    padding: 0.5rem;
+    background: #fafbfc;
+}
+#chatInput {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+}
+</style>
+
+<script>
+const roomId = "{{ room_id|default:'' }}";
+const userId = "{{ request.user.id }}";
+const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+const wsUrl = `${wsScheme}://${window.location.host}/ws/video-call/${roomId}/`;
+let localStream, remoteStream, peerConnection, ws;
+
+// ICE servers (use your own TURN/STUN for production)
+const iceServers = {
+    iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        // { urls: 'turn:your.turn.server:3478', username: 'user', credential: 'pass' }
+    ]
+};
+
+function addMessage(msg, sender) {
+    const chatMessages = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.textContent = sender ? `${sender}: ${msg}` : msg;
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function setCallStatus(status) {
+    document.getElementById('call-status').textContent = status;
+}
+
+function startWebSocket() {
+    ws = new WebSocket(wsUrl);
+    ws.onopen = () => {
+        setCallStatus('Connected');
+        // Initiator (user) sends call_ring, vendor waits for incoming call
+        const isInitiator = ("{{ is_initiator|default:'false'|lower }}" === "true");
+        const isUser = ("{{ request.user.id }}" == "{{ chat_room.user.id }}");
+        if (isInitiator && isUser) {
+            sendCallRing();
+        }
+    };
+    ws.onmessage = async (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'offer') {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            ws.send(JSON.stringify({ type: 'answer', answer, sender_id: userId }));
+        } else if (data.type === 'answer') {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        } else if (data.type === 'ice_candidate') {
+            if (data.candidate) {
+                try { await peerConnection.addIceCandidate(data.candidate); } catch (e) {}
+            }
+        } else if (data.type === 'call_ended') {
+            setCallStatus('Call Ended');
+            addMessage(data.message || 'Call ended.', 'System');
+            endCall();
+        } else if (data.type === 'chat_message') {
+            addMessage(data.message, data.sender_name);
+        } else if (data.type === 'call_ringing') {
+            // Vendor sees incoming call popup
+            const isVendor = ("{{ request.user.id }}" == "{{ chat_room.vendor.user.id }}");
+            if (isVendor) {
+                showRingingModal(
+                    `<h3>Incoming Video Call</h3><p>From: <strong>${data.caller_name}</strong></p>`,
+                    `<button class='btn btn-success' onclick='sendCallAccept()'>Accept</button> <button class='btn btn-danger' onclick='sendCallReject()'>Reject</button>`
+                );
+                setCallStatus('Incoming Call...');
+            }
+        } else if (data.type === 'call_accepted') {
+            hideRingingModal();
+            setCallStatus('Call Connected');
+            if (!callAccepted) startCall();
+        } else if (data.type === 'call_rejected') {
+            hideRingingModal();
+            setCallStatus('Call Rejected');
+            addMessage('Vendor rejected the call.', 'System');
+            endCall();
+        }
+    };
+    ws.onclose = () => setCallStatus('Disconnected');
+}
+
+async function startCall() {
+    peerConnection = new RTCPeerConnection(iceServers);
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    document.getElementById('localVideo').srcObject = localStream;
+    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+    peerConnection.ontrack = (event) => {
+        if (!remoteStream) {
+            remoteStream = new MediaStream();
+            document.getElementById('remoteVideo').srcObject = remoteStream;
+        }
+        remoteStream.addTrack(event.track);
+    };
+    peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+            ws.send(JSON.stringify({ type: 'ice_candidate', candidate: event.candidate, sender_id: userId }));
+        }
+    };
+    // If initiator, create offer
+    const isInitiator = ("{{ is_initiator|default:'false'|lower }}" === "true");
+    if (isInitiator) {
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        ws.send(JSON.stringify({ type: 'offer', offer, sender_id: userId }));
+    }
+    startDeductionTimer();
+}
+
+function endCall() {
+    if (peerConnection) peerConnection.close();
+    if (ws) ws.close();
+    setCallStatus('Call Ended');
+    stopDeductionTimer();
+    const isUser = ("{{ request.user.id }}" == "{{ chat_room.user.id }}");
+    if (isUser) {
+        setTimeout(showRatingModal, 1000);
+    }
+}
+
+let deductionInterval = null;
+
+function startDeductionTimer() {
+    // Only the user (not vendor) should send deduction requests
+    const isUser = ("{{ request.user.id }}" == "{{ chat_room.user.id }}");
+    if (!isUser) return;
+    deductionInterval = setInterval(() => {
+        ws.send(JSON.stringify({ type: 'deduct_minute', user_id: userId }));
+    }, 60000); // every 60 seconds
+}
+
+function stopDeductionTimer() {
+    if (deductionInterval) {
+        clearInterval(deductionInterval);
+        deductionInterval = null;
+    }
+}
+
+let callAccepted = false;
+
+function showRingingModal(content, actionsHtml = "") {
+    document.getElementById('ringingContent').innerHTML = content;
+    document.getElementById('ringingActions').innerHTML = actionsHtml;
+    document.getElementById('ringingModal').style.display = 'flex';
+}
+function hideRingingModal() {
+    document.getElementById('ringingModal').style.display = 'none';
+}
+
+function showRatingModal() {
+    document.getElementById('ratingModal').style.display = 'flex';
+}
+function hideRatingModal() {
+    document.getElementById('ratingModal').style.display = 'none';
+}
+
+// Star rating UI
+function renderStars(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        html += `<span class='star' data-value='${i}' style='cursor:pointer; color:${i <= rating ? '#ffc107' : '#ccc'};'>&#9733;</span>`;
+    }
+    document.getElementById('starRating').innerHTML = html;
+}
+let selectedRating = 5;
+
+function sendCallRing() {
+    ws.send(JSON.stringify({
+        type: 'call_ring',
+        caller_id: userId,
+        caller_name: "{{ request.user.get_full_name|escapejs }}"
+    }));
+    showRingingModal('Ringing vendor... Please wait.');
+}
+
+function sendCallAccept() {
+    ws.send(JSON.stringify({
+        type: 'call_accept',
+        vendor_id: userId,
+        vendor_name: "{{ request.user.get_full_name|escapejs }}"
+    }));
+    hideRingingModal();
+    callAccepted = true;
+    setCallStatus('Call Connected');
+    startCall();
+}
+
+function sendCallReject() {
+    ws.send(JSON.stringify({
+        type: 'call_reject',
+        vendor_id: userId,
+        vendor_name: "{{ request.user.get_full_name|escapejs }}"
+    }));
+    hideRingingModal();
+    setCallStatus('Call Rejected');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    startWebSocket();
+    startCall();
+    document.getElementById('muteBtn').onclick = () => {
+        localStream.getAudioTracks().forEach(track => track.enabled = !track.enabled);
+    };
+    document.getElementById('videoBtn').onclick = () => {
+        localStream.getVideoTracks().forEach(track => track.enabled = !track.enabled);
+    };
+    document.getElementById('endCallBtn').onclick = () => {
+        ws.send(JSON.stringify({ type: 'call_ended', sender_id: userId }));
+        endCall();
+    };
+    document.getElementById('chatForm').onsubmit = (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chatInput');
+        if (input.value.trim()) {
+            ws.send(JSON.stringify({ type: 'chat_message', message: input.value, sender_id: userId }));
+            addMessage(input.value, 'You');
+            input.value = '';
+        }
+    };
+    renderStars(selectedRating);
+    document.getElementById('ratingInput').value = selectedRating;
+    document.getElementById('starRating').onclick = function(e) {
+        if (e.target.classList.contains('star')) {
+            selectedRating = parseInt(e.target.getAttribute('data-value'));
+            renderStars(selectedRating);
+            document.getElementById('ratingInput').value = selectedRating;
+        }
+    };
+    document.getElementById('ratingForm').onsubmit = function(e) {
+        e.preventDefault();
+        const rating = document.getElementById('ratingInput').value;
+        const review = document.getElementById('reviewInput').value;
+        fetch('{% url "chat:video_call_rate" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+                room_id: roomId,
+                rating: rating,
+                review: review
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                hideRatingModal();
+                setCallStatus('Thank you for your feedback!');
+            } else {
+                alert('Failed to submit rating: ' + data.error);
+            }
+        });
+    };
+});
+</script>
+{% endblock %} 

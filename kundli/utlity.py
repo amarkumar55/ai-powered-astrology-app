@@ -111,7 +111,6 @@ def generate_kundli_details(request, clean_data):
             chart_url = APP_BASE_URL + generate_kundli_svg_and_return_url(lagna_chart)
             nakshatra = int(moon_details.nakshatra) 
 
-    
             kundli_details = KundliReport.objects.create(
                 user = request.user,
                 name = f"{first_name} {last_name}",

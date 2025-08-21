@@ -1,0 +1,81 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Dasha Effect - Astro Admin Panel{% endblock %}
+{% block content %}
+<div class="w-full min-h-screen mx-auto p-2">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Edit Dasha Effect</h2>
+            <p class="text-sm text-gray-100">Edit #{{dasha.id}} details</p>
+        </div>
+        <a href="{% url 'admin_panel:admin_dasha_effect' %}"
+            class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">
+            <i class="fas fa-arrow-left mr-2"></i>Back to List
+        </a>
+    </div>
+    <!-- Form -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <form method="post" action="{% url 'admin_panel:admin_dasha_effect_edit' dasha.id %}" class="space-y-6">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="mb-4">
+                {% for field in form %}
+                {% for error in field.errors %}
+                <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-2">{{ error }}</div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div>
+                <label for="mahadasha_planet" class="block text-sm font-medium text-gray-700">Mahadasha Planet</label>
+                <input type="text" name="mahadasha_planet" value="{{dasha.mahadasha_planet}}" id="mahadasha_planet" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="antar_dasha_planet" class="block text-sm font-medium text-gray-700">Antardasha
+                    Planet</label>
+                <input type="text" name="antar_dasha_planet" value="{{dasha.antar_dasha_planet}}" id="antar_dasha_planet" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" name="start_date" id="start_date"  value="{{ dasha.start_date|date:'Y-m-d' }}" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
+                <input type="date" name="end_date" id="end_date" value="{{ dasha.end_date|date:'Y-m-d' }}" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+            </div>
+
+            <div>
+                <label for="mahadasha_effect" class="block text-sm font-medium text-gray-700">Mahadasha Effect</label>
+                <textarea name="mahadasha_effect" id="mahadasha_effect" rows="3" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ dasha.mahadasha_effect }}</textarea>
+            </div>
+
+            <div>
+                <label for="antardasha_effect" class="block text-sm font-medium text-gray-700">Antardasha Effect</label>
+                <textarea name="antardasha_effect" id="antardasha_effect" rows="3" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ dasha.antardasha_effect }}</textarea>
+            </div>
+
+            <div>
+                <label for="combined_effect" class="block text-sm font-medium text-gray-700">Combined Effect</label>
+                <textarea name="combined_effect" id="combined_effect" rows="4" required
+                    class="mt-1 p-2 text-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">{{ dasha.combined_effect }}</textarea>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
+                    Update Dasha Effect
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

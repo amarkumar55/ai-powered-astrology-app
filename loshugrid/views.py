@@ -1,7 +1,9 @@
 import re
+import uuid
 from django.views import View
 from .forms import LoShuGridForm
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from utlity.helper import store_activity
 from django_ratelimit.decorators import ratelimit
@@ -15,13 +17,18 @@ class LoShuGridView(View):
     template_name = "loshugrid/index.html"
 
     def get(self, request):
-        
+        tag = request.GET.get('tag', '').strip()
+        session_key = f'loshu_grid_result_{tag}'
+        data = request.session.get(session_key)
+        is_report_generate = data is not None
+
         show_captcha, context = handle_captcha_logic(request, {})
         form = LoShuGridForm(show_captcha=show_captcha)
 
         context.update({
             "form": form,
-            "is_report_generate": False,
+            "is_report_generate": is_report_generate,
+            "data":data,
             "show_captcha": show_captcha,
         })
         return render(request, self.template_name, context)
@@ -46,7 +53,7 @@ class LoShuGridView(View):
                     
                 data = {
                     "name": f"{first_name} {last_name}".strip(),
-                    "date_of_birth": birth_date,
+                    "date_of_birth": birth_date.isoformat(),
                     "arrows_of_strength": [],
                     "numbers": numbers,
                     "digits": digits,
@@ -81,6 +88,9 @@ class LoShuGridView(View):
              
                 reset_failed_attempts(request)
 
+                tag = uuid.uuid4().hex 
+                request.session[f'loshu_grid_result_{tag}'] = data
+
                 if request.user.is_authenticated:
                     store_activity(request, form.cleaned_data.copy(), "loshugrid_predition_generate", request.user)
                 else:
@@ -88,11 +98,7 @@ class LoShuGridView(View):
                 
                 messages.success(request, "Your Lo Shu Grid prediction is generated.")
 
-                return render(request, self.template_name, {
-                        "is_report_generate": True,
-                        "data": data
-                    }   
-                )
+                return redirect(f"{reverse('loshugrid.index')}?tag={tag}")
 
             except Exception as e:
                 increment_failed_attempts(request)

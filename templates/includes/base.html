@@ -1,32 +1,49 @@
-{% load compress %}
 {% load static %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon_io/favicon-32x32.png">
-    <title>{% block title %}{% endblock %} - {{ APP_NAME }} </title>
+    <title>{% block title %}Page{% endblock %} - {{ APP_NAME }}</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}" nonce="{{ nonce }}">
     <link rel="stylesheet" href="{% static 'css/main.css' %}" nonce="{{ nonce }}">
 </head>
 
-<body class="flex flex-col min-h-screen bg-primary">
-    {% include 'includes/header.html' %}
-   
-    <div class="w-full h-16 px-4 py-4">
+<body class="bg-primary min-h-screen flex flex-col">
+
+    <!-- Fixed Header -->
+    <header class="bgNavbar w-full p-2 shadow-lg shadow-[bg-hcolor] z-50 bg-opacity-90 fixed top-0 left-0 right-0  border-b border-white/10">
+        {% include 'includes/header.html' %}
+    </header>
+
+    <!-- Spacer to push content below fixed header -->
+    <div class="h-16"></div>
+
+    <!-- Alerts (appear below header) -->
+
+    <div class="fixed top-32 right-0 h-32 z-40">
         {% include 'includes/alert.html' %}
     </div>
 
-    <main class="flex-grow">
-        <div id="content">{% block content %}{% endblock %}</div>
+    <!-- Main content -->
+    <main class="flex-grow relative">
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
     </main>
-    
-    {% include 'includes/footer.html' %}
+
+    <!-- Footer -->
+    <footer class="bg-hcolor shadow-lg shadow-[bg-hcolor] text-white w-full px-6 py-12 space-y-6 mt-auto border-t border-white/10">
+        {% include 'includes/footer.html' %}
+    </footer>
+
+    <!-- Scripts -->
     <script src="{% static 'js/jquery.min.js' %}" nonce="{{ nonce }}"></script>
     <script src="{% static 'js/parsley.min.js' %}" nonce="{{ nonce }}"></script>
-    <script src="{% static 'js/validation.js' %}"  nonce="{{ nonce }}"></script>
+    <script src="{% static 'js/validation.js' %}" nonce="{{ nonce }}"></script>
     <script src="{% static 'js/main.js' %}" nonce="{{ nonce }}"></script>
     {% block script %}{% endblock %}
+
 </body>
 </html>

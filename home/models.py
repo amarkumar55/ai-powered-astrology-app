@@ -13,6 +13,7 @@ class TimeStampMixin(models.Model):
 
 
 class ContactQuery(TimeStampMixin):
+    
     alphabetic = RegexValidator(
         regex=r'^[a-zA-Z ]*$',  # Allows spaces in names
         message='Field must contain only alphabetic characters and spaces.'
@@ -46,5 +47,8 @@ class ContactQuery(TimeStampMixin):
 
     def __str__(self):
         return f"{self.full_name} - {self.email}"
+    
+    class Mata:
+        app_label = "core"
 
 

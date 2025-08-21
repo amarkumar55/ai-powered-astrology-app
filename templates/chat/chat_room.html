@@ -1,0 +1,277 @@
+{% extends "chat/base_chat.html" %}
+
+{% block title %}Chat with {{ chat_room.vendor.full_name }} - AstroLive{% endblock %}
+
+{% block chat_content %}
+<div class="chat-room">
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <div class="d-flex align-items-center">
+            {% if chat_room.vendor.profile_image %}
+                <img src="{{ chat_room.vendor.profile_image.url }}" alt="{{ chat_room.vendor.full_name }}" class="vendor-avatar" style="width: 50px; height: 50px;">
+            {% else %}
+                <div class="vendor-avatar" style="width: 50px; height: 50px; background: #ddd; display: flex; align-items: center; justify-content: center; color: #666;">
+                    <i class="fas fa-user"></i>
+                </div>
+            {% endif %}
+            <div class="ms-3">
+                <h5 class="mb-0">{{ chat_room.vendor.full_name }}</h5>
+                <small>{{ chat_room.vendor.get_specialization_display }}</small>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="status-badge {% if chat_room.vendor.is_available %}status-online{% else %}status-offline{% endif %}">
+                {% if chat_room.vendor.is_available %}Online{% else %}Offline{% endif %}
+            </span>
+            <span class="text-white">${{ chat_room.vendor.hourly_rate }}/hour</span>
+            {% if chat_room.vendor.supports_video_call %}
+            <a href="{% url 'chat:video_call_room' chat_room.id %}" class="btn btn-success btn-sm">
+                <i class="fas fa-video"></i> Start Video Call
+            </a>
+            {% endif %}
+            <a href="{% url 'chat.end_chat' chat_room.id %}" class="btn btn-outline-light btn-sm" onclick="return confirm('Are you sure you want to end this chat session?')">
+                End Chat
+            </a>
+        </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div class="chat-messages" id="chat-messages">
+        {% for message in messages %}
+        <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %} {% if message.message_type == 'system' %}system{% endif %}">
+            <div class="message-content">
+                {% if message.message_type == 'file' and message.file %}
+                    <div>
+                        <strong>File: {{ message.file.name|slice:"7:" }}</strong>
+                        <br>
+                        <a href="{{ message.file.url }}" target="_blank" class="btn btn-sm btn-primary mt-2">Download</a>
+                    </div>
+                {% else %}
+                    {{ message.content }}
+                {% endif %}
+                <div class="message-time">{{ message.created_at|time:"H:i" }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        <div id="typing-indicator" class="typing-indicator" style="display: none;">
+            <em>{{ chat_room.vendor.full_name }} is typing...</em>
+        </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="chat-input">
+        <form id="message-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea 
+                id="message-input" 
+                name="content" 
+                placeholder="Type your message..." 
+                rows="3"
+                required
+            ></textarea>
+            <div class="d-flex flex-column gap-2">
+                <input type="file" id="file-input" name="file" accept="image/*,.pdf,.doc,.docx,.txt" style="display: none;">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.getElementById('file-input').click()">
+                    <i class="fas fa-paperclip"></i> Attach
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Session Info Modal -->
+<div class="modal fade" id="sessionInfoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Session Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Duration:</strong> <span id="session-duration">{{ chat_room.duration_formatted }}</span></p>
+                <p><strong>Rate:</strong> ${{ chat_room.vendor.hourly_rate }}/hour</p>
+                <p><strong>Estimated Cost:</strong> $<span id="estimated-cost">0.00</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const chatId = '{{ chat_room.id }}';
+    const userId = '{{ request.user.id }}';
+    const userName = '{{ request.user.get_full_name|escapejs }}';
+    const vendorName = '{{ chat_room.vendor.full_name|escapejs }}';
+    const hourlyRate = '{{ chat_room.vendor.hourly_rate }}';
+    
+    let typingTimer;
+    let isTyping = false;
+    
+    // WebSocket connection
+    const chatSocket = new WebSocket(
+        `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/chat/${chatId}/`
+    );
+    
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        
+        if (data.type === 'chat_message') {
+            addMessage(data.message, data.sender_id, data.sender_name, data.timestamp);
+        } else if (data.type === 'user_typing') {
+            showTypingIndicator(data.sender_name);
+        } else if (data.type === 'user_stop_typing') {
+            hideTypingIndicator();
+        } else if (data.type === 'connection_established') {
+            console.log('Connected to chat room');
+        }
+    };
+    
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+        showNotification('Connection lost. Please refresh the page.', 'warning');
+    };
+    
+    // Message form handling
+    document.getElementById('message-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const messageInput = document.getElementById('message-input');
+        const fileInput = document.getElementById('file-input');
+        const message = messageInput.value.trim();
+        const file = fileInput.files[0];
+        
+        if (!message && !file) return;
+        
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('content', message);
+        if (file) {
+            formData.append('file', file);
+        }
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        
+        // Send message via AJAX
+        fetch(`/chat/chat/${chatId}/send/`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                messageInput.value = '';
+                fileInput.value = '';
+                
+                // Send via WebSocket for real-time
+                chatSocket.send(JSON.stringify({
+                    'type': 'chat_message',
+                    'message': message,
+                    'sender_id': userId
+                }));
+            } else {
+                showNotification('Failed to send message: ' + data.error, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Failed to send message', 'error');
+        });
+    });
+    
+    // Typing indicator
+    document.getElementById('message-input').addEventListener('input', function() {
+        if (!isTyping) {
+            isTyping = true;
+            chatSocket.send(JSON.stringify({
+                'type': 'typing',
+                'sender_id': userId,
+                'sender_name': userName
+            }));
+        }
+        
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            isTyping = false;
+            chatSocket.send(JSON.stringify({
+                'type': 'stop_typing',
+                'sender_id': userId
+            }));
+        }, 1000);
+    });
+    
+    // File input handling
+    document.getElementById('file-input').addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const fileName = file.name;
+            document.getElementById('message-input').value = `Attaching: ${fileName}`;
+        }
+    });
+    
+    function addMessage(content, senderId, senderName, timestamp) {
+        const messagesContainer = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        
+        const isSent = senderId == userId;
+        const messageClass = isSent ? 'sent' : 'received';
+        
+        messageDiv.className = `message ${messageClass}`;
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                ${content}
+                <div class="message-time">${formatTime(timestamp)}</div>
+            </div>
+        `;
+        
+        messagesContainer.appendChild(messageDiv);
+        scrollToBottom(messagesContainer);
+    }
+    
+    function showTypingIndicator(name) {
+        const indicator = document.getElementById('typing-indicator');
+        indicator.innerHTML = `<em>${name} is typing...</em>`;
+        indicator.style.display = 'block';
+        scrollToBottom(document.getElementById('chat-messages'));
+    }
+    
+    function hideTypingIndicator() {
+        document.getElementById('typing-indicator').style.display = 'none';
+    }
+    
+    // Update session duration and cost
+    function updateSessionInfo() {
+        const startTime = new Date('{{ chat_room.start_time|date:"c" }}');
+        const now = new Date();
+        const durationMs = now - startTime;
+        const durationMinutes = Math.floor(durationMs / 60000);
+        const cost = (hourlyRate / 60) * durationMinutes;
+        
+        document.getElementById('session-duration').textContent = formatDuration(durationMinutes);
+        document.getElementById('estimated-cost').textContent = cost.toFixed(2);
+    }
+    
+    function formatDuration(minutes) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (hours > 0) {
+            return `${hours}h ${mins}m`;
+        }
+        return `${mins}m`;
+    }
+    
+    // Update session info every minute
+    setInterval(updateSessionInfo, 60000);
+    updateSessionInfo();
+    
+    // Scroll to bottom on load
+    window.addEventListener('load', function() {
+        scrollToBottom(document.getElementById('chat-messages'));
+    });
+</script>
+{% endblock %} 

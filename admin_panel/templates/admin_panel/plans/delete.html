@@ -1,0 +1,20 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Delete Category - Astro Admin Panel{% endblock %}
+{% block content %}
+<div class="w-full mx-auto max-w-lg mt-16">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-semibold text-red-600 mb-4">Delete Category</h2>
+        <p class="mb-6 text-gray-700">Are you sure you want to delete the category <span class="font-bold">"{{
+                category.name }}"</span>? This action cannot be undone.</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex justify-between">
+                <a href="{% url 'admin_panel:admin_categories' %}"
+                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200">Cancel</a>
+                <button type="submit"
+                    class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

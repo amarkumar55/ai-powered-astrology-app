@@ -3,10 +3,10 @@ from .models import Horoscope
 
 @admin.register(Horoscope)
 class HoroscopeAdmin(admin.ModelAdmin):
-    list_display = ('sign', 'date', 'type', 'created_at')
+    list_display = ('sign', 'date', 'type',)
     list_filter = ('sign', 'type', 'date')
     search_fields = ('sign', 'prediction')
-    readonly_fields = ('created_at',)
+  
     ordering = ('-date', 'sign')
     fieldsets = (
         ('Basic Information', {

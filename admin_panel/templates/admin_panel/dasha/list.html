@@ -1,0 +1,113 @@
+{% extends 'admin_panel/base.html' %}
+{% block title %}Dasha - Astro Admin Panel{% endblock %}
+{% block content %}
+
+<div class="min-h-screen w-full mx-auto p-2">
+  
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white">Dasha Effects List</h2>
+            <p class="text-sm text-gray-100">Manage your dasha effects list</p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg flex flex-row justify-end items-center shadow-md p-4 mb-6">
+
+        <form method="GET" action="{% url 'admin_panel:admin_dasha_effect' %}" class="flex items-center space-x-4">
+            {% csrf_token %}
+            {% include 'admin_panel/fields/search.html' with name="search" value=request.GET.search %}
+            {% include 'admin_panel/fields/date.html' with name="start_date" value=request.GET.start_date %}
+            {% include 'admin_panel/fields/date.html' with name="end_date" value=request.GET.end_date %}
+            {% include 'admin_panel/fields/button.html' %}
+        </form>
+    </div>
+
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Maha Dasha Planet</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Antar Dasha Planet</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Start Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">End Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mahadasha Effect</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Antardasha Effect</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Combined Effect</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for dasha in dashas %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ dasha.mahadasha_planet|capfirst}}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ dasha.antar_dasha_planet|capfirst }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ dasha.start_date|date:'M, d Y' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ dasha.end_date|date:'M, d Y' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ dasha.mahadasha_effect }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ dasha.antardasha_effect }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ dasha.combined_effect }}
+                    </td>
+            
+                    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                        {{ dasha.created_at|date:"M, d Y, H:i:s" }}
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a href="{% url 'admin_panel:admin_dasha_effect_edit' dasha.id %}" class="text-blue-600 hover:text-blue-900">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                        No Dasha Effect found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-4 flex justify-between items-center">
+        <div class="text-sm text-gray-500">
+            Showing {{ dashas.start_index }} to {{ dashas.end_index }} of {{ dashas.paginator.count}} entries
+        </div>
+        <div class="flex space-x-2">
+            {% if dashas.has_previous %}
+            <a href="?page={{ dashas.previous_page_number }}"
+                class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Previous</a>
+            {% endif %}
+
+            {% for num in dashas.paginator.page_range %}
+            <a href="?page={{ num }}"
+                class="px-3 py-1 rounded-md {% if num == dashas.number %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                {{ num }}
+            </a>
+            {% endfor %}
+
+            {% if dashas.has_next %}
+            <a href="?page={{ dashas.next_page_number }}"
+                class="px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Next</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

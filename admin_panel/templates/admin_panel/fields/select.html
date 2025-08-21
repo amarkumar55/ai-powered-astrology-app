@@ -1,0 +1,15 @@
+<div>
+    <select 
+        name="{{ name }}" 
+        id="{{ name }}"
+        class="form-select p-2 text-gray-700 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+
+        <option value="">{{ empty_label|default:"All" }}</option>
+        
+        {% for key, value in options.items %}
+        <option value="{{ key }}" {% if selected == key|stringformat:"s" %}selected{% endif %}>
+            {{ value }}
+        </option>
+        {% endfor %}
+    </select>
+</div>

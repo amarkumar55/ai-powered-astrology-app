@@ -1,0 +1,181 @@
+{% extends "chat/base_chat.html" %}
+
+{% block title %}Become a Consultant - AstroLive{% endblock %}
+
+{% block chat_content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>🔮 Become a Consultant</h2>
+                    <p class="text-muted">Share your expertise and help others on their spiritual journey</p>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.specialization.id_for_label }}" class="form-label">Specialization *</label>
+                                    {{ form.specialization }}
+                                    {% if form.specialization.errors %}
+                                        <div class="text-danger">{{ form.specialization.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.experience_years.id_for_label }}" class="form-label">Years of Experience *</label>
+                                    {{ form.experience_years }}
+                                    {% if form.experience_years.errors %}
+                                        <div class="text-danger">{{ form.experience_years.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.hourly_rate.id_for_label }}" class="form-label">Hourly Rate (USD) *</label>
+                            {{ form.hourly_rate }}
+                            {% if form.hourly_rate.errors %}
+                                <div class="text-danger">{{ form.hourly_rate.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">Set a competitive rate for your services</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.bio.id_for_label }}" class="form-label">Bio *</label>
+                            {{ form.bio }}
+                            {% if form.bio.errors %}
+                                <div class="text-danger">{{ form.bio.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">Tell potential clients about your expertise and approach</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.languages.id_for_label }}" class="form-label">Languages Spoken</label>
+                            {{ form.languages }}
+                            {% if form.languages.errors %}
+                                <div class="text-danger">{{ form.languages.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">e.g., English, Hindi, Spanish</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.consultation_hours.id_for_label }}" class="form-label">Consultation Hours</label>
+                            {{ form.consultation_hours }}
+                            {% if form.consultation_hours.errors %}
+                                <div class="text-danger">{{ form.consultation_hours.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">JSON format: {"monday": ["09:00-17:00"], "tuesday": ["09:00-17:00"]}</small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.profile_image.id_for_label }}" class="form-label">Profile Image</label>
+                                    {{ form.profile_image }}
+                                    {% if form.profile_image.errors %}
+                                        <div class="text-danger">{{ form.profile_image.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.certificates.id_for_label }}" class="form-label">Certificates</label>
+                                    {{ form.certificates }}
+                                    {% if form.certificates.errors %}
+                                        <div class="text-danger">{{ form.certificates.errors }}</div>
+                                    {% endif %}
+                                    <small class="form-text text-muted">Upload relevant certifications or qualifications</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h5>📋 Application Process</h5>
+                            <ul class="mb-0">
+                                <li>Submit your application with all required information</li>
+                                <li>Our team will review your credentials and experience</li>
+                                <li>You'll receive an email notification within 2-3 business days</li>
+                                <li>Once approved, you can start accepting chat requests</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane"></i> Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Specialization Guide -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>🎯 Available Specializations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for value, label in specializations %}
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    {% if value == 'astrologer' %}
+                                        <i class="fas fa-star text-warning" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'tarot_reader' %}
+                                        <i class="fas fa-cards-blank text-purple" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'numerologist' %}
+                                        <i class="fas fa-hashtag text-info" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'palmist' %}
+                                        <i class="fas fa-hand-paper text-success" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'vastu_expert' %}
+                                        <i class="fas fa-home text-primary" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'crystal_healer' %}
+                                        <i class="fas fa-gem text-pink" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'reiki_master' %}
+                                        <i class="fas fa-heart text-danger" style="font-size: 1.5rem;"></i>
+                                    {% elif value == 'meditation_guide' %}
+                                        <i class="fas fa-om text-indigo" style="font-size: 1.5rem;"></i>
+                                    {% else %}
+                                        <i class="fas fa-user text-secondary" style="font-size: 1.5rem;"></i>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <strong>{{ label }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% if value == 'astrologer' %}
+                                            Vedic astrology, horoscope readings, birth chart analysis
+                                        {% elif value == 'tarot_reader' %}
+                                            Tarot card readings, intuitive guidance, spiritual insights
+                                        {% elif value == 'numerologist' %}
+                                            Numerology analysis, life path numbers, name numerology
+                                        {% elif value == 'palmist' %}
+                                            Palm reading, hand analysis, life line interpretation
+                                        {% elif value == 'vastu_expert' %}
+                                            Vastu Shastra, space harmonization, energy flow
+                                        {% elif value == 'crystal_healer' %}
+                                            Crystal therapy, energy healing, chakra balancing
+                                        {% elif value == 'reiki_master' %}
+                                            Reiki healing, energy channeling, spiritual healing
+                                        {% elif value == 'meditation_guide' %}
+                                            Meditation techniques, mindfulness, spiritual guidance
+                                        {% else %}
+                                            Other spiritual and healing practices
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
