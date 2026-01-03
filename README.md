@@ -77,10 +77,17 @@ This platform is designed to serve users with personalized astrological insights
 - JavaScript
 
 ### Cloud & DevOps
-- AWS (EC2, RDS, S3)
-- CI/CD-ready architecture
-
+- AWS (EC2, RDS, S3) – Production deployment
+- Docker – Containerized application environments
+- CI/CD – Automated build and deployment workflows
+  
 ---
+
+## 🚧 Deployment & Infrastructure Notes
+
+This repository focuses on the **application-level implementation**.  
+Docker configuration, cloud infrastructure (AWS), and deployment pipelines are managed separately and are not included in this public repository for security and compliance reasons.
+
 
 ## 📂 Project Structure (High-Level) 
 
