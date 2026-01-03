@@ -307,18 +307,18 @@ DATABASES = {
   
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'astro',
-        'USER': 'amarkumar',
-        'PASSWORD': '@amar9691',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432'
     },
   
     'smartnotes': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartnotes',
-        'USER': 'amarkumar',
-        'PASSWORD': '@amar9691',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     },
