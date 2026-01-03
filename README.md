@@ -61,7 +61,6 @@ This platform is designed to serve users with personalized astrological insights
 ### Backend
 - **Python** (Django)
 - **Django REST Framework**
-- **FastAPI** (for async & AI-related services)
 - REST APIs
 
 ### AI / NLP
