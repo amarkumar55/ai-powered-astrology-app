@@ -86,18 +86,18 @@ This platform is designed to serve users with personalized astrological insights
 
 ## 📂 Project Structure (High-Level)
 
-├── admin_panel
-├── apis
-├── astro / astrology / kundli / dasha / panchang
-├── authentication
-├── blogs / smartnotes
-├── chat
-├── payment / subscription / invoice
-├── dashboard
-├── core
-├── media / static / templates
-├── logs
-├── manage.py
+- admin_panel
+- apis
+- astro / astrology / kundli / dasha / panchang
+-  authentication
+-  blogs / smartnotes
+- chat
+- payment / subscription / invoice 
+- dashboard
+- core
+- media / static / templates  
+- logs
+- manage.py
 
 
 Each module is designed to be **loosely coupled and independently maintainable**, enabling future scalability and feature expansion.
