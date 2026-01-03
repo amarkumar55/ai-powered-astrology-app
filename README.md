@@ -218,5 +218,9 @@ Individual contents are under the [Database Contents License (DbCL)](https://ope
 
 
 ## 📄 License
+This project is licensed under a **restrictive license**.  
+Commercial use, redistribution, or modification is not permitted without prior authorization.
+
+## 📄 License
 This project is licensed under the MIT License.
 
