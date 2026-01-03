@@ -22,7 +22,7 @@ This platform is designed to serve users with personalized astrological insights
 - **Horoscope & Daily Predictions**
 - **Numerology & Loshu Grid**
 - **Compatibility Analysis**
-- **Astrological Reports & Smart Notes**
+- **Astrological Reports**
 
 ---
 
