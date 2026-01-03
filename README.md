@@ -78,26 +78,97 @@ This platform is designed to serve users with personalized astrological insights
 - JavaScript
 
 ### Cloud & DevOps
-- Docker
 - AWS (EC2, RDS, S3)
 - CI/CD-ready architecture
 
 ---
 
-## 📂 Project Structure (High-Level)
+## 📂 Project Structure (High-Level) 
 
-- admin_panel
-- apis
-- astro / astrology / kundli / dasha / panchang
--  authentication
--  blogs / smartnotes
-- chat
-- payment / subscription / invoice 
-- dashboard
-- core
-- media / static / templates  
-- logs
-- manage.py
+## 📂 Project Structure
+
+The project is organized into modular Django apps and directories to ensure scalability, maintainability, and clear separation of concerns.
+
+- **admin_panel/**  
+  Handles administrative functionalities such as system management, content moderation, and operational controls.
+
+- **apis/**  
+  Exposes RESTful APIs for core application features and third-party integrations.
+
+- **astro/**  
+  Main project container and configuration directory for the Astrology SaaS platform.
+
+- **authentication/**  
+  Manages user authentication, authorization, and role-based access control (RBAC).
+
+- **blogs/**  
+  Handles blog content creation, management, and publishing workflows.
+
+- **chat/**  
+  Implements real-time chat functionality, including AI-assisted user interactions.
+
+- **commands/**  
+  Contains background jobs and scheduled tasks for automated and asynchronous processing.
+
+- **compatibility/**  
+  Manages astrology-based compatibility matching and analysis features.
+
+- **dasha/**  
+  Handles Dasha calculation and prediction logic.
+
+- **home/**  
+  Manages public-facing landing pages and entry points of the application.
+
+- **horoscope/**  
+  Provides daily, weekly, and personalized horoscope generation.
+
+- **payment/**  
+  Handles payment processing and transaction workflows.
+
+- **subscription/**  
+  Manages subscription plans, recurring billing, and access entitlements.
+
+- **invoice/**  
+  Responsible for invoice generation, storage, and transaction records.
+
+- **dashboard/**  
+  Implements user dashboards, personalized insights, and account-level views.
+
+- **core/**  
+  Contains shared business logic and core components reused across multiple apps.
+
+- **kundli/**  
+  Manages Kundli (birth chart) generation along with AI-powered interpretation and summarization.
+
+- **loshugrid/**  
+  Handles Loshu Grid generation and numerological analysis.
+
+- **media/**  
+  Stores and serves user-uploaded media files.
+
+- **numberlogy/**  
+  Manages numerology-related features and calculations.
+
+- **panchang/**  
+  Provides Panchang calculations and calendar-based astrological predictions.
+
+- **logs/**  
+  Stores application logs for monitoring, debugging, and auditing.
+
+- **static/**  
+  Contains static assets used during development.
+
+- **staticfiles/**  
+  Holds collected static assets for production deployment.
+
+- **templates/**  
+  Manages HTML templates used for server-side rendering.
+
+- **utility/**  
+  Contains reusable helper functions and shared utilities.
+
+- **manage.py**  
+  Entry point for Django management commands and administrative tasks.
 
 
 Each module is designed to be **loosely coupled and independently maintainable**, enabling future scalability and feature expansion.
