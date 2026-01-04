@@ -307,18 +307,18 @@ DATABASES = {
   
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'astro',
-        'USER': 'amarkumar',
-        'PASSWORD': '@amar9691',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432'
     },
   
     'smartnotes': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartnotes',
-        'USER': 'amarkumar',
-        'PASSWORD': '@amar9691',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     },
@@ -350,7 +350,6 @@ USE_TZ = True
 
 TWO_FACTOR_SMS_GATEWAY = 'two_factor.gateways.fake.Fake'
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 COMPRESS_ROOT = BASE_DIR / 'static'
 COMPRESS_ENABLED = True
@@ -382,7 +381,7 @@ EMAIL_PORT = 1025
 EMAIL_USE_TLS = False  
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-DEFAULT_FROM_EMAIL = 'info@astrolive.com'  
+DEFAULT_FROM_EMAIL = ''  
 
 
 CRONJOBS = [
@@ -394,11 +393,6 @@ RAZOR_KEY_ID=''
 RAZOR_KEY_SECRET=''
 
 
-#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
-#Tech9691@@'
-#AKt610xBTSuKSXmxD1S46g2
-#dbA@amar9691
-
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
@@ -408,7 +402,7 @@ CKEDITOR_CONFIGS = {
 }
 
 ADMINS = [
-    ('Your Name', 'admin@astrolive.com'),
+    ('Your Name', ''),
 ]
 
 

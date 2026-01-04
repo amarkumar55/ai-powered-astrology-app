@@ -30,13 +30,11 @@ class PaymentDetailView(generics.RetrieveAPIView):
 class PaymentProcessView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
-        # Example: expects amount, payment_method, description
         amount = request.data.get('amount')
         payment_method = request.data.get('payment_method')
         description = request.data.get('description', '')
         currency = request.data.get('currency', 'INR')
-        # Here you would integrate with Razorpay/Stripe/PayPal SDKs
-        # For now, just create a pending Payment record
+       
         payment = Payment.objects.using(self.request.db).create(
             user=request.user,
             amount=amount,
