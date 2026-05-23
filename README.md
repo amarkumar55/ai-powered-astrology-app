@@ -1,226 +1,179 @@
 # 🔮 AI-Powered Astrology SaaS Platform
+### Production-grade subscription SaaS · Django · FastAPI · BART NLP · AWS · Real-time Chat
 
-A **production-grade SaaS platform** combining traditional astrology systems with **modern AI capabilities**, built to support subscriptions, payments, live chat, and intelligent content generation at scale.
+![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)
+![Django](https://img.shields.io/badge/Django-REST_Framework-092E20?style=flat-square&logo=django)
+![AWS](https://img.shields.io/badge/AWS-EC2_RDS_S3-FF9900?style=flat-square&logo=amazonaws)
+![Redis](https://img.shields.io/badge/Redis-Caching_&_Queues-DC382D?style=flat-square&logo=redis)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat-square&logo=docker)
+![License](https://img.shields.io/badge/License-Restricted-red?style=flat-square)
 
-This platform is designed to serve users with personalized astrological insights, real-time interactions, and AI-powered summaries, while maintaining performance, security, and scalability.
-
----
-
-## 🚀 Key Features
-
-### 🧠 AI & NLP Capabilities
-- **AI-powered text transformation** for astrology interpretations
-- **NLP-based summarization** using the **BART model** for concise horoscope, report, and content summaries
-- Intelligent content enhancement for blogs, notes, and astrology reports
-- AI-assisted **live chat** for user interactions and guidance
+> A full-lifecycle SaaS backend built from scratch — combining traditional astrology engines with AI-powered personalization, real-time chat, and production-grade subscription billing.
 
 ---
 
-### 🔭 Astrology Modules
-- **Kundli (Birth Chart) Generation**
-- **Dasha & Panchang Calculations**
-- **Horoscope & Daily Predictions**
-- **Numerology & Loshu Grid**
-- **Compatibility Analysis**
-- **Astrological Reports**
+## 🎯 What This Platform Does
+
+Most astrology apps are static content. This platform is a dynamic, AI-augmented SaaS — delivering personalized predictions, real-time interactions, and intelligent content generation, all backed by a modular, scalable backend I designed and owned end-to-end.
 
 ---
 
-### 💬 Communication & Engagement
-- **Live Chat System** with real-time messaging
-- Blog & content publishing system
-- Personalized dashboards for users
-- Event-based features (live sessions, recordings)
+## ✨ Core Capabilities
 
----
+### 🤖 AI & NLP
+- Transformer-based text summarization using **BART** — powers horoscope reports, blog summaries, and personalized content
+- AI-assisted **live chat** with intelligent conversational workflows
+- Domain-specific content enhancement for astrology interpretations
+
+### 🔭 Astrology Engine
+- Kundli (Birth Chart) generation with AI-powered interpretation
+- Dasha predictions, Panchang calculations, daily Horoscope
+- Numerology & Loshu Grid analysis
+- Compatibility matching and astrological reports
 
 ### 💳 Payments & Subscriptions
-- Subscription-based access model
-- Secure **payment processing**
-- Invoice generation and transaction tracking
-- Support for recurring plans and premium features
+- Subscription state machine — trial → paid → cancellation with automated transitions
+- Recurring billing, invoice generation, and transaction tracking
+- Idempotent payment processing with webhook-driven sync and failure recovery
+- Premium feature access control via subscription entitlements
+
+### 💬 Communication & Engagement
+- Real-time live chat system with AI-assisted workflows
+- Blog and content publishing with AI summarization
+- Personalized user dashboards and account-level views
+- Live sessions, webinars, and recorded content delivery
+
+### 🛡️ Security & Reliability
+- Role-based access control (RBAC) with JWT authentication
+- Payment-safe idempotent architecture
+- Centralized logging, error monitoring, and audit trails
+- Production-grade configuration and secret management
 
 ---
 
-### 🛠️ Backend Architecture
+## 🏗️ Architecture
 
-- Modular backend structure with clearly separated domains:
-  - Authentication & Authorization
-  - Payments & Subscriptions
-  - AI & NLP services
-  - Astrology engines
-  - Content & Media handling
-- Background jobs for async processing
-- Centralized logging and monitoring
-- RESTful APIs for frontend and integrations
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        API LAYER (DRF)                          │
+│   Authentication · Subscriptions · Astrology · Chat · Content   │
+└────────────┬──────────────────────────────────────┬────────────┘
+             │                                      │
+    ┌────────▼────────┐                   ┌────────▼────────┐
+    │   Core Services │                   │   AI / NLP      │
+    │  Kundli · Dasha │                   │  BART · Chat    │
+    │  Panchang · etc │                   │  Summarization  │
+    └────────┬────────┘                   └────────┬────────┘
+             │                                      │
+    ┌────────▼──────────────────────────────────────▼────────┐
+    │              Data & Infrastructure Layer                 │
+    │   PostgreSQL · Redis (cache + queues) · Background Jobs  │
+    │           AWS (EC2, RDS, S3) · Docker · CI/CD           │
+    └─────────────────────────────────────────────────────────┘
+```
 
 ---
 
 ## 🧩 Tech Stack
 
-### Backend
-- **Python** (Django)
-- **Django REST Framework**
-- REST APIs
-
-### AI / NLP
-- **Transformer-based models**
-- **BART (NLP Summarization)**
-- AI-driven text processing & chat workflows
-
-### Database & Caching
-- PostgreSQL / MySQL
-- Redis (caching & background tasks)
-
-### Frontend
-- HTML5, Tailwind CSS
-- JavaScript
-
-### Cloud & DevOps
-- AWS (EC2, RDS, S3) – Production deployment
-- Docker – Containerized application environments
-- CI/CD – Automated build and deployment workflows
-  
----
-
-## 🚧 Deployment & Infrastructure Notes
-
-This repository focuses on the **application-level implementation**.  
-Docker configuration, cloud infrastructure (AWS), and deployment pipelines are managed separately and are not included in this public repository for security and compliance reasons.
-
-
-## 📂 Project Structure (High-Level) 
-
-## 📂 Project Structure
-
-The project is organized into modular Django apps and directories to ensure scalability, maintainability, and clear separation of concerns.
-
-- **admin_panel/**  
-  Handles administrative functionalities such as system management, content moderation, and operational controls.
-
-- **apis/**  
-  Exposes RESTful APIs for core application features and third-party integrations.
-
-- **astro/**  
-  Main project container and configuration directory for the Astrology SaaS platform.
-
-- **authentication/**  
-  Manages user authentication, authorization, and role-based access control (RBAC).
-
-- **blogs/**  
-  Handles blog content creation, management, and publishing workflows.
-
-- **chat/**  
-  Implements real-time chat functionality, including AI-assisted user interactions.
-
-- **commands/**  
-  Contains background jobs and scheduled tasks for automated and asynchronous processing.
-
-- **compatibility/**  
-  Manages astrology-based compatibility matching and analysis features.
-
-- **dasha/**  
-  Handles Dasha calculation and prediction logic.
-
-- **home/**  
-  Manages public-facing landing pages and entry points of the application.
-
-- **horoscope/**  
-  Provides daily, weekly, and personalized horoscope generation.
-
-- **payment/**  
-  Handles payment processing and transaction workflows.
-
-- **subscription/**  
-  Manages subscription plans, recurring billing, and access entitlements.
-
-- **invoice/**  
-  Responsible for invoice generation, storage, and transaction records.
-
-- **dashboard/**  
-  Implements user dashboards, personalized insights, and account-level views.
-
-- **core/**  
-  Contains shared business logic and core components reused across multiple apps.
-
-- **kundli/**  
-  Manages Kundli (birth chart) generation along with AI-powered interpretation and summarization.
-
-- **loshugrid/**  
-  Handles Loshu Grid generation and numerological analysis.
-
-- **media/**  
-  Stores and serves user-uploaded media files.
-
-- **numberlogy/**  
-  Manages numerology-related features and calculations.
-
-- **panchang/**  
-  Provides Panchang calculations and calendar-based astrological predictions.
-
-- **logs/**  
-  Stores application logs for monitoring, debugging, and auditing.
-
-- **static/**  
-  Contains static assets used during development.
-
-- **staticfiles/**  
-  Holds collected static assets for production deployment.
-
-- **templates/**  
-  Manages HTML templates used for server-side rendering.
-
-- **utility/**  
-  Contains reusable helper functions and shared utilities.
-
-- **manage.py**  
-  Entry point for Django management commands and administrative tasks.
-
-
-Each module is designed to be **loosely coupled and independently maintainable**, enabling future scalability and feature expansion.
+| Layer | Technology |
+|-------|-----------|
+| Backend | Python · Django · Django REST Framework |
+| AI / NLP | BART Transformer · Hugging Face · AI chat workflows |
+| Database | PostgreSQL · MySQL |
+| Caching & Queues | Redis |
+| Cloud | AWS (EC2, RDS, S3) |
+| DevOps | Docker · CI/CD pipelines |
+| Auth | JWT · RBAC |
+| Frontend (supporting) | HTML5 · Tailwind CSS · JavaScript |
 
 ---
 
-## 🔐 Security & Reliability
-- Role-based access control (RBAC)
-- Secure authentication flows
-- Payment-safe architecture
-- Centralized error logging
-- Production-grade configuration handling
+## 📁 Project Structure
+
+```
+astro/                          # Main project config
+├── authentication/             # JWT auth, RBAC, session management
+├── apis/                       # Unified RESTful API layer
+├── kundli/                     # Birth chart generation + AI interpretation
+├── dasha/                      # Dasha prediction engine
+├── panchang/                   # Panchang & calendar calculations
+├── horoscope/                  # Daily/weekly horoscope generation
+├── compatibility/              # Compatibility matching & analysis
+├── numberlogy/                 # Numerology & Loshu Grid
+├── payment/                    # Payment processing & webhook handling
+├── subscription/               # Subscription plans, billing, entitlements
+├── invoice/                    # Invoice generation & transaction records
+├── chat/                       # Real-time chat + AI-assisted workflows
+├── blogs/                      # Content publishing & AI summarization
+├── dashboard/                  # Personalized user dashboards
+├── commands/                   # Background jobs & scheduled tasks
+├── core/                       # Shared business logic & reusable utilities
+├── admin_panel/                # System management & content moderation
+├── utility/                    # Helper functions & shared utilities
+└── manage.py
+```
+
+Each module is **loosely coupled and independently maintainable** — designed for scale from day one.
 
 ---
 
-## 🎯 Use Cases
-- Astrology SaaS platforms
-- Subscription-based content services
-- AI-assisted knowledge platforms
-- Event & webinar-driven applications
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/amarkumar55/ai-astrology-saas.git
+cd ai-astrology-saas
+
+# Create and activate virtual environment
+python -m venv venv
+source venv/bin/activate       # macOS / Linux
+venv\Scripts\activate          # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your DB, Redis, AWS, and API credentials
+
+# Run database migrations
+python manage.py migrate
+
+# Start the development server
+python manage.py runserver
+```
 
 ---
 
-## 🧑‍💻 Author
+## 🚧 Deployment Notes
 
-**Amar Kumar**  
-Senior Backend Engineer  
-Specializing in **Laravel, Python, AWS, SaaS systems, and AI-powered backend integrations**
+Docker configuration, AWS infrastructure, and CI/CD pipelines are managed separately and excluded from this public repository for security and compliance reasons.
 
-📌 LinkedIn: https://www.linkedin.com/in/amarinfo  
-📌 Portfolio: https://www.amaraiverse.com/
+The application is production-deployed on **AWS (EC2, RDS, S3)** with containerized environments via **Docker** and automated deployment via **CI/CD pipelines**.
 
 ---
 
+## 🌍 Data Attribution
 
-### 🌍 Data Source Attribution
+Country/state/city data sourced from the [Countries States Cities Database](https://github.com/dr5hn/countries-states-cities-database), licensed under [ODbL](https://opendatacommons.org/licenses/odbl/1-0/).
 
-This project uses data from the [Countries States Cities Database](https://github.com/dr5hn/countries-states-cities-database),  
-which is licensed under the [Open Database License (ODbL)](https://opendatacommons.org/licenses/odbl/1-0/).  
-Individual contents are under the [Database Contents License (DbCL)](https://opendatacommons.org/licenses/dbcl/1-0/).
+---
 
+## 👤 Author
+
+**Amar Kumar** — Senior Backend Engineer · IBM Certified AI Engineer  
+Specializing in distributed systems, AI-powered SaaS backends, and production-scale Python architecture.
+
+📌 [LinkedIn](https://www.linkedin.com/in/amarkumar241429017) ·  💻 [GitHub](https://github.com/amarkumar55)
+
+---
 
 ## 📄 License
+
 This project is licensed under a **restrictive license**.  
-Commercial use, redistribution, or modification is not permitted without prior authorization.
+Commercial use, redistribution, or modification is not permitted without prior written authorization.
 
-## 📄 License
-This project is licensed under the MIT License.
+---
 
+*Built to demonstrate full product lifecycle ownership — from system design to production deployment.*
