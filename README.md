@@ -122,7 +122,7 @@ Each module is **loosely coupled and independently maintainable** — designed f
 
 ```bash
 # Clone the repository
-git clone https://github.com/amarkumar55/ai-astrology-saas.git
+git clone https://github.com/amarskdev/ai-astrology-saas.git
 cd ai-astrology-saas
 
 # Create and activate virtual environment
@@ -160,15 +160,6 @@ Country/state/city data sourced from the [Countries States Cities Database](http
 
 ---
 
-## 👤 Author
-
-**Amar Kumar** — Senior Backend Engineer · IBM Certified AI Engineer  
-Specializing in distributed systems, AI-powered SaaS backends, and production-scale Python architecture.
-
-📌 [LinkedIn](https://www.linkedin.com/in/amarkumar241429017) ·  💻 [GitHub](https://github.com/amarkumar55)
-
----
-
 ## 📄 License
 
 This project is licensed under a **restrictive license**.  
@@ -177,3 +168,27 @@ Commercial use, redistribution, or modification is not permitted without prior w
 ---
 
 *Built to demonstrate full product lifecycle ownership — from system design to production deployment.*
+
+---
+
+## 🤝 Connect With Me
+
+
+<div align="center">
+
+### 👤 About the Author
+
+**Amar Kumar**  
+*Senior Backend Engineer · IBM Certified AI Engineer*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-amarskdev-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amarskdev)
+[![GitHub](https://img.shields.io/badge/GitHub-amarskdev-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amarskdev)
+[![Gmail](https://img.shields.io/badge/Gmail-amarsk.dev-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:amarsk.dev@gmail.com)
+[![LeetCode](https://img.shields.io/badge/LeetCode-amarskdev-FFA116?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/amarskdev)
+[![Instagram](https://img.shields.io/badge/Instagram-amarsk.dev-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/amarsk.dev/)
+[![Credly](https://img.shields.io/badge/Credly-Badges-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/amarskdev/)
+
+*If you found this project useful, consider giving it a ⭐ — it means a lot!*
+
+</div>
+
